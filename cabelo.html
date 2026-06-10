@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Provador de Cortes — Studio Provador</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700&family=Cormorant+Garamond:wght@300;400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'DM Sans',sans-serif; background:#0a0c0f; color:#e8eaf0; min-height:100vh; }
+#tela-bloqueio { display:none; align-items:center; justify-content:center; min-height:100vh; padding:20px; text-align:center; }
+#tela-bloqueio h2 { font-family:'Playfair Display',serif; font-size:22px; color:#E88080; margin-bottom:10px; }
+#tela-bloqueio p { font-size:13px; color:#9A7A7A; line-height:1.7; margin-bottom:20px; }
+.btn-voltar { background:none; border:1px solid rgba(126,200,164,0.3); color:#7EC8A4; font-family:'DM Sans',sans-serif; font-size:12px; letter-spacing:2px; text-transform:uppercase; padding:10px 24px; cursor:pointer; border-radius:2px; }
+#app { display:none; min-height:100vh; background:#f4f6f9; color:#10141a; }
+.app-header { background:#fff; border-bottom:1px solid #dde4ef; padding:14px 20px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:10; }
+.app-logo { font-family:'Playfair Display',serif; font-size:18px; color:#10141a; display:flex; align-items:center; gap:8px; }
+.logo-dot { width:7px; height:7px; border-radius:50%; background:#7EC8A4; display:inline-block; }
+.licenca-info { text-align:right; font-size:11px; color:#5B9A7A; }
+.uso-badge { display:inline-flex; align-items:center; gap:6px; background:#eef9f4; border:1px solid #b8dfc8; border-radius:20px; padding:4px 12px; font-size:12px; color:#1a6b3a; font-weight:500; margin-top:4px; }
+.uso-badge.aviso { background:#fff8e1; border-color:#ffe082; color:#b06000; }
+.uso-badge.esgotado { background:#fde8e8; border-color:#f5c6c6; color:#c62828; }
+.banner { padding:10px 16px; font-size:12px; line-height:1.6; border-bottom:1px solid; display:none; }
+.banner.amarelo { background:#fffbea; border-color:#ffe082; color:#7a5500; }
+.banner.vermelho { background:#fff0f0; border-color:#f5c6c6; color:#c62828; }
+.banner.laranja { background:#fff5ec; border-color:#ffc896; color:#8a3d00; }
+.app-body { max-width:680px; margin:0 auto; padding:20px; }
+.section-card { background:#fff; border:1px solid #dde4ef; border-radius:12px; padding:20px; margin-bottom:16px; }
+.section-title { font-size:11px; font-weight:500; color:#aaa; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:14px; }
+.genero-selector { display:flex; gap:10px; }
+.genero-btn { flex:1; padding:10px; border:2px solid #dde4ef; border-radius:8px; background:transparent; cursor:pointer; font-family:'DM Sans',sans-serif; font-size:14px; font-weight:500; color:#666; transition:all 0.15s; }
+.genero-btn.ativo { border-color:#7EC8A4; background:#eef9f4; color:#1a6b3a; }
+.upload-zone { border:2px dashed #ddd; border-radius:12px; padding:20px 14px; text-align:center; cursor:pointer; transition:border-color 0.15s,background 0.15s; position:relative; min-height:140px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; }
+.upload-zone:hover { border-color:#7EC8A4; background:#f0faf5; }
+.upload-zone.has-img { border-style:solid; border-color:#7EC8A4; padding:8px; }
+.upload-zone input[type=file] { display:none; }
+.upload-icon { font-size:28px; }
+.upload-label { font-size:13px; font-weight:500; color:#333; }
+.upload-hint { font-size:11px; color:#999; }
+.upload-preview { width:100%; height:140px; object-fit:contain; border-radius:8px; display:none; background:#f4f6f9; }
+.upload-zone.has-img .upload-preview { display:block; }
+.upload-zone.has-img .upload-icon,.upload-zone.has-img .upload-label,.upload-zone.has-img .upload-hint { display:none; }
+.remove-img { position:absolute; top:6px; right:6px; width:22px; height:22px; background:rgba(0,0,0,0.5); border:none; border-radius:50%; color:white; font-size:12px; cursor:pointer; display:none; align-items:center; justify-content:center; }
+.upload-zone.has-img .remove-img { display:flex; }
+.galeria-titulo { font-size:11px; font-weight:500; color:#aaa; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:12px; }
+.galeria-ou { text-align:center; font-size:12px; color:#bbb; margin:14px 0; letter-spacing:1px; position:relative; }
+.galeria-ou::before,.galeria-ou::after { content:''; position:absolute; top:50%; width:40%; height:1px; background:#dde4ef; }
+.galeria-ou::before { left:0; } .galeria-ou::after { right:0; }
+.galeria-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:8px; margin-bottom:4px; }
+.galeria-item { border:2px solid #dde4ef; border-radius:10px; padding:6px 6px 8px; text-align:center; cursor:pointer; transition:all 0.15s; background:#fafbfd; display:flex; flex-direction:column; align-items:center; gap:6px; }
+.galeria-item:hover { border-color:#7EC8A4; background:#eef9f4; transform:translateY(-2px); box-shadow:0 4px 12px rgba(126,200,164,0.15); }
+.galeria-item.selecionado { border-color:#7EC8A4; background:#eef9f4; box-shadow:0 0 0 3px rgba(126,200,164,0.2); }
+.galeria-item .gi-foto { width:100%; height:90px; object-fit:cover; border-radius:6px; background:#eee; }
+.galeria-item .gi-nome { font-size:10px; color:#333; font-weight:600; line-height:1.3; }
+.galeria-item .gi-desc { font-size:9px; color:#888; line-height:1.3; }
+.galeria-secao { font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#7EC8A4; font-weight:600; margin:16px 0 10px; padding-bottom:6px; border-bottom:1px solid #eef9f4; }
+.btn-gerar { width:100%; height:50px; background:linear-gradient(135deg,#1a5c3a,#7EC8A4); color:white; border:none; border-radius:8px; font-family:'DM Sans',sans-serif; font-size:16px; font-weight:500; cursor:pointer; transition:opacity 0.15s,transform 0.1s; display:flex; align-items:center; justify-content:center; gap:8px; }
+.btn-gerar:hover:not(:disabled) { opacity:0.88; }
+.btn-gerar:active { transform:scale(0.98); }
+.btn-gerar:disabled { background:#e0e4ea; color:#aaa; cursor:default; }
+.result-area { display:none; }
+.result-area.visible { display:block; }
+.result-img-wrap { border-radius:12px; overflow:hidden; background:#eef2f7; }
+.result-img { width:100%; height:auto; max-height:70vh; object-fit:cover; border-radius:12px; display:block; }
+.result-actions { display:flex; gap:10px; margin-top:12px; }
+.btn-dl { flex:1; height:40px; background:#f0f4f8; border:1px solid #ddd; border-radius:8px; font-family:'DM Sans',sans-serif; font-size:14px; font-weight:500; cursor:pointer; color:#10141a; transition:background 0.12s; }
+.btn-dl:hover { background:#dde4ef; }
+.loading-area { display:none; text-align:center; padding:50px 20px; }
+.loading-spinner { width:36px; height:36px; border:2px solid rgba(126,200,164,0.2); border-top-color:#7EC8A4; border-radius:50%; animation:spin 1s linear infinite; margin:0 auto 16px; }
+@keyframes spin { to{transform:rotate(360deg)} }
+.loading-texto { font-family:'Playfair Display',serif; font-size:14px; letter-spacing:2px; color:#7EC8A4; text-transform:uppercase; }
+.erro-area { display:none; background:rgba(200,80,80,0.08); border:1px solid rgba(200,80,80,0.25); border-radius:8px; padding:16px; margin-bottom:16px; color:#c62828; font-size:13px; }
+.toast { position:fixed; bottom:30px; right:30px; background:rgba(126,200,164,0.15); border:1px solid rgba(126,200,164,0.4); color:#1a6b3a; font-size:12px; letter-spacing:2px; padding:12px 22px; border-radius:8px; opacity:0; transform:translateY(10px); transition:all 0.3s; pointer-events:none; z-index:999; }
+.toast.visivel { opacity:1; transform:translateY(0); }
+.salon-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:10px; margin-bottom:10px; }
+.salon-slot { border:2px dashed #dde4ef; border-radius:10px; overflow:hidden; aspect-ratio:3/4; position:relative; cursor:pointer; transition:all 0.15s; background:#fafbfd; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:4px; }
+.salon-slot:hover { border-color:#7EC8A4; background:#eef9f4; }
+.salon-slot.has-foto { border-style:solid; border-color:#7EC8A4; }
+.salon-slot.selecionado { border-color:#1a6b3a; box-shadow:0 0 0 3px rgba(126,200,164,0.25); }
+.salon-slot img { width:100%; height:100%; object-fit:cover; display:none; }
+.salon-slot.has-foto img { display:block; }
+.salon-slot.has-foto .salon-placeholder { display:none; }
+.salon-placeholder { display:flex; flex-direction:column; align-items:center; gap:4px; }
+.salon-placeholder span { font-size:20px; }
+.salon-placeholder p { font-size:9px; color:#aaa; text-align:center; line-height:1.3; }
+.salon-badge { position:absolute; top:4px; left:4px; background:rgba(26,107,58,0.85); color:#fff; font-size:8px; font-weight:600; padding:2px 6px; border-radius:10px; letter-spacing:0.5px; display:none; }
+.salon-slot.selecionado .salon-badge { display:block; }
+.salon-remove { position:absolute; top:4px; right:4px; width:20px; height:20px; background:rgba(0,0,0,0.5); border:none; border-radius:50%; color:white; font-size:10px; cursor:pointer; align-items:center; justify-content:center; display:none; }
+.salon-slot.has-foto .salon-remove { display:flex; }
+.salon-input { display:none; }
+.salon-info { font-size:11px; color:#888; background:#f4f6f9; border-radius:6px; padding:8px 10px; margin-bottom:10px; }
+@media(max-width:600px){ .galeria-grid{grid-template-columns:repeat(2,1fr)} .salon-grid{grid-template-columns:repeat(2,1fr)} .app-header{flex-direction:column;gap:10px} .result-img{max-height:60vh} .app-body{padding:12px} }
+</style>
+</head>
+<body>
+
+<div id="tela-bloqueio">
+  <div>
+    <div style="font-size:48px;margin-bottom:16px">🔒</div>
+    <h2 id="bloqueio-titulo">Acesso bloqueado</h2>
+    <p id="bloqueio-msg">Retorne à tela inicial.</p>
+    <button class="btn-voltar" onclick="window.location.href='index.html'">← Voltar</button>
+  </div>
+</div>
+
+<div id="app">
+  <div class="app-header">
+    <div class="app-logo"><span class="logo-dot"></span> Provador de Cortes</div>
+    <div class="licenca-info">
+      <div id="licenca-nome"></div>
+      <div class="uso-badge" id="uso-badge">✂️ carregando…</div>
+    </div>
+  </div>
+
+  <!-- Banners -->
+  <div class="banner amarelo" id="banner-dias"></div>
+  <div class="banner vermelho" id="banner-vencido"></div>
+  <div class="banner laranja" id="banner-creditos"></div>
+
+  <div class="app-body">
+    <div class="section-card">
+      <div class="section-title">Gênero</div>
+      <div class="genero-selector">
+        <button class="genero-btn ativo" id="btn-fem" onclick="setGenero('feminino')">👩 Feminino</button>
+        <button class="genero-btn" id="btn-masc" onclick="setGenero('masculino')">👨 Masculino</button>
+      </div>
+    </div>
+    <div class="section-card">
+      <div class="section-title">Foto do cliente</div>
+      <div class="upload-zone" id="zone-rosto" onclick="triggerUpload('file-rosto')">
+        <input type="file" id="file-rosto" accept="image/*" capture="environment" onchange="carregarImagem('rosto',this)">
+        <img class="upload-preview" id="prev-rosto" alt="">
+        <button class="remove-img" onclick="remover('rosto',event)">✕</button>
+        <div class="upload-icon">🧑</div>
+        <div class="upload-label">Foto do Cliente</div>
+        <div class="upload-hint">Foto frontal, boa iluminação</div>
+      </div>
+    </div>
+    <div class="section-card">
+      <div class="galeria-titulo">Escolha o corte desejado</div>
+      <div class="galeria-secao">Feminino</div>
+      <div class="galeria-grid" id="galeria-fem">
+        <div class="galeria-item" onclick="selecionarCorte(this,'feminino','Longo Liso')"><img class="gi-foto" src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=200&h=120&fit=crop&crop=top" alt="Longo Liso" onerror="this.style.background='#ddd'"><div class="gi-nome">Longo Liso</div></div>
+        <div class="galeria-item" onclick="selecionarCorte(this,'feminino','Bob Curto')"><img class="gi-foto" src="https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?w=200&h=120&fit=crop&crop=top" alt="Bob Curto" onerror="this.style.background='#ddd'"><div class="gi-nome">Bob Curto</div></div>
+        <div class="galeria-item" onclick="selecionarCorte(this,'feminino','Chanel')"><img class="gi-foto" src="https://images.unsplash.com/photo-1620122830785-a67c4c66b20e?w=200&h=120&fit=crop&crop=top" alt="Chanel" onerror="this.style.background='#ddd'"><div class="gi-nome">Chanel</div></div>
+        <div class="galeria-item" onclick="selecionarCorte(this,'feminino','Pixie Cut')"><img class="gi-foto" src="https://images.unsplash.com/photo-1634449571010-02389ed0f9b0?w=200&h=120&fit=crop&crop=top" alt="Pixie Cut" onerror="this.style.background='#ddd'"><div class="gi-nome">Pixie Cut</div></div>
+        <div class="galeria-item" onclick="selecionarCorte(this,'feminino','Cacheado Longo')"><img class="gi-foto" src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=200&h=120&fit=crop&crop=top" alt="Cacheado Longo" onerror="this.style.background='#ddd'"><div class="gi-nome">Cacheado Longo</div></div>
+        <div class="galeria-item" onclick="selecionarCorte(this,'feminino','Ondulado Médio')"><img class="gi-foto" src="https://images.unsplash.com/photo-1492106087820-71f1a00d2b11?w=200&h=120&fit=crop&crop=top" alt="Ondulado Médio" onerror="this.style.background='#ddd'"><div class="gi-nome">Ondulado Médio</div></div>
+      </div>
+      <div class="galeria-secao">Masculino</div>
+      <div class="galeria-grid" id="galeria-masc">
+        <div class="galeria-item" onclick="selecionarCorte(this,'masculino','Degradê')"><img class="gi-foto" src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=200&h=120&fit=crop&crop=top" alt="Degradê" onerror="this.style.background='#ddd'"><div class="gi-nome">Degradê</div></div>
+        <div class="galeria-item" onclick="selecionarCorte(this,'masculino','Undercut')"><img class="gi-foto" src="https://images.unsplash.com/photo-1580618672591-eb180b1a973f?w=200&h=120&fit=crop&crop=top" alt="Undercut" onerror="this.style.background='#ddd'"><div class="gi-nome">Undercut</div></div>
+        <div class="galeria-item" onclick="selecionarCorte(this,'masculino','Buzz Cut')"><img class="gi-foto" src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=200&h=120&fit=crop&crop=top" alt="Buzz Cut" onerror="this.style.background='#ddd'"><div class="gi-nome">Buzz Cut</div></div>
+        <div class="galeria-item" onclick="selecionarCorte(this,'masculino','Pompadour')"><img class="gi-foto" src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=200&h=120&fit=crop&crop=top" alt="Pompadour" onerror="this.style.background='#ddd'"><div class="gi-nome">Pompadour</div></div>
+      </div>
+      <div class="galeria-ou">ou envie uma referência</div>
+      <div class="upload-zone" id="zone-corte" onclick="triggerUpload('file-corte')">
+        <input type="file" id="file-corte" accept="image/*" onchange="carregarImagem('corte',this)">
+        <img class="upload-preview" id="prev-corte" alt="">
+        <button class="remove-img" onclick="remover('corte',event)">✕</button>
+        <div class="upload-icon">✂️</div>
+        <div class="upload-label">Foto de Referência</div>
+        <div class="upload-hint">Corte que deseja aplicar</div>
+      </div>
+      <div class="galeria-ou">ou escolha do salão</div>
+      <div class="salon-info">Fotos dos trabalhos do seu salão — ficam salvas neste dispositivo</div>
+      <div class="salon-grid" id="salon-grid"></div>
+      <div id="salon-selecionado-info" style="display:none;font-size:11px;color:#1a6b3a;background:#eef9f4;border-radius:6px;padding:8px 10px;margin-bottom:10px">✓ Trabalho do salão selecionado como referência</div>
+    </div>
+    <div class="section-card">
+      <div class="erro-area" id="erro-area"></div>
+      <div class="loading-area" id="loading-area">
+        <div class="loading-spinner"></div>
+        <div class="loading-texto">Gerando simulação…</div>
+      </div>
+      <div class="result-area" id="result-area">
+        <div class="result-img-wrap"><img class="result-img" id="result-img" alt="Resultado"></div>
+        <div class="result-actions">
+          <button class="btn-dl" onclick="baixar()">⬇ Salvar</button>
+          <button class="btn-dl" onclick="nova()">↺ Nova simulação</button>
+        </div>
+      </div>
+      <button class="btn-gerar" id="btn-gerar" onclick="gerarProvador()" disabled>✂️ Simular corte</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script type="module">
+import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
+import { getFirestore, doc, getDoc, updateDoc, increment } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+
+const fb = initializeApp({
+  apiKey:"AIzaSyCB-4FQpw157I6qKJAuXyXc3QEzqlcI1c0",
+  authDomain:"studio-provadores.firebaseapp.com",
+  projectId:"studio-provadores",
+  storageBucket:"studio-provadores.firebasestorage.app",
+  messagingSenderId:"368373390400",
+  appId:"1:368373390400:web:2f027e9c17402c327953a5"
+});
+const db = getFirestore(fb);
+
+const CARENCIA_MS = 24*60*60*1000;
+const CREDITOS_AVISO = 10;
+const DIAS_AVISO = 5;
+const SALON_KEY = 'studio_compt_cabelo_salon';
+
+const imgs = {rosto:null, corte:null};
+let licencaDoc = null;
+let GEMINI_KEY = null;
+let generoAtual = 'feminino';
+let salonFotos = JSON.parse(localStorage.getItem(SALON_KEY)||'[]');
+let salonSelecionado = null;
+
+function getMesAtual() { const d=new Date(); return `${d.getFullYear()}_${d.getMonth()+1}`; }
+function getUsosMes(dados) { return (dados.usos||{})[getMesAtual()]||0; }
+
+function mostrarToast(msg) {
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('visivel');
+  setTimeout(()=>t.classList.remove('visivel'),2800);
+}
+
+// Verifica acesso via chave na URL
+async function inicializar() {
+  const params = new URLSearchParams(window.location.search);
+  const chave = params.get('chave') || sessionStorage.getItem('compt_chave');
+  if (!chave || !chave.startsWith('COMPT-')) {
+    window.location.href = 'index.html'; return;
+  }
+  try {
+    const snap = await getDoc(doc(db,'licencas',chave));
+    if (!snap.exists()) { window.location.href='index.html'; return; }
+    const dados = snap.data();
+    const agora = Date.now();
+    const vencido = agora > dados.venceEm;
+    const dentroCarencia = agora <= (dados.venceEm + CARENCIA_MS);
+    const usos = getUsosMes(dados);
+    const limiteTotal = (dados.limite||50) + (dados.creditosAvulsos||0);
+
+    if (vencido && !dentroCarencia) {
+      mostrarBloqueio('Plano vencido', 'Seu plano venceu em '+dados.venceData+'. Entre em contato para renovar.');
+      return;
+    }
+    if (usos >= limiteTotal) {
+      mostrarBloqueio('Créditos esgotados', 'Você usou todos os '+limiteTotal+' créditos deste mês. Entre em contato para adicionar mais.');
+      return;
+    }
+
+    const cfgSnap = await getDoc(doc(db,'config','gemini'));
+    if (!cfgSnap.exists()) { mostrarBloqueio('Erro de configuração','Contate o suporte.'); return; }
+    GEMINI_KEY = cfgSnap.data().apiKey;
+    licencaDoc = { id:chave, ...dados };
+
+    // Monta interface
+    const planoLabel = dados.plano==='starter'?'Starter':'Pro';
+    document.getElementById('licenca-nome').textContent = dados.nome+' · '+planoLabel;
+    document.getElementById('app').style.display = 'block';
+    atualizarContador(dados);
+    renderBanners(dados, usos, limiteTotal);
+    renderSalon();
+  } catch(e) {
+    window.location.href = 'index.html';
+  }
+}
+
+function mostrarBloqueio(titulo, msg) {
+  document.getElementById('bloqueio-titulo').textContent = titulo;
+  document.getElementById('bloqueio-msg').textContent = msg;
+  document.getElementById('tela-bloqueio').style.display = 'flex';
+}
+
+function renderBanners(dados, usos, limiteTotal) {
+  const agora = Date.now();
+  const vencido = agora > dados.venceEm;
+  const dentroCarencia = agora <= (dados.venceEm + CARENCIA_MS);
+  const diasRestantes = Math.ceil((dados.venceEm - agora) / (1000*60*60*24));
+  const rest = limiteTotal - usos;
+
+  if (vencido && dentroCarencia) {
+    const b=document.getElementById('banner-vencido');
+    b.innerHTML='⛔ <strong>Plano vencido!</strong> Acesso será bloqueado em breve. Entre em contato para renovar.';
+    b.style.display='block';
+  } else if (!vencido && diasRestantes <= DIAS_AVISO) {
+    const b=document.getElementById('banner-dias');
+    b.innerHTML=`⚠️ <strong>Atenção:</strong> Plano vence em <strong>${diasRestantes} dia${diasRestantes>1?'s':''}</strong> (${dados.venceData}). Renove para não perder o acesso.`;
+    b.style.display='block';
+  }
+  if (rest <= CREDITOS_AVISO && rest > 0) {
+    const b=document.getElementById('banner-creditos');
+    b.innerHTML=`🔶 <strong>Créditos acabando:</strong> Restam <strong>${rest} créditos</strong> este mês. Entre em contato para adicionar mais.`;
+    b.style.display='block';
+  }
+}
+
+function atualizarContador(dados) {
+  const usos=getUsosMes(dados), limiteBase=dados.limite||50, avulso=dados.creditosAvulsos||0, limite=limiteBase+avulso, rest=limite-usos;
+  const badge=document.getElementById('uso-badge');
+  badge.textContent = avulso>0 ? `✂️ ${usos}/${limiteBase}+${avulso} avulso · ${rest} restantes` : `✂️ ${usos}/${limite} créditos · ${rest} restantes`;
+  badge.className = 'uso-badge'+(rest<=0?' esgotado':rest<=CREDITOS_AVISO?' aviso':'');
+  if (rest<=0) mostrarBloqueio('Créditos esgotados','Você usou todos os créditos deste mês. Entre em contato para adicionar mais.');
+}
+
+// Gênero
+window.setGenero = g => {
+  generoAtual=g;
+  document.getElementById('btn-fem').className='genero-btn'+(g==='feminino'?' ativo':'');
+  document.getElementById('btn-masc').className='genero-btn'+(g==='masculino'?' ativo':'');
+};
+
+// Galeria
+window.selecionarCorte = (el,genero,nome) => {
+  document.querySelectorAll('.galeria-item').forEach(i=>i.classList.remove('selecionado'));
+  el.classList.add('selecionado'); generoAtual=genero; window._corteNome=nome;
+  imgs.corte=null; salonSelecionado=null;
+  document.getElementById('prev-corte').src='';
+  document.getElementById('zone-corte').classList.remove('has-img');
+  document.getElementById('file-corte').value='';
+  document.getElementById('salon-selecionado-info').style.display='none';
+  renderSalon(); mostrarToast('✓ '+nome+' selecionado'); atualizarBotao();
+};
+
+// Salon
+function renderSalon() {
+  const grid=document.getElementById('salon-grid'); grid.innerHTML='';
+  salonFotos.forEach((foto,idx)=>{
+    const slot=document.createElement('div');
+    slot.className='salon-slot has-foto'+(salonSelecionado===foto.id?' selecionado':'');
+    slot.innerHTML=`<img src="${foto.data}" alt="Trabalho ${idx+1}"><div class="salon-placeholder"><span>📷</span><p>Foto ${idx+1}</p></div><div class="salon-badge">SELECIONADO</div><button class="salon-remove">✕</button>`;
+    slot.querySelector('img').onclick=()=>selecionarSalon(foto.id);
+    slot.querySelector('.salon-remove').onclick=(e)=>{e.stopPropagation();removerSalon(foto.id);};
+    grid.appendChild(slot);
+  });
+  if(salonFotos.length<9){
+    const add=document.createElement('div'); add.className='salon-slot';
+    add.innerHTML=`<input type="file" class="salon-input" id="salon-add-input" accept="image/*"><div class="salon-placeholder"><span>➕</span><p>Adicionar foto</p></div>`;
+    add.onclick=()=>document.getElementById('salon-add-input').click();
+    add.querySelector('input').onchange=(e)=>adicionarSalon(e);
+    grid.appendChild(add);
+  }
+}
+function adicionarSalon(e){
+  const file=e.target.files[0]; if(!file)return;
+  const r=new FileReader(); r.onload=ev=>{
+    const id='salon_'+Date.now(); salonFotos.push({id,data:ev.target.result,nome:file.name});
+    try{localStorage.setItem(SALON_KEY,JSON.stringify(salonFotos));}catch(_){}
+    renderSalon(); mostrarToast('📸 Foto adicionada!');
+  }; r.readAsDataURL(file);
+}
+function removerSalon(id){
+  salonFotos=salonFotos.filter(f=>f.id!==id);
+  try{localStorage.setItem(SALON_KEY,JSON.stringify(salonFotos));}catch(_){}
+  if(salonSelecionado===id){salonSelecionado=null;imgs.corte=null;document.getElementById('salon-selecionado-info').style.display='none';atualizarBotao();}
+  renderSalon();
+}
+function selecionarSalon(id){
+  salonSelecionado=id; const foto=salonFotos.find(f=>f.id===id); imgs.corte=foto.data; window._corteNome=null;
+  document.querySelectorAll('.galeria-item').forEach(i=>i.classList.remove('selecionado'));
+  document.getElementById('prev-corte').src=''; document.getElementById('zone-corte').classList.remove('has-img');
+  document.getElementById('file-corte').value=''; document.getElementById('salon-selecionado-info').style.display='block';
+  renderSalon(); mostrarToast('✓ Trabalho selecionado!'); atualizarBotao();
+}
+
+window.triggerUpload=id=>document.getElementById(id).click();
+window.carregarImagem=(tipo,input)=>{
+  const f=input.files[0]; if(!f)return;
+  const r=new FileReader(); r.onload=e=>{
+    imgs[tipo]=e.target.result;
+    document.getElementById('prev-'+tipo).src=e.target.result;
+    document.getElementById('zone-'+tipo).classList.add('has-img');
+    if(tipo==='corte'){document.querySelectorAll('.galeria-item').forEach(i=>i.classList.remove('selecionado'));salonSelecionado=null;window._corteNome=null;document.getElementById('salon-selecionado-info').style.display='none';renderSalon();}
+    atualizarBotao();
+  }; r.readAsDataURL(f);
+};
+window.remover=(tipo,ev)=>{
+  ev.stopPropagation(); imgs[tipo]=null;
+  document.getElementById('prev-'+tipo).src=''; document.getElementById('zone-'+tipo).classList.remove('has-img');
+  document.getElementById('file-'+tipo).value=''; atualizarBotao();
+};
+function atualizarBotao(){
+  const u=licencaDoc?getUsosMes(licencaDoc):0;
+  const l=(licencaDoc?.limite||50)+(licencaDoc?.creditosAvulsos||0);
+  document.getElementById('btn-gerar').disabled=!(imgs.rosto&&(imgs.corte||window._corteNome))||u>=l;
+}
+
+// Gerar
+window.gerarProvador=async()=>{
+  const snap=await getDoc(doc(db,'licencas',licencaDoc.id));
+  const dados=snap.data(); licencaDoc={id:licencaDoc.id,...dados};
+  const usos=getUsosMes(dados); const limiteTotal=(dados.limite||50)+(dados.creditosAvulsos||0);
+  if(usos>=limiteTotal){atualizarContador(dados);return;}
+  document.getElementById('btn-gerar').disabled=true;
+  document.getElementById('erro-area').style.display='none';
+  document.getElementById('result-area').classList.remove('visible');
+  document.getElementById('loading-area').style.display='block';
+  try{
+    const rB64=imgs.rosto.split(',')[1], rMime=imgs.rosto.split(';')[0].split(':')[1];
+    let prompt,parts;
+    if(imgs.corte){
+      const cB64=imgs.corte.split(',')[1],cMime=imgs.corte.split(';')[0].split(':')[1];
+      prompt=`You are a professional hair stylist and photo editor. Apply the hairstyle from the reference image to the person in the first photo (${generoAtual}). IMPORTANT: keep the exact same face, skin tone, facial features, lighting and background. Only change the hairstyle. The result must look like a real professional photo — natural, photorealistic, not artificial.`;
+      parts=[{text:prompt},{inline_data:{mime_type:rMime,data:rB64}},{inline_data:{mime_type:cMime,data:cB64}}];
+    }else{
+      const corte=window._corteNome||'haircut';
+      prompt=`You are a professional hair stylist and photo editor. Apply a "${corte}" hairstyle to the person in this photo (${generoAtual}). IMPORTANT: keep the exact same face, skin tone, facial features, lighting and background. Only change the hairstyle. The result must look like a real professional photo — natural, photorealistic.`;
+      parts=[{text:prompt},{inline_data:{mime_type:rMime,data:rB64}}];
+    }
+    const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${GEMINI_KEY}`,
+      {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts}]})});
+    if(!res.ok){const e=await res.json();throw new Error(e.error?.message||'Erro '+res.status);}
+    const data=await res.json();
+    let img=null;
+    for(const p of data.candidates?.[0]?.content?.parts||[]){
+      const id=p.inlineData||p.inline_data;
+      if(id?.mimeType?.startsWith('image/')||id?.mime_type?.startsWith('image/')){img=`data:${id.mimeType||id.mime_type};base64,${id.data}`;break;}
+    }
+    if(!img){const f=data.candidates?.[0]?.finishReason||'';if(f==='SAFETY')throw new Error('Imagem bloqueada por segurança. Tente outra foto.');throw new Error('IA não retornou imagem. Tente novamente.');}
+    const mesKey='usos.'+getMesAtual();
+    await updateDoc(doc(db,'licencas',licencaDoc.id),{[mesKey]:increment(1)});
+    licencaDoc={id:licencaDoc.id,...(await getDoc(doc(db,'licencas',licencaDoc.id))).data()};
+    document.getElementById('loading-area').style.display='none';
+    document.getElementById('result-img').src=img;
+    document.getElementById('result-area').classList.add('visible');
+    document.getElementById('result-area').scrollIntoView({behavior:'smooth',block:'nearest'});
+    atualizarContador(licencaDoc);
+  }catch(e){
+    document.getElementById('loading-area').style.display='none';
+    document.getElementById('erro-area').textContent='⚠ '+e.message;
+    document.getElementById('erro-area').style.display='block';
+    document.getElementById('btn-gerar').disabled=false;
+  }
+};
+
+window.baixar=()=>{const a=document.createElement('a');a.href=document.getElementById('result-img').src;a.download=`corte_${Date.now()}.png`;a.click();};
+window.nova=()=>{
+  imgs.rosto=null;imgs.corte=null;window._corteNome=null;salonSelecionado=null;
+  document.getElementById('result-area').classList.remove('visible');
+  ['rosto','corte'].forEach(t=>{document.getElementById('prev-'+t).src='';document.getElementById('zone-'+t).classList.remove('has-img');document.getElementById('file-'+t).value='';});
+  document.querySelectorAll('.galeria-item').forEach(i=>i.classList.remove('selecionado'));
+  document.getElementById('salon-selecionado-info').style.display='none';
+  renderSalon();atualizarBotao();window.scrollTo({top:0,behavior:'smooth'});
+};
+
+inicializar();
+</script>
+</body>
+</html>
