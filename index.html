@@ -3,405 +3,95 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Provador — Studio Provador</title>
+<title>Provador Virtual — Acesso</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700&family=Cormorant+Garamond:wght@300;400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:'DM Sans',sans-serif; background:#0f0a0d; color:#f0e8f0; min-height:100vh; }
-
-/* LOGIN */
-#tela-login { display:flex; align-items:center; justify-content:center; min-height:100vh; padding:20px; background:radial-gradient(ellipse at 50% 0%,rgba(160,120,200,0.1) 0%,transparent 65%); }
-.login-box { width:100%; max-width:400px; text-align:center; }
-.login-logo { font-family:'Playfair Display',serif; font-size:10px; letter-spacing:8px; color:#9A72C4; text-transform:uppercase; margin-bottom:16px; }
-.login-title { font-family:'Playfair Display',serif; font-size:30px; color:#f5eaf0; margin-bottom:6px; }
-.login-title em { color:#C4A0E8; font-style:italic; }
-.login-sub { font-size:11px; letter-spacing:2px; color:#9A72C4; text-transform:uppercase; margin-bottom:40px; }
-.login-campo label { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:#9A72C4; display:block; margin-bottom:8px; text-align:left; }
-.login-campo input { width:100%; background:rgba(0,0,0,0.5); border:1px solid rgba(160,120,200,0.25); border-radius:2px; color:#f0e8f0; font-family:'Cormorant Garamond',serif; font-size:16px; padding:12px 16px; outline:none; transition:border-color 0.3s; margin-bottom:16px; }
-.login-campo input:focus { border-color:#C4A0E8; }
-.btn-entrar { width:100%; background:linear-gradient(135deg,#6B3A9A,#C4A0E8,#6B3A9A); border:none; color:#fff; font-family:'Playfair Display',serif; font-size:12px; letter-spacing:4px; text-transform:uppercase; padding:14px; cursor:pointer; border-radius:2px; font-weight:700; margin-top:8px; transition:opacity 0.3s; }
-.btn-entrar:hover { opacity:0.85; }
-.btn-entrar:disabled { opacity:0.5; cursor:default; }
-.login-erro { background:rgba(200,80,80,0.12); border:1px solid rgba(200,80,80,0.3); color:#E88080; font-size:12px; padding:10px 16px; border-radius:2px; margin-top:14px; display:none; }
-
-/* APP */
-#app { display:none; min-height:100vh; background:#f7f2f5; color:#1a1015; }
-.app-header { background:#fff; border-bottom:1px solid #e0d4ec; padding:16px 24px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:10; }
-.app-logo { font-family:'Playfair Display',serif; font-size:20px; color:#1a1015; display:flex; align-items:center; gap:10px; }
-.logo-dot { width:8px; height:8px; border-radius:50%; background:#9A72C4; display:inline-block; }
-.licenca-info { text-align:right; font-size:11px; color:#9A72C4; }
-.uso-badge { display:inline-flex; align-items:center; gap:6px; background:#f5eeff; border:1px solid #d4b8f0; border-radius:20px; padding:4px 12px; font-size:12px; color:#6B3A9A; font-weight:500; margin-top:4px; }
-.uso-badge.aviso { background:#fff8e1; border-color:#ffe082; color:#b06000; }
-.uso-badge.esgotado { background:#fde8e8; border-color:#f5c6c6; color:#c62828; }
-
-.app-body { max-width:720px; margin:0 auto; padding:24px; }
-.section-card { background:#fff; border:1px solid #e0d4ec; border-radius:12px; padding:20px; margin-bottom:16px; }
-.section-title { font-size:11px; font-weight:500; color:#aaa; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:14px; }
-
-/* TABS */
-.tabs { display:flex; gap:0; border-bottom:2px solid #e0d4ec; margin-bottom:20px; }
-.tab-btn { flex:1; padding:12px 8px; font-family:'DM Sans',sans-serif; font-size:13px; font-weight:500; color:#999; background:none; border:none; cursor:pointer; border-bottom:2px solid transparent; margin-bottom:-2px; transition:all 0.2s; }
-.tab-btn.ativo { color:#6B3A9A; border-bottom-color:#9A72C4; }
-.tab-btn:hover:not(.ativo) { color:#666; }
-.tab-panel { display:none; }
-.tab-panel.ativo { display:block; }
-
-/* FOTO */
-.upload-zone { border:2px dashed #ddd; border-radius:12px; padding:20px 14px; text-align:center; cursor:pointer; transition:border-color 0.15s,background 0.15s; position:relative; min-height:180px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; }
-.upload-zone:hover { border-color:#9A72C4; background:#f9f5ff; }
-.upload-zone.has-img { border-style:solid; border-color:#9A72C4; padding:8px; }
-.upload-zone input[type=file] { display:none; }
-.upload-icon { font-size:32px; line-height:1; }
-.upload-label { font-size:13px; font-weight:500; color:#333; }
-.upload-hint { font-size:11px; color:#999; }
-.upload-preview { width:100%; height:160px; object-fit:contain; border-radius:8px; display:none; background:#f7f2f5; }
-.upload-zone.has-img .upload-preview { display:block; }
-.upload-zone.has-img .upload-icon, .upload-zone.has-img .upload-label, .upload-zone.has-img .upload-hint { display:none; }
-.remove-img { position:absolute; top:6px; right:6px; width:22px; height:22px; background:rgba(0,0,0,0.5); border:none; border-radius:50%; color:white; font-size:12px; cursor:pointer; display:none; align-items:center; justify-content:center; }
-.upload-zone.has-img .remove-img { display:flex; }
-
-/* GALERIA */
-.galeria-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:4px; }
-.galeria-item { border:2px solid #e0d4ec; border-radius:10px; overflow:hidden; cursor:pointer; transition:all 0.15s; background:#fdf8ff; position:relative; }
-.galeria-item:hover { border-color:#9A72C4; transform:translateY(-2px); box-shadow:0 4px 14px rgba(154,114,196,0.2); }
-.galeria-item.selecionado { border-color:#9A72C4; box-shadow:0 0 0 3px rgba(154,114,196,0.25); }
-.galeria-item img { width:100%; height:90px; object-fit:cover; object-position:center top; display:block; }
-.galeria-item .item-label { padding:6px 6px 8px; text-align:center; background:#fff; }
-.galeria-item .item-nome { font-size:11px; font-weight:600; color:#5a3a7a; display:block; }
-.galeria-item .item-desc { font-size:9px; color:#aaa; display:block; margin-top:1px; }
-.galeria-item.selecionado::after { content:'✓'; position:absolute; top:6px; right:8px; background:#9A72C4; color:#fff; font-size:11px; font-weight:700; width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; line-height:20px; text-align:center; }
-.galeria-ou { text-align:center; font-size:12px; color:#bbb; margin:10px 0; letter-spacing:1px; }
-
-/* DUAL RESULT */
-.dual-result { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:12px; }
-.result-col { }
-.result-col-titulo { font-size:11px; font-weight:600; color:#9A72C4; letter-spacing:2px; text-transform:uppercase; margin-bottom:8px; }
-.result-img-wrap { border-radius:12px; overflow:hidden; background:#f0ecf0; min-height:200px; display:flex; align-items:center; justify-content:center; }
-.result-img { width:100%; border-radius:12px; display:block; }
-
-/* LOADING dentro de cada coluna */
-.col-loading { display:none; text-align:center; padding:30px 10px; }
-.col-spinner { width:28px; height:28px; border:2px solid rgba(154,114,196,0.2); border-top-color:#9A72C4; border-radius:50%; animation:spin 1s linear infinite; margin:0 auto 10px; }
-@keyframes spin { to{transform:rotate(360deg)} }
-.col-loading-txt { font-family:'Playfair Display',serif; font-size:12px; letter-spacing:2px; color:#9A72C4; text-transform:uppercase; }
-
-/* BOTÕES */
-.info-row { display:flex; gap:8px; align-items:center; background:#f5eeff; border-radius:8px; padding:10px 14px; font-size:13px; color:#999; margin-bottom:12px; }
-.btn-gerar { width:100%; height:50px; background:linear-gradient(135deg,#6B3A9A,#9A72C4); color:white; border:none; border-radius:8px; font-family:'DM Sans',sans-serif; font-size:16px; font-weight:500; cursor:pointer; transition:opacity 0.15s,transform 0.1s; display:flex; align-items:center; justify-content:center; gap:8px; }
-.btn-gerar:hover:not(:disabled) { opacity:0.88; }
-.btn-gerar:active { transform:scale(0.98); }
-.btn-gerar:disabled { background:#e0dce0; color:#aaa; cursor:default; }
-.result-actions { display:flex; gap:10px; margin-top:12px; }
-.btn-dl { flex:1; height:40px; background:#f5f0fb; border:1px solid #ddd; border-radius:8px; font-family:'DM Sans',sans-serif; font-size:13px; font-weight:500; cursor:pointer; color:#1a1015; transition:background 0.12s; }
-.btn-dl:hover { background:#e8d8f8; }
-
-.erro-area { display:none; background:rgba(200,80,80,0.08); border:1px solid rgba(200,80,80,0.25); border-radius:8px; padding:16px; margin-bottom:16px; color:#c62828; font-size:13px; }
-.bloqueio-area { display:none; text-align:center; padding:40px 20px; background:#fde8e8; border:1px solid #f5c6c6; border-radius:12px; margin-bottom:16px; }
-.bloqueio-area h3 { font-family:'Playfair Display',serif; font-size:18px; color:#c62828; margin-bottom:8px; }
-.bloqueio-area p { font-size:13px; color:#8B0000; line-height:1.6; }
-.result-area { display:none; }
-.result-area.visible { display:block; }
-
-.toast { position:fixed; bottom:30px; right:30px; background:rgba(154,114,196,0.15); border:1px solid rgba(154,114,196,0.4); color:#6B3A9A; font-size:12px; letter-spacing:2px; padding:12px 22px; border-radius:8px; opacity:0; transform:translateY(10px); transition:all 0.3s; pointer-events:none; z-index:999; }
-.toast.visivel { opacity:1; transform:translateY(0); }
-
-/* MEUS LOOKS */
-.meus-looks-titulo { font-size:11px; font-weight:600; color:#9A72C4; letter-spacing:2px; text-transform:uppercase; margin:18px 0 10px; display:flex; align-items:center; justify-content:space-between; }
-.btn-add-look { background:#f5eeff; border:1px solid #d4b8f0; color:#6B3A9A; font-size:10px; letter-spacing:1px; padding:5px 12px; border-radius:20px; cursor:pointer; font-weight:600; }
-.btn-add-look:hover { background:#e8d8f8; }
-.meus-looks-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:8px; }
-.meu-look-item { border:2px solid #e0d4ec; border-radius:10px; overflow:hidden; cursor:pointer; transition:all 0.15s; background:#fdf8ff; position:relative; }
-.meu-look-item:hover { border-color:#9A72C4; transform:translateY(-2px); box-shadow:0 4px 14px rgba(154,114,196,0.2); }
-.meu-look-item.selecionado { border-color:#9A72C4; box-shadow:0 0 0 3px rgba(154,114,196,0.25); }
-.meu-look-item img { width:100%; height:90px; object-fit:cover; object-position:center top; display:block; }
-.meu-look-item .look-label { padding:5px 6px 7px; background:#fff; }
-.meu-look-item .look-nome { font-size:10px; font-weight:600; color:#5a3a7a; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
-.meu-look-item .look-del { position:absolute; top:4px; right:4px; background:rgba(0,0,0,0.55); color:#fff; border:none; border-radius:50%; width:18px; height:18px; font-size:10px; cursor:pointer; display:none; align-items:center; justify-content:center; line-height:1; }
-.meu-look-item:hover .look-del { display:flex; }
-.meu-look-item.selecionado::after { content:'✓'; position:absolute; top:4px; left:6px; background:#9A72C4; color:#fff; font-size:10px; font-weight:700; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
-
-/* MODAL */
-.modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:200; display:none; align-items:center; justify-content:center; padding:20px; }
-.modal-overlay.visivel { display:flex; }
-.modal-box { background:#fff; border-radius:12px; padding:24px; width:100%; max-width:360px; }
-.modal-titulo { font-family:'Playfair Display',serif; font-size:16px; color:#1a1015; margin-bottom:16px; }
-.modal-preview { width:100%; height:160px; object-fit:cover; border-radius:8px; margin-bottom:12px; display:none; background:#f0e8f0; }
-.modal-zona { border:2px dashed #ddd; border-radius:8px; padding:20px; text-align:center; cursor:pointer; margin-bottom:12px; }
-.modal-zona:hover { border-color:#9A72C4; background:#f5eeff; }
-.modal-nome { width:100%; border:1px solid #ddd; border-radius:8px; padding:10px 12px; font-size:14px; margin-bottom:16px; outline:none; }
-.modal-nome:focus { border-color:#9A72C4; }
-.modal-acoes { display:flex; gap:8px; }
-.btn-modal-salvar { flex:1; background:linear-gradient(135deg,#6B3A9A,#9A72C4); color:#fff; border:none; border-radius:8px; padding:11px; font-weight:600; font-size:13px; cursor:pointer; }
-.btn-modal-cancelar { background:#f5f5f5; border:none; border-radius:8px; padding:11px 16px; color:#666; cursor:pointer; font-size:13px; }
-
-@media(max-width:600px){ .galeria-grid{grid-template-columns:repeat(2,1fr)} .dual-result{grid-template-columns:1fr} .app-header{flex-direction:column;gap:10px} .tabs{flex-direction:column} }
-.btn-foto-opcao {
-  flex:1; display:flex; flex-direction:column; align-items:center; gap:6px;
-  padding:14px 10px; border:2px dashed var(--border); border-radius:14px;
-  background:var(--surface); color:var(--text-main); font-size:13px;
-  font-weight:600; cursor:pointer; transition:.2s;
-}
-.btn-foto-opcao:hover { border-color:#9A72C4; background:#f5eeff; }
+body { font-family:'DM Sans',sans-serif; background:#0a0c0f; color:#e8eaf0; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; background:radial-gradient(ellipse at 50% 0%,rgba(126,200,164,0.08) 0%,transparent 65%); }
+.box { width:100%; max-width:380px; text-align:center; }
+.logo { font-family:'Playfair Display',serif; font-size:10px; letter-spacing:8px; color:#7EC8A4; text-transform:uppercase; margin-bottom:14px; }
+.titulo { font-family:'Playfair Display',serif; font-size:30px; color:#f0f2f8; margin-bottom:6px; }
+.titulo em { color:#7EC8A4; font-style:italic; }
+.sub { font-size:11px; letter-spacing:2px; color:#5B9A7A; text-transform:uppercase; margin-bottom:40px; }
+.campo label { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:#5B9A7A; display:block; margin-bottom:8px; text-align:left; }
+.campo input { width:100%; background:rgba(0,0,0,0.5); border:1px solid rgba(126,200,164,0.25); border-radius:2px; color:#e8eaf0; font-family:'Cormorant Garamond',serif; font-size:28px; padding:14px 16px; outline:none; transition:border-color 0.3s; text-align:center; letter-spacing:8px; }
+.campo input:focus { border-color:#7EC8A4; }
+.btn { width:100%; background:linear-gradient(135deg,#1a5c3a,#7EC8A4,#1a5c3a); border:none; color:#0a0c0f; font-family:'Playfair Display',serif; font-size:12px; letter-spacing:4px; text-transform:uppercase; padding:14px; cursor:pointer; border-radius:2px; font-weight:700; margin-top:14px; transition:opacity 0.3s; }
+.btn:hover { opacity:0.85; }
+.btn:disabled { opacity:0.4; cursor:default; }
+.erro { background:rgba(200,80,80,0.1); border:1px solid rgba(200,80,80,0.3); color:#E88080; font-size:12px; padding:10px 16px; border-radius:2px; margin-top:14px; display:none; line-height:1.5; }
+.aviso { background:rgba(255,200,50,0.08); border:1px solid rgba(255,200,50,0.25); color:#E8C97A; font-size:12px; padding:10px 16px; border-radius:2px; margin-top:14px; display:none; line-height:1.6; text-align:left; }
+.aviso strong { color:#FFD966; }
+.geo-status { font-size:11px; color:#5B9A7A; margin-top:10px; min-height:16px; letter-spacing:1px; }
+.tela-escolha { display:none; text-align:center; }
+.bem-vindo { font-family:'Playfair Display',serif; font-size:22px; color:#f0f2f8; margin-bottom:6px; }
+.bem-sub { font-size:11px; color:#5B9A7A; letter-spacing:2px; text-transform:uppercase; margin-bottom:10px; }
+.creditos-badge { display:inline-flex; align-items:center; gap:6px; background:rgba(126,200,164,0.1); border:1px solid rgba(126,200,164,0.25); border-radius:20px; padding:5px 14px; font-size:12px; color:#7EC8A4; margin-bottom:30px; }
+.creditos-badge.aviso-cred { background:rgba(255,200,50,0.1); border-color:rgba(255,200,50,0.3); color:#E8C97A; }
+.creditos-badge.esgotado { background:rgba(200,80,80,0.1); border-color:rgba(200,80,80,0.3); color:#E88080; }
+.opcoes { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px; }
+.opcao { background:linear-gradient(145deg,rgba(126,200,164,0.08),rgba(0,0,0,0.4)); border:1px solid rgba(126,200,164,0.2); border-radius:8px; padding:28px 16px; cursor:pointer; transition:all 0.2s; text-decoration:none; color:inherit; }
+.opcao:hover { border-color:#7EC8A4; background:rgba(126,200,164,0.12); transform:translateY(-2px); }
+.opcao .icone { font-size:36px; margin-bottom:10px; }
+.opcao .nome { font-family:'Playfair Display',serif; font-size:16px; color:#7EC8A4; margin-bottom:4px; }
+.opcao .desc { font-size:11px; color:#5B9A7A; letter-spacing:1px; }
+.btn-sair { background:none; border:1px solid rgba(126,200,164,0.15); color:#5B9A7A; font-family:'DM Sans',sans-serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; padding:8px 20px; cursor:pointer; border-radius:2px; transition:all 0.2s; margin-top:10px; }
+.btn-sair:hover { border-color:rgba(200,80,80,0.3); color:#E88080; }
+.banner { border-radius:6px; padding:10px 14px; font-size:12px; margin-bottom:14px; line-height:1.6; text-align:left; display:none; }
+.banner.amarelo { background:rgba(255,200,50,0.08); border:1px solid rgba(255,200,50,0.25); color:#E8C97A; }
+.banner.vermelho { background:rgba(200,80,80,0.1); border:1px solid rgba(200,80,80,0.3); color:#E88080; }
+.banner.laranja { background:rgba(230,120,30,0.1); border:1px solid rgba(230,120,30,0.3); color:#E89050; }
 </style>
 </head>
 <body>
 
-<!-- TELA DE LOGIN -->
-<div id="tela-login">
-  <div class="login-box">
-    <div class="login-logo">Studio Provador</div>
-    <div class="login-title">Provador <em>Virtual</em></div>
-    <div class="login-sub">Cabelo &amp; Maquiagem</div>
-    <div class="login-campo">
-      <label>Chave de Licença</label>
-      <input type="text" id="input-chave" placeholder="COMPLETO-XXXXXX-YYYYYY" onkeydown="if(event.key==='Enter') entrar()">
-    </div>
-    <button class="btn-entrar" id="btn-entrar" onclick="entrar()">Entrar</button>
-    <div class="login-erro" id="login-erro">Chave inválida ou expirada.</div>
+<!-- TELA LOGIN -->
+<div class="box" id="tela-login">
+  <div class="logo">Studio Provador</div>
+  <div class="titulo">Provador <em>Virtual</em></div>
+  <div class="sub">Cabelo · Maquiagem</div>
+  <div class="campo">
+    <label>Senha de acesso</label>
+    <input type="text" id="input-pin" maxlength="4" placeholder="••••"
+      oninput="this.value=this.value.replace(/\D/g,'')"
+      onkeydown="if(event.key==='Enter')entrar()">
   </div>
+  <button class="btn" id="btn-entrar" onclick="entrar()">Entrar</button>
+  <div class="geo-status" id="geo-status"></div>
+  <div class="erro" id="login-erro"></div>
+  <div class="aviso" id="login-aviso"></div>
 </div>
 
-<!-- APP PRINCIPAL -->
-<div id="app">
-  <div class="app-header">
-    <div class="app-logo"><span class="logo-dot"></span> ✨ Sua Versão Mais Linda</div>
-    <div class="licenca-info">
-      <div id="licenca-nome"></div>
-      <div class="uso-badge" id="uso-badge">✨ carregando…</div>
-    </div>
+<!-- TELA ESCOLHA -->
+<div class="box tela-escolha" id="tela-escolha">
+  <div class="bem-vindo" id="bem-vindo">Olá!</div>
+  <div class="bem-sub" id="bem-sub">Plano Starter</div>
+
+  <!-- Banners de aviso -->
+  <div class="banner amarelo" id="banner-dias" role="alert"></div>
+  <div class="banner vermelho" id="banner-vencido" role="alert"></div>
+  <div class="banner laranja" id="banner-creditos" role="alert"></div>
+
+  <div class="creditos-badge" id="creditos-badge">✨ carregando…</div>
+
+  <div class="opcoes">
+    <a class="opcao" id="link-cabelo" href="cabelo.html">
+      <div class="icone">✂️</div>
+      <div class="nome">Cabelo</div>
+      <div class="desc">Simular corte</div>
+    </a>
+    <a class="opcao" id="link-makeup" href="maquiagem.html">
+      <div class="icone">💄</div>
+      <div class="nome">Maquiagem</div>
+      <div class="desc">Simular make</div>
+    </a>
   </div>
-
-  <div class="app-body">
-    <div class="bloqueio-area" id="bloqueio-area">
-      <h3>Limite mensal atingido</h3>
-      <p>Seu plano atingiu o limite de simulações deste mês.<br>O contador reinicia automaticamente no início do próximo mês.<br>Para aumentar o limite, entre em contato com o Studio Provador.</p>
-    </div>
-
-    <div id="conteudo-principal">
-      <!-- FOTO DO ROSTO -->
-      <div class="section-card">
-        <div class="section-title">Foto da cliente</div>
-        <div id="zone-rosto" style="position:relative">
-          <img class="upload-preview" id="prev-rosto" alt="" style="display:none;width:100%;max-height:220px;object-fit:cover;border-radius:12px;margin-bottom:10px">
-          <button class="remove-img" id="btn-remove-rosto" onclick="removerFoto('rosto',event)" style="display:none">✕</button>
-          <div style="display:flex;gap:10px">
-            <button class="btn-foto-opcao" onclick="abrirCamera()">
-              <span style="font-size:22px">📷</span>
-              <span>Tirar Foto</span>
-            </button>
-            <button class="btn-foto-opcao" onclick="abrirGaleria()">
-              <span style="font-size:22px">🖼️</span>
-              <span>Escolher da Galeria</span>
-            </button>
-          </div>
-          <input type="file" id="file-rosto-camera" accept="image/*" capture="environment" onchange="carregarImagem('rosto',this)" style="display:none">
-          <input type="file" id="file-rosto-galeria" accept="image/*" onchange="carregarImagem('rosto',this)" style="display:none">
-        </div>
-      </div>
-
-      <!-- TABS CABELO / MAQUIAGEM -->
-      <div class="section-card">
-        <div class="tabs">
-          <button class="tab-btn ativo" onclick="mudarTab('cabelo',this)">💇‍♀️ Cabelo</button>
-          <button class="tab-btn" onclick="mudarTab('makeup',this)">💄 Maquiagem</button>
-        </div>
-
-        <!-- TAB CABELO -->
-        <div id="tab-cabelo" class="tab-panel ativo">
-
-          <div class="section-title">Escolha o estilo de cabelo</div>
-          <div class="galeria-grid" id="galeria-cabelo">
-            <div class="galeria-item" onclick="selecionarEstilo('cabelo',this,'Transform the hair in this photo to straight sleek hair: perfectly smooth, shiny, with natural movement. Keep face, skin tone, background and lighting exactly the same. Only change the hair texture and style.')">
-              <img src="https://images.pexels.com/photos/1858175/pexels-photo-1858175.jpeg?auto=compress&cs=tinysrgb&w=200&h=120&fit=crop" alt="Liso" onerror="this.style.height='40px'">
-              <div class="item-label"><span class="item-nome">Liso Natural</span><span class="item-desc">Escova, brilho suave</span></div>
-            </div>
-            <div class="galeria-item" onclick="selecionarEstilo('cabelo',this,'Transform the hair to beach waves: soft, natural-looking waves with texture and movement, as if dried naturally after a beach day. Keep face, skin and background unchanged. Only alter hair.')">
-              <img src="https://images.pexels.com/photos/1520760/pexels-photo-1520760.jpeg?auto=compress&cs=tinysrgb&w=200&h=120&fit=crop" alt="Beach Waves" onerror="this.style.height='40px'">
-              <div class="item-label"><span class="item-nome">Beach Waves</span><span class="item-desc">Ondas soltas e naturais</span></div>
-            </div>
-            <div class="galeria-item" onclick="selecionarEstilo('cabelo',this,'Transform the hair to defined curls: bouncy, well-defined spiral curls with volume and shine. Keep face, skin, background and lighting exactly unchanged. Only change the hair.')">
-              <img src="https://images.pexels.com/photos/3065209/pexels-photo-3065209.jpeg?auto=compress&cs=tinysrgb&w=200&h=120&fit=crop" alt="Cachos" onerror="this.style.height='40px'">
-              <div class="item-label"><span class="item-nome">Cachos</span><span class="item-desc">Cachos definidos com volume</span></div>
-            </div>
-            <div class="galeria-item" onclick="selecionarEstilo('cabelo',this,'Style the hair into an elegant high bun: smooth, polished bun on top of the head with sleek sides. Keep all facial features, skin tone, background and lighting exactly the same.')">
-              <img src="https://images.pexels.com/photos/2681751/pexels-photo-2681751.jpeg?auto=compress&cs=tinysrgb&w=200&h=120&fit=crop" alt="Coque" onerror="this.style.height='40px'">
-              <div class="item-label"><span class="item-nome">Coque Alto</span><span class="item-desc">Elegante e despojado</span></div>
-            </div>
-            <div class="galeria-item" onclick="selecionarEstilo('cabelo',this,'Style the hair into a loose side braid: a relaxed, slightly messy side braid with soft face-framing pieces. Keep face, skin, lighting and background exactly unchanged.')">
-              <img src="https://images.pexels.com/photos/3373716/pexels-photo-3373716.jpeg?auto=compress&cs=tinysrgb&w=200&h=120&fit=crop" alt="Trança" onerror="this.style.height='40px'">
-              <div class="item-label"><span class="item-nome">Trança</span><span class="item-desc">Lateral despojada</span></div>
-            </div>
-            <div class="galeria-item" onclick="selecionarEstilo('cabelo',this,'Add rich honey blonde highlights to the hair using a balayage technique: natural-looking warm blonde streaks blended through the existing hair color. Keep all facial features, background and lighting unchanged. Only color the hair.')">
-              <img src="https://images.pexels.com/photos/2823254/pexels-photo-2823254.jpeg?auto=compress&cs=tinysrgb&w=200&h=120&fit=crop" alt="Mechas" onerror="this.style.height='40px'">
-              <div class="item-label"><span class="item-nome">Mechas</span><span class="item-desc">Balayage mel/loiro</span></div>
-            </div>
-            <div class="galeria-item" onclick="selecionarEstilo('cabelo',this,'Color the hair to a deep rich auburn/chestnut red: warm, vibrant red-brown tone with natural-looking highlights. Keep face, skin tone, background and lighting exactly unchanged. Only change the hair color.')">
-              <img src="https://images.pexels.com/photos/1037999/pexels-photo-1037999.jpeg?auto=compress&cs=tinysrgb&w=200&h=120&fit=crop" alt="Ruivo" onerror="this.style.height='40px'">
-              <div class="item-label"><span class="item-nome">Ruivo</span><span class="item-desc">Castanho avermelhado</span></div>
-            </div>
-            <div class="galeria-item" onclick="selecionarEstilo('cabelo',this,'Style the hair with high volume blowout: full, bouncy, voluminous blowout with soft waves and maximum body. Keep face, skin, background and lighting exactly unchanged. Only transform the hair.')">
-              <img src="https://images.pexels.com/photos/3997991/pexels-photo-3997991.jpeg?auto=compress&cs=tinysrgb&w=200&h=120&fit=crop" alt="Volume" onerror="this.style.height='40px'">
-              <div class="item-label"><span class="item-nome">Volumão</span><span class="item-desc">Escova com muito volume</span></div>
-            </div>
-          </div>
-
-          <!-- Meus Looks Cabelo -->
-          <div id="secao-looks-cabelo" style="display:none">
-            <div class="meus-looks-titulo">
-              <span>✦ Meus Looks de Cabelo</span>
-              <button class="btn-add-look" onclick="abrirModal('cabelo')">+ Adicionar</button>
-            </div>
-            <div class="meus-looks-grid" id="grid-looks-cabelo"></div>
-          </div>
-          <div style="cursor:pointer;color:#9A72C4;font-size:11px;text-align:center;margin:10px 0 4px;letter-spacing:2px;font-weight:600;" onclick="toggleLooks('cabelo')">✦ Ver / Adicionar Looks do Cabelereiro</div>
-
-          <div class="galeria-ou">— ou envie uma foto de referência —</div>
-          <div class="upload-zone" id="zone-cabelo" onclick="triggerUpload('file-cabelo')" style="min-height:80px">
-            <input type="file" id="file-cabelo" accept="image/*" capture="environment" onchange="carregarImagem('cabelo',this)">
-            <img class="upload-preview" id="prev-cabelo" alt="">
-            <button class="remove-img" onclick="removerFoto('cabelo',event)">✕</button>
-            <div class="upload-icon" style="font-size:22px">📁</div>
-            <div class="upload-label" style="font-size:12px">Enviar referência própria</div>
-            <div class="upload-hint">Foto do cabelo desejado</div>
-          </div>
-        </div>
-
-        <!-- TAB MAQUIAGEM -->
-        <div id="tab-makeup" class="tab-panel">
-
-          <div class="section-title">Escolha o estilo de maquiagem</div>
-          <div class="galeria-grid" id="galeria-makeup">
-            <div class="galeria-item" onclick="selecionarEstilo('makeup',this,'Apply subtle natural makeup: lightweight foundation matching skin tone, softly defined brows, light mascara, and nude/pink lip balm. Result must look like the person is wearing almost no makeup — fresh, clean, skin-first finish.')">
-              <img src="https://images.pexels.com/photos/3373716/pexels-photo-3373716.jpeg?auto=compress&cs=tinysrgb&w=200&h=120&fit=crop" alt="Natural" onerror="this.style.height='40px'">
-              <div class="item-label"><span class="item-nome">Make Natural</span><span class="item-desc">Pele uniforme, lábios nude</span></div>
-            </div>
-            <div class="galeria-item" onclick="selecionarEstilo('makeup',this,'Apply a professional smokey eye: blend dark brown and black eyeshadow ONLY on the upper eyelids and slightly above the crease — do NOT put dark shadow under the eyes. Add thin precise eyeliner on upper lid only, volumizing mascara. Keep skin and lips neutral. Blending must be smooth.')">
-              <img src="https://images.pexels.com/photos/2065195/pexels-photo-2065195.jpeg?auto=compress&cs=tinysrgb&w=200&h=120&fit=crop" alt="Esfumado" onerror="this.style.height='40px'">
-              <div class="item-label"><span class="item-nome">Olho Esfumado</span><span class="item-desc">Sombra escura degradê</span></div>
-            </div>
-            <div class="galeria-item" onclick="selecionarEstilo('makeup',this,'Apply classic red lip makeup: precise classic red lipstick with clean edges, minimal eye makeup with subtle mascara, light foundation with soft blush. The red lip must look precisely applied and elegant.')">
-              <img src="https://images.pexels.com/photos/1037999/pexels-photo-1037999.jpeg?auto=compress&cs=tinysrgb&w=200&h=120&fit=crop" alt="Batom" onerror="this.style.height='40px'">
-              <div class="item-label"><span class="item-nome">Batom Vermelho</span><span class="item-desc">Classic red lip, make clean</span></div>
-            </div>
-            <div class="galeria-item" onclick="selecionarEstilo('makeup',this,'Apply elegant bridal makeup: flawless full-coverage foundation, subtle highlight on cheekbones, natural false lashes, soft rose-pink lips, delicate peachy blush. Result must look romantic, polished and camera-ready.')">
-              <img src="https://images.pexels.com/photos/1729931/pexels-photo-1729931.jpeg?auto=compress&cs=tinysrgb&w=200&h=120&fit=crop" alt="Noiva" onerror="this.style.height='40px'">
-              <div class="item-label"><span class="item-nome">Look Noiva</span><span class="item-desc">Iluminador, cílios, rosé</span></div>
-            </div>
-            <div class="galeria-item" onclick="selecionarEstilo('makeup',this,'Apply glamorous party makeup: glitter or shimmer on upper eyelids, precise dark eyeliner, voluminous mascara, bold lip color (wine or fuchsia). All products must look professionally blended — glamorous but not overdone.')">
-              <img src="https://images.pexels.com/photos/3762875/pexels-photo-3762875.jpeg?auto=compress&cs=tinysrgb&w=200&h=120&fit=crop" alt="Festa" onerror="this.style.height='40px'">
-              <div class="item-label"><span class="item-nome">Make Festa</span><span class="item-desc">Glitter, delineado dramático</span></div>
-            </div>
-            <div class="galeria-item" onclick="selecionarEstilo('makeup',this,'Apply cat eye makeup: precise thin-to-thick winged eyeliner with a clean sharp flick at the outer corner of each eye. Keep the wing symmetrical and elegant. Neutral skin and lips.')">
-              <img src="https://images.pexels.com/photos/2681751/pexels-photo-2681751.jpeg?auto=compress&cs=tinysrgb&w=200&h=120&fit=crop" alt="Cat Eye" onerror="this.style.height='40px'">
-              <div class="item-label"><span class="item-nome">Cat Eye</span><span class="item-desc">Delineado gatinho alongado</span></div>
-            </div>
-            <div class="galeria-item" onclick="selecionarEstilo('makeup',this,'Apply elegant nighttime makeup: precise black eyeliner on upper lash line with a subtle wing, well-defined brows, medium plum or mauve-rose lipstick — NOT dark burgundy. Soft natural foundation, light blush. Result must look sophisticated.')">
-              <img src="https://images.pexels.com/photos/2823254/pexels-photo-2823254.jpeg?auto=compress&cs=tinysrgb&w=200&h=120&fit=crop" alt="Noturna" onerror="this.style.height='40px'">
-              <div class="item-label"><span class="item-nome">Make Noturna</span><span class="item-desc">Delineado + lábio vinho</span></div>
-            </div>
-            <div class="galeria-item" onclick="selecionarEstilo('makeup',this,'Apply artistic colorful editorial makeup: vibrant blue and purple eyeshadow on upper lids, graphic color accents, bold fuchsia or coral lips. Style should look like a high-fashion editorial shoot — creative and striking.')">
-              <img src="https://images.pexels.com/photos/3997991/pexels-photo-3997991.jpeg?auto=compress&cs=tinysrgb&w=200&h=120&fit=crop" alt="Artístico" onerror="this.style.height='40px'">
-              <div class="item-label"><span class="item-nome">Artístico</span><span class="item-desc">Cores vibrantes, criativo</span></div>
-            </div>
-          </div>
-
-          <!-- Meus Looks Makeup -->
-          <div id="secao-looks-makeup" style="display:none">
-            <div class="meus-looks-titulo">
-              <span>✦ Meus Looks de Maquiagem</span>
-              <button class="btn-add-look" onclick="abrirModal('makeup')">+ Adicionar</button>
-            </div>
-            <div class="meus-looks-grid" id="grid-looks-makeup"></div>
-          </div>
-          <div style="cursor:pointer;color:#9A72C4;font-size:11px;text-align:center;margin:10px 0 4px;letter-spacing:2px;font-weight:600;" onclick="toggleLooks('makeup')">✦ Ver / Adicionar Looks da Maquiadora</div>
-
-          <div class="galeria-ou">— ou envie uma foto de referência —</div>
-          <div class="upload-zone" id="zone-makeup" onclick="triggerUpload('file-makeup')" style="min-height:80px">
-            <input type="file" id="file-makeup" accept="image/*" capture="environment" onchange="carregarImagem('makeup',this)">
-            <img class="upload-preview" id="prev-makeup" alt="">
-            <button class="remove-img" onclick="removerFoto('makeup',event)">✕</button>
-            <div class="upload-icon" style="font-size:22px">📁</div>
-            <div class="upload-label" style="font-size:12px">Enviar referência própria</div>
-            <div class="upload-hint">Look desejado ou paleta</div>
-          </div>
-        </div>
-      </div>
-
-      <!-- GERAR -->
-      <div class="section-card">
-        <div class="info-row">✨ Mostre para a cliente a melhor versão dela — em segundos!</div>
-        <div style="display:flex;gap:10px;flex-wrap:wrap">
-          <button class="btn-gerar" id="btn-gerar-cabelo" onclick="gerarSimulacao('cabelo')" disabled style="flex:1">💇‍♀️ Gerar Cabelo</button>
-          <button class="btn-gerar" id="btn-gerar-makeup" onclick="gerarSimulacao('makeup')" disabled style="flex:1">💄 Gerar Maquiagem</button>
-        </div>
-      </div>
-
-      <div class="erro-area" id="erro-area"></div>
-
-      <!-- RESULTADO -->
-      <div class="result-area section-card" id="result-area">
-        <div class="section-title" id="result-titulo">Resultado da Simulação</div>
-        <div id="result-col-cabelo" style="display:none">
-          <div class="col-loading" id="load-cabelo">
-            <div class="col-spinner"></div>
-            <div class="col-loading-txt">Transformando o cabelo…</div>
-          </div>
-          <div class="result-img-wrap" id="wrap-cabelo" style="display:none">
-            <img class="result-img" id="img-cabelo" alt="Resultado Cabelo">
-          </div>
-          <div class="result-actions" style="flex-wrap:wrap;margin-top:12px">
-            <button class="btn-dl" onclick="baixar('cabelo')">⬇ Baixar</button>
-            <button class="btn-dl" onclick="nova()">↺ Nova simulação</button>
-          </div>
-          <div style="margin-top:10px">
-            <button class="btn-dl" style="background:#25D366;color:#fff;border-color:#25D366;width:100%;font-weight:600" onclick="compartilharWhatsApp('cabelo')">📲 Enviar p/ Cliente</button>
-          </div>
-        </div>
-        <div id="result-col-makeup" style="display:none">
-          <div class="col-loading" id="load-makeup">
-            <div class="col-spinner"></div>
-            <div class="col-loading-txt">Aplicando maquiagem…</div>
-          </div>
-          <div class="result-img-wrap" id="wrap-makeup" style="display:none">
-            <img class="result-img" id="img-makeup" alt="Resultado Maquiagem">
-          </div>
-          <div class="result-actions" style="flex-wrap:wrap;margin-top:12px">
-            <button class="btn-dl" onclick="baixar('makeup')">⬇ Baixar</button>
-            <button class="btn-dl" onclick="nova()">↺ Nova simulação</button>
-          </div>
-          <div style="margin-top:10px">
-            <button class="btn-dl" style="background:#25D366;color:#fff;border-color:#25D366;width:100%;font-weight:600" onclick="compartilharWhatsApp('makeup')">📲 Enviar p/ Cliente</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+  <button class="btn-sair" onclick="sair()">Sair</button>
 </div>
-
-<!-- MODAL ADICIONAR LOOK -->
-<div class="modal-overlay" id="modal-look">
-  <div class="modal-box">
-    <div class="modal-titulo" id="modal-titulo">✦ Adicionar Look</div>
-    <div class="modal-zona" onclick="document.getElementById('input-look-foto').click()">
-      <input type="file" id="input-look-foto" accept="image/*" style="display:none" onchange="previewModalLook(this)">
-      <img id="preview-modal-look" class="modal-preview" alt="">
-      <div id="modal-zona-txt">📷 Toque para escolher a foto do look</div>
-    </div>
-    <input type="text" class="modal-nome" id="input-look-nome" placeholder="Nome do look (ex: Noiva Clássica)">
-    <div class="modal-acoes">
-      <button class="btn-modal-cancelar" onclick="fecharModal()">Cancelar</button>
-      <button class="btn-modal-salvar" onclick="salvarLook()">✓ Salvar Look</button>
-    </div>
-  </div>
-</div>
-
-<div class="toast" id="toast"></div>
 
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getFirestore, doc, getDoc, updateDoc, increment } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
-
-const PREFIXO = "COMPLETO";
+import { getFirestore, collection, query, where, getDocs, doc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const fb = initializeApp({
   apiKey:"AIzaSyCB-4FQpw157I6qKJAuXyXc3QEzqlcI1c0",
@@ -413,471 +103,163 @@ const fb = initializeApp({
 });
 const db = getFirestore(fb);
 
-const imgs = { rosto:null, cabelo:null, makeup:null };
-const estilos = { cabelo:null, makeup:null };
-let licencaDoc = null;
-let GEMINI_KEY = null;
-let looksData = { cabelo:[], makeup:[] };
-let modalTipo = null;
-let modalFotoB64 = null;
-
-function getDeviceId() {
-  const raw = [navigator.userAgent, navigator.language, navigator.platform,
-    screen.width+'x'+screen.height, screen.colorDepth,
-    Intl.DateTimeFormat().resolvedOptions().timeZone,
-    navigator.hardwareConcurrency||'', navigator.deviceMemory||''].join('|');
-  let h = 0;
-  for (let i = 0; i < raw.length; i++) { h = ((h<<5)-h)+raw.charCodeAt(i); h|=0; }
-  return 'DEV_'+Math.abs(h).toString(36).toUpperCase();
-}
+const GEO_RAIO_METROS = 150;
+const DIAS_AVISO = 5;
+const CREDITOS_AVISO = 10;
+const CARENCIA_MS = 24 * 60 * 60 * 1000; // 1 dia
 
 function getMesAtual() { const d=new Date(); return `${d.getFullYear()}_${d.getMonth()+1}`; }
 function getUsosMes(dados) { return (dados.usos||{})[getMesAtual()]||0; }
 
+function distanciaMetros(lat1,lng1,lat2,lng2) {
+  const R=6371000, r=Math.PI/180;
+  const a=Math.sin((lat2-lat1)*r/2)**2 + Math.cos(lat1*r)*Math.cos(lat2*r)*Math.sin((lng2-lng1)*r/2)**2;
+  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+}
+
+function getPosicaoAtual() {
+  return new Promise((res,rej) => {
+    if (!navigator.geolocation) { rej(new Error('Geolocalização não suportada neste dispositivo.')); return; }
+    navigator.geolocation.getCurrentPosition(
+      p => res({ lat: p.coords.latitude, lng: p.coords.longitude }),
+      e => rej(new Error('Permita a localização para acessar o provador.')),
+      { enableHighAccuracy:true, timeout:10000 }
+    );
+  });
+}
+
 window.entrar = async () => {
-  const chave = document.getElementById('input-chave').value.trim().toUpperCase();
+  const pin = document.getElementById('input-pin').value.trim();
   const btn = document.getElementById('btn-entrar');
   const erro = document.getElementById('login-erro');
+  const avisoEl = document.getElementById('login-aviso');
+  const geoStatus = document.getElementById('geo-status');
+  erro.style.display = 'none';
+  avisoEl.style.display = 'none';
 
-  if (!chave.startsWith(PREFIXO+'-')) {
-    erro.textContent = 'Chave inválida para este provador. Use uma chave COMPLETO-...';
-    erro.style.display = 'block'; return;
-  }
+  if (pin.length !== 4) { erro.textContent='Digite os 4 dígitos da sua senha.'; erro.style.display='block'; return; }
 
-  btn.disabled = true; btn.textContent = 'Verificando…';
+  btn.disabled=true; btn.textContent='Verificando…';
 
   try {
-    const snap = await getDoc(doc(db, 'licencas', chave));
-    if (!snap.exists()) throw new Error('Licença não encontrada.');
-    const dados = snap.data();
+    // 1. Busca licença pelo PIN
+    const q = query(collection(db,'licencas'), where('pin','==',pin), where('compartilhado','==',true));
+    const snap = await getDocs(q);
+    if (snap.empty) throw new Error('Senha incorreta ou não encontrada.');
+    const docSnap = snap.docs[0];
+    const dados = docSnap.data();
+    const chave = docSnap.id;
 
-    if (Date.now() > dados.venceEm) throw new Error('Licença expirada. Contate o Studio Provador.');
+    // 2. Verifica vencimento com carência de 1 dia
+    const agora = Date.now();
+    const vencido = agora > dados.venceEm;
+    const dentroCarencia = agora <= (dados.venceEm + CARENCIA_MS);
+    if (vencido && !dentroCarencia) throw new Error('Acesso encerrado. Plano vencido em '+dados.venceData+'. Entre em contato para renovar.');
 
-    const deviceId = getDeviceId();
-    if (dados.deviceId) {
-      if (dados.deviceId !== deviceId) throw new Error('Esta licença já está ativada em outro dispositivo. Contate o Studio Provador para transferência.');
+    // 3. Verifica créditos
+    const usos = getUsosMes(dados);
+    const limiteBase = dados.limite || 50;
+    const avulsos = dados.creditosAvulsos || 0;
+    const limiteTotal = limiteBase + avulsos;
+    if (usos >= limiteTotal) throw new Error('Créditos esgotados este mês. Entre em contato para adicionar créditos avulsos.');
+
+    // 4. Geolocalização
+    geoStatus.textContent = '📍 Verificando localização…';
+    const posAtual = await getPosicaoAtual();
+
+    if (dados.geoLat && dados.geoLng) {
+      // Já tem local cadastrado — verifica distância
+      const dist = distanciaMetros(posAtual.lat, posAtual.lng, dados.geoLat, dados.geoLng);
+      if (dist > GEO_RAIO_METROS) throw new Error(`Acesso permitido apenas no local cadastrado do salão. Você está a ${Math.round(dist)}m do endereço registrado.`);
     } else {
-      await updateDoc(doc(db,'licencas',chave), { deviceId, primeiroAcesso: Date.now() });
+      // Primeiro acesso — registra localização
+      await updateDoc(doc(db,'licencas',chave), {
+        geoLat: posAtual.lat,
+        geoLng: posAtual.lng,
+        primeiroAcesso: agora
+      });
     }
+    geoStatus.textContent = '';
 
-    if (getUsosMes(dados) >= ((dados.limite||100)+(dados.creditosAvulsos||0))) {
-      throw new Error('Limite mensal atingido. Aguarde o próximo mês ou faça upgrade do plano.');
-    }
+    // 5. Salva sessão no sessionStorage
+    sessionStorage.setItem('compt_chave', chave);
+    sessionStorage.setItem('compt_dados', JSON.stringify({...dados, id:chave}));
 
-    const cfgSnap = await getDoc(doc(db, 'config', 'gemini'));
-    if (!cfgSnap.exists()) throw new Error('Configuração do sistema não encontrada. Contate o suporte.');
-    GEMINI_KEY = cfgSnap.data().apikey;
-
-    licencaDoc = { id: chave, ...dados };
-    document.getElementById('tela-login').style.display = 'none';
-    document.getElementById('app').style.display = 'block';
-    carregarLooks();
-
-    const pl = (dados.plano||'lite');
-    const plN = pl.charAt(0).toUpperCase()+pl.slice(1);
-    document.getElementById('licenca-nome').textContent = dados.nome + ' · ' + plN + ' · Vence ' + dados.venceData;
-    atualizarContador(dados);
+    // 6. Monta tela de escolha
+    mostrarTelaEscolha(dados, chave, usos, limiteTotal, vencido, dentroCarencia);
 
   } catch(e) {
-    erro.textContent = e.message || 'Erro ao verificar licença.';
+    geoStatus.textContent = '';
+    erro.textContent = e.message || 'Erro ao verificar acesso.';
     erro.style.display = 'block';
-    btn.disabled = false; btn.textContent = 'Entrar';
+    btn.disabled=false; btn.textContent='Entrar';
   }
 };
 
-async function recarregarLicenca() {
-  const snap = await getDoc(doc(db,'licencas',licencaDoc.id));
-  licencaDoc = { id: licencaDoc.id, ...snap.data() };
-  return licencaDoc;
-}
+function mostrarTelaEscolha(dados, chave, usos, limiteTotal, vencido, dentroCarencia) {
+  document.getElementById('tela-login').style.display = 'none';
+  document.getElementById('tela-escolha').style.display = 'block';
 
-function atualizarContador(dados) {
-  const usos = getUsosMes(dados);
-  const limiteBase = dados.limite || 100;
-  const avulso = dados.creditosAvulsos || 0;
-  const limite = limiteBase + avulso;
-  const restante = limite - usos;
-  const badge = document.getElementById('uso-badge');
-  badge.textContent = avulso > 0 ? `✨ ${usos} / ${limiteBase} +${avulso} avulso` : `✨ ${usos} / ${limite} usos este mês`;
-  badge.className = 'uso-badge';
-  if (restante <= 0) {
-    badge.classList.add('esgotado');
-    document.getElementById('bloqueio-area').style.display = 'block';
-    document.getElementById('conteudo-principal').style.opacity = '0.4';
-    document.getElementById('conteudo-principal').style.pointerEvents = 'none';
-  } else if (restante <= Math.ceil(limite * 0.1)) {
-    badge.classList.add('aviso');
+  const planoLabel = dados.plano === 'starter' ? 'Starter · 50 créditos/mês' : 'Pro · 80 créditos/mês';
+  document.getElementById('bem-vindo').textContent = dados.nome;
+  document.getElementById('bem-sub').textContent = planoLabel;
+
+  // Badge de créditos
+  const rest = limiteTotal - usos;
+  const badge = document.getElementById('creditos-badge');
+  const avulsos = dados.creditosAvulsos || 0;
+  badge.textContent = avulsos > 0
+    ? `✨ ${usos} / ${dados.limite||50} +${avulsos} avulso · ${rest} restantes`
+    : `✨ ${usos} / ${limiteTotal} créditos usados · ${rest} restantes`;
+  badge.className = 'creditos-badge' + (rest <= 0 ? ' esgotado' : rest <= CREDITOS_AVISO ? ' aviso-cred' : '');
+
+  // Banners de aviso
+  const diasRestantes = Math.ceil((dados.venceEm - Date.now()) / (1000*60*60*24));
+
+  if (vencido && dentroCarencia) {
+    const b = document.getElementById('banner-vencido');
+    b.innerHTML = '⛔ <strong>Plano vencido!</strong> Acesso será bloqueado em breve. Entre em contato para renovar.';
+    b.style.display = 'block';
+  } else if (!vencido && diasRestantes <= DIAS_AVISO) {
+    const b = document.getElementById('banner-dias');
+    b.innerHTML = `⚠️ <strong>Atenção:</strong> Seu plano vence em <strong>${diasRestantes} dia${diasRestantes>1?'s':''}</strong> (${dados.venceData}). Renove para não perder o acesso.`;
+    b.style.display = 'block';
   }
-}
 
-window.mudarTab = (tipo, btn) => {
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('ativo'));
-  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('ativo'));
-  btn.classList.add('ativo');
-  document.getElementById('tab-'+tipo).classList.add('ativo');
-};
-
-window.triggerUpload = id => document.getElementById(id).click();
-window.abrirCamera  = () => document.getElementById('file-rosto-camera').click();
-window.abrirGaleria = () => document.getElementById('file-rosto-galeria').click();
-
-window.carregarRosto = (aba, input) => {
-  const file = input.files[0]; if(!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    const key = 'rosto' + aba.charAt(0).toUpperCase() + aba.slice(1);
-    imgs[key] = e.target.result;
-    document.getElementById('prev-rosto-'+aba).src = e.target.result;
-    document.getElementById('zone-rosto-'+aba).classList.add('has-img');
-    atualizarBotao();
-  };
-  reader.readAsDataURL(file);
-};
-
-window.removerRosto = (aba, event) => {
-  event.stopPropagation();
-  const key = 'rosto' + aba.charAt(0).toUpperCase() + aba.slice(1);
-  imgs[key] = null;
-  document.getElementById('prev-rosto-'+aba).src = '';
-  document.getElementById('zone-rosto-'+aba).classList.remove('has-img');
-  document.getElementById('file-rosto-'+aba).value = '';
-  atualizarBotao();
-};
-
-window.carregarImagem = (tipo, input) => {
-  const file = input.files[0]; if(!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    imgs[tipo] = e.target.result;
-    const prev = document.getElementById('prev-'+tipo);
-    prev.src = e.target.result;
-    if (tipo === 'rosto') {
-      prev.style.display = 'block';
-      document.getElementById('btn-remove-rosto').style.display = 'flex';
-    } else {
-      document.getElementById('zone-'+tipo).classList.add('has-img');
-    }
-    if (tipo === 'cabelo' || tipo === 'makeup') {
-      estilos[tipo] = null;
-      document.querySelectorAll('#galeria-'+tipo+' .galeria-item').forEach(i => i.classList.remove('selecionado'));
-    }
-    atualizarBotao();
-  };
-  reader.readAsDataURL(file);
-};
-
-window.removerFoto = (tipo, event) => {
-  event.stopPropagation();
-  imgs[tipo] = null;
-  const prev = document.getElementById('prev-'+tipo);
-  prev.src = '';
-  if (tipo === 'rosto') {
-    prev.style.display = 'none';
-    document.getElementById('btn-remove-rosto').style.display = 'none';
-    const fc = document.getElementById('file-rosto-camera');
-    const fg = document.getElementById('file-rosto-galeria');
-    if(fc) fc.value = '';
-    if(fg) fg.value = '';
-  } else {
-    document.getElementById('zone-'+tipo).classList.remove('has-img');
-    document.getElementById('file-'+tipo).value = '';
+  if (rest <= CREDITOS_AVISO && rest > 0) {
+    const b = document.getElementById('banner-creditos');
+    b.innerHTML = `🔶 <strong>Créditos acabando:</strong> Restam apenas <strong>${rest} créditos</strong> este mês. Entre em contato para adicionar mais.`;
+    b.style.display = 'block';
   }
-  atualizarBotao();
-};
 
-window.selecionarEstilo = (tipo, el, prompt) => {
-  document.querySelectorAll('#galeria-'+tipo+' .galeria-item').forEach(i => i.classList.remove('selecionado'));
-  document.querySelectorAll('#grid-looks-'+tipo+' .meu-look-item').forEach(i => i.classList.remove('selecionado'));
-  el.classList.add('selecionado');
-  estilos[tipo] = prompt;
-  imgs[tipo] = null;
-  document.getElementById('prev-'+tipo).src = '';
-  document.getElementById('zone-'+tipo).classList.remove('has-img');
-  mostrarToast('✓ Estilo selecionado');
-  atualizarBotao();
-};
-
-function atualizarBotao() {
-  const temCabelo = imgs.cabelo || estilos.cabelo;
-  const temMakeup = imgs.makeup || estilos.makeup;
-  const usos = licencaDoc ? getUsosMes(licencaDoc) : 0;
-  const limiteTotal = (licencaDoc?.limite||100)+(licencaDoc?.creditosAvulsos||0);
-  const esgotado = usos >= limiteTotal;
-  document.getElementById('btn-gerar-cabelo').disabled = !(imgs.rosto && temCabelo) || esgotado;
-  document.getElementById('btn-gerar-makeup').disabled = !(imgs.rosto && temMakeup) || esgotado;
+  // Passa chave via URL para os provadores
+  document.getElementById('link-cabelo').href = `cabelo.html?chave=${chave}`;
+  document.getElementById('link-makeup').href = `maquiagem.html?chave=${chave}`;
 }
 
-async function chamarGemini(parts) {
-  const res = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${GEMINI_KEY}`,
-    { method:'POST', headers:{'Content-Type':'application/json'},
-      body: JSON.stringify({ contents:[{parts}] }) }
-  );
-  if(!res.ok){ const e=await res.json(); throw new Error(e.error?.message||'Erro '+res.status); }
-  const data = await res.json();
-  for(const p of data.candidates?.[0]?.content?.parts||[]) {
-    const id = p.inlineData || p.inline_data;
-    if(id?.mimeType?.startsWith('image/') || id?.mime_type?.startsWith('image/')) {
-      const mime = id.mimeType || id.mime_type;
-      return `data:${mime};base64,${id.data}`;
-    }
-  }
-  const motivo = data.candidates?.[0]?.finishReason || '';
-  if(motivo === 'SAFETY') throw new Error('Imagem bloqueada por política de segurança. Tente outra foto.');
-  throw new Error('IA não retornou imagem. Tente novamente.');
-}
+window.sair = () => {
+  sessionStorage.clear();
+  document.getElementById('tela-login').style.display = 'flex';
+  document.getElementById('tela-escolha').style.display = 'none';
+  document.getElementById('input-pin').value = '';
+  document.getElementById('btn-entrar').disabled = false;
+  document.getElementById('btn-entrar').textContent = 'Entrar';
+};
 
-window.gerarSimulacao = async (tipo) => {
-  const dados = await recarregarLicenca();
-  if (getUsosMes(dados) >= ((dados.limite||100)+(dados.creditosAvulsos||0))) { atualizarContador(dados); return; }
-
-  const btnId = tipo === 'cabelo' ? 'btn-gerar-cabelo' : 'btn-gerar-makeup';
-  document.getElementById(btnId).disabled = true;
-  document.getElementById('erro-area').style.display = 'none';
-
-  // Mostrar só o col do tipo clicado
-  document.getElementById('result-col-cabelo').style.display = tipo === 'cabelo' ? 'block' : 'none';
-  document.getElementById('result-col-makeup').style.display = tipo === 'makeup' ? 'block' : 'none';
-  document.getElementById('result-titulo').textContent = tipo === 'cabelo' ? '💇‍♀️ Resultado — Cabelo' : '💄 Resultado — Maquiagem';
-
-  document.getElementById('result-area').classList.add('visible');
-  document.getElementById('result-area').scrollIntoView({behavior:'smooth',block:'nearest'});
-
-  const rostoB64 = imgs.rosto.split(',')[1];
-  const rostoMime = imgs.rosto.split(';')[0].split(':')[1];
-
-  document.getElementById('load-'+tipo).style.display = 'block';
-  document.getElementById('wrap-'+tipo).style.display = 'none';
-
+// Auto-login se já tem sessão ativa
+const chaveSalva = sessionStorage.getItem('compt_chave');
+const dadosSalvos = sessionStorage.getItem('compt_dados');
+if (chaveSalva && dadosSalvos) {
   try {
-    let parts;
-    if (tipo === 'cabelo') {
-      if (imgs.cabelo) {
-        const cB64 = imgs.cabelo.split(',')[1];
-        const cMime = imgs.cabelo.split(';')[0].split(':')[1];
-        parts = [
-          {text:`You are a professional hair stylist and photo editor. Apply the hairstyle shown in the reference image to the person in the first image. Keep the face, skin tone, background and lighting exactly unchanged. Only transform the hair.`},
-          {inline_data:{mime_type:rostoMime,data:rostoB64}},
-          {inline_data:{mime_type:cMime,data:cB64}}
-        ];
-      } else {
-        parts = [
-          {text:`You are a professional hair stylist and photo editor. Edit this photo to apply the following hairstyle. CRITICAL: Keep the exact same person, face shape, skin tone, lighting, background and camera angle unchanged. Only transform the hair. ${estilos.cabelo}`},
-          {inline_data:{mime_type:rostoMime,data:rostoB64}}
-        ];
-      }
-    } else {
-      if (imgs.makeup) {
-        const mB64 = imgs.makeup.split(',')[1];
-        const mMime = imgs.makeup.split(';')[0].split(':')[1];
-        parts = [
-          {text:`Você é especialista em maquiagem digital. Aplique a maquiagem da imagem de referência no rosto da primeira imagem. Mantenha as feições, cor de pele, iluminação e perspectiva originais. Resultado fotorrealista e profissional.`},
-          {inline_data:{mime_type:rostoMime,data:rostoB64}},
-          {inline_data:{mime_type:mMime,data:mB64}}
-        ];
-      } else {
-        parts = [
-          {text:`You are a professional makeup artist and photo retoucher. Edit this photo to apply makeup as described. CRITICAL RULES: 1) Keep the exact same person, face shape, skin tone, lighting, background and camera angle. 2) Apply makeup with professional precision. 3) The result must look like a real photo taken after professional makeup application. 4) Do NOT change hair or anything outside the makeup. Makeup to apply: ${estilos.makeup}`},
-          {inline_data:{mime_type:rostoMime,data:rostoB64}}
-        ];
-      }
+    const dados = JSON.parse(dadosSalvos);
+    const usos = getUsosMes(dados);
+    const limiteTotal = (dados.limite||50) + (dados.creditosAvulsos||0);
+    const vencido = Date.now() > dados.venceEm;
+    const dentroCarencia = Date.now() <= (dados.venceEm + CARENCIA_MS);
+    if (!vencido || dentroCarencia) {
+      mostrarTelaEscolha(dados, chaveSalva, usos, limiteTotal, vencido, dentroCarencia);
     }
-
-    const imgResult = await chamarGemini(parts);
-    document.getElementById('load-'+tipo).style.display = 'none';
-    document.getElementById('img-'+tipo).src = imgResult;
-    document.getElementById('wrap-'+tipo).style.display = 'flex';
-
-    // Cobrar 1 crédito
-    const mesKey = 'usos.'+getMesAtual();
-    await updateDoc(doc(db,'licencas',licencaDoc.id), {[mesKey]: increment(1)});
-    licencaDoc = await recarregarLicenca();
-    atualizarContador(licencaDoc);
-
-  } catch(e) {
-    document.getElementById('load-'+tipo).style.display = 'none';
-    document.getElementById('wrap-'+tipo).innerHTML = `<div style="padding:20px;color:#c62828;font-size:13px">⚠ ${e.message}</div>`;
-    document.getElementById('wrap-'+tipo).style.display = 'flex';
-    const ea = document.getElementById('erro-area');
-    ea.textContent = e.message;
-    ea.style.display = 'block';
-  }
-
-  document.getElementById(btnId).disabled = false;
-  atualizarBotao();
-};
-
-window.baixar = (tipo) => {
-  const img = document.getElementById('img-'+tipo);
-  if(!img || !img.src || img.src.startsWith('http')) { mostrarToast('⚠ Gere a simulação primeiro'); return; }
-  const a = document.createElement('a');
-  a.href = img.src;
-  a.download = tipo+'_'+Date.now()+'.png';
-  a.click();
-};
-
-window.nova = () => {
-  ['cabelo','makeup'].forEach(t => {
-    imgs[t] = null; estilos[t] = null;
-    document.getElementById('prev-'+t).src = '';
-    document.getElementById('zone-'+t).classList.remove('has-img');
-    document.getElementById('file-'+t).value = '';
-    document.querySelectorAll('#galeria-'+t+' .galeria-item').forEach(i => i.classList.remove('selecionado'));
-    document.getElementById('load-'+t).style.display = 'none';
-    document.getElementById('wrap-'+t).style.display = 'none';
-  });
-  imgs.rosto = null;
-  document.getElementById('prev-rosto').src = '';
-  document.getElementById('zone-rosto').classList.remove('has-img');
-  document.getElementById('file-rosto').value = '';
-  document.getElementById('result-area').classList.remove('visible');
-  document.getElementById('erro-area').style.display = 'none';
-  atualizarBotao();
-  window.scrollTo({top:0,behavior:'smooth'});
-};
-
-// ── MEUS LOOKS ──
-async function carregarLooks() {
-  try {
-    const snap = await getDoc(doc(db,'licencas',licencaDoc.id));
-    const d = snap.data();
-    looksData.cabelo = d?.looksCabelo || [];
-    looksData.makeup = d?.looksMakeup || [];
-    renderizarLooks('cabelo');
-    renderizarLooks('makeup');
-  } catch(e) { console.log('Erro ao carregar looks:', e); }
-}
-
-function renderizarLooks(tipo) {
-  const grid = document.getElementById('grid-looks-'+tipo);
-  const secao = document.getElementById('secao-looks-'+tipo);
-  if(!grid) return;
-  if(looksData[tipo].length === 0) { grid.innerHTML = ''; return; }
-  secao.style.display = 'block';
-  grid.innerHTML = looksData[tipo].map((l,i) => `
-    <div class="meu-look-item" id="look-${tipo}-${i}" onclick="selecionarMeuLook('${tipo}',${i})">
-      <img src="${l.foto}" alt="${l.nome}">
-      <div class="look-label"><span class="look-nome">${l.nome}</span></div>
-      <button class="look-del" onclick="deletarLook(event,'${tipo}',${i})">✕</button>
-    </div>`).join('');
-}
-
-window.toggleLooks = (tipo) => {
-  const s = document.getElementById('secao-looks-'+tipo);
-  if(s.style.display === 'none' || s.style.display === '') {
-    s.style.display = 'block';
-    if(looksData[tipo].length === 0) abrirModal(tipo);
-  } else {
-    s.style.display = 'none';
-  }
-};
-
-window.selecionarMeuLook = (tipo, i) => {
-  document.querySelectorAll('#galeria-'+tipo+' .galeria-item').forEach(el => el.classList.remove('selecionado'));
-  document.querySelectorAll('#grid-looks-'+tipo+' .meu-look-item').forEach(el => el.classList.remove('selecionado'));
-  document.getElementById('look-'+tipo+'-'+i)?.classList.add('selecionado');
-  imgs[tipo] = looksData[tipo][i].foto;
-  document.getElementById('prev-'+tipo).src = imgs[tipo];
-  document.getElementById('zone-'+tipo).classList.add('has-img');
-  estilos[tipo] = null;
-  mostrarToast('✓ Look: ' + looksData[tipo][i].nome);
-  atualizarBotao();
-};
-
-window.deletarLook = async (e, tipo, i) => {
-  e.stopPropagation();
-  if(!confirm('Remover este look?')) return;
-  looksData[tipo].splice(i, 1);
-  const campo = tipo === 'cabelo' ? 'looksCabelo' : 'looksMakeup';
-  await updateDoc(doc(db,'licencas',licencaDoc.id), {[campo]: looksData[tipo]});
-  renderizarLooks(tipo);
-  mostrarToast('Look removido');
-};
-
-window.abrirModal = (tipo) => {
-  modalTipo = tipo;
-  modalFotoB64 = null;
-  document.getElementById('input-look-foto').value = '';
-  document.getElementById('preview-modal-look').style.display = 'none';
-  document.getElementById('modal-zona-txt').style.display = 'block';
-  document.getElementById('input-look-nome').value = '';
-  document.getElementById('modal-titulo').textContent = tipo === 'cabelo' ? '✦ Adicionar Look de Cabelo' : '✦ Adicionar Look de Maquiagem';
-  document.getElementById('modal-look').classList.add('visivel');
-};
-
-window.fecharModal = () => {
-  document.getElementById('modal-look').classList.remove('visivel');
-};
-
-window.previewModalLook = (input) => {
-  const file = input.files[0]; if(!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    modalFotoB64 = e.target.result;
-    document.getElementById('preview-modal-look').src = modalFotoB64;
-    document.getElementById('preview-modal-look').style.display = 'block';
-    document.getElementById('modal-zona-txt').style.display = 'none';
-  };
-  reader.readAsDataURL(file);
-};
-
-window.salvarLook = async () => {
-  const nome = document.getElementById('input-look-nome').value.trim();
-  if(!modalFotoB64) { mostrarToast('⚠ Escolha uma foto'); return; }
-  if(!nome) { mostrarToast('⚠ Digite um nome para o look'); return; }
-  const canvas = document.createElement('canvas');
-  const imgEl = new Image(); imgEl.src = modalFotoB64;
-  await new Promise(r => imgEl.onload = r);
-  const maxW = 400;
-  const scale = Math.min(1, maxW / imgEl.width);
-  canvas.width = imgEl.width * scale; canvas.height = imgEl.height * scale;
-  canvas.getContext('2d').drawImage(imgEl, 0, 0, canvas.width, canvas.height);
-  const fotoComprimida = canvas.toDataURL('image/jpeg', 0.7);
-  looksData[modalTipo].push({ nome, foto: fotoComprimida });
-  const campo = modalTipo === 'cabelo' ? 'looksCabelo' : 'looksMakeup';
-  try {
-    await updateDoc(doc(db,'licencas',licencaDoc.id), {[campo]: looksData[modalTipo]});
-    fecharModal();
-    renderizarLooks(modalTipo);
-    document.getElementById('secao-looks-'+modalTipo).style.display = 'block';
-    mostrarToast('✓ Look salvo!');
-  } catch(e) { mostrarToast('⚠ Erro ao salvar: ' + e.message); }
-};
-
-window.compartilharWhatsApp = async (tipo) => {
-  const imgEl = document.getElementById('img-' + tipo);
-  if (!imgEl || !imgEl.src) { mostrarToast('⚠ Imagem não disponível'); return; }
-  try {
-    // Converter imagem para blob e compartilhar via Web Share API
-    const res = await fetch(imgEl.src);
-    const blob = await res.blob();
-    const nome = tipo === 'cabelo' ? 'simulacao-cabelo.jpg' : 'simulacao-maquiagem.jpg';
-    const file = new File([blob], nome, { type: 'image/jpeg' });
-    const texto = tipo === 'cabelo'
-      ? '✨ Veja como você ficaria com esse cabelo! Simulação feita no nosso salão 💇‍♀️'
-      : '✨ Veja como você ficaria com essa maquiagem! Simulação feita no nosso salão 💄';
-    if (navigator.share && navigator.canShare && navigator.canShare({ files: [file] })) {
-      await navigator.share({ files: [file], text: texto });
-    } else {
-      // Fallback: baixar imagem e abrir WhatsApp Web
-      const a = document.createElement('a');
-      a.href = imgEl.src;
-      a.download = nome;
-      a.click();
-      setTimeout(() => {
-        window.open('https://wa.me/?text=' + encodeURIComponent(texto), '_blank');
-      }, 800);
-      mostrarToast('📲 Imagem baixada! Envie pelo WhatsApp');
-    }
-  } catch(e) {
-    mostrarToast('⚠ Erro ao compartilhar');
-  }
-};
-
-function mostrarToast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg; t.classList.add('visivel');
-  setTimeout(() => t.classList.remove('visivel'), 2500);
+  } catch(_) {}
 }
 </script>
 </body>
