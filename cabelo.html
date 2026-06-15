@@ -156,7 +156,16 @@ body { font-family:'DM Sans',sans-serif; background:#0a0c0f; color:#e8eaf0; min-
       </div>
       <div class="galeria-ou">ou envie uma referência</div>
       <div class="upload-zone" id="zone-corte" onclick="triggerUpload('file-corte')">
-        <input type="file" id="file-corte" accept="image/*" onchange="carregarImagem('corte',this)">
+        <!-- CORRIGIDO: botões câmera/galeria separados -->
+</div>
+<div class="ref-source-btns" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+  <button class="ref-source-btn" style="padding:10px;border:1px solid #dde4ef;border-radius:8px;background:#fafbfd;font-size:13px;color:#1a6b3a;cursor:pointer;text-align:center;" onclick="triggerUploadRef('camera')">📷 Tirar foto da referência</button>
+  <button class="ref-source-btn" style="padding:10px;border:1px solid #dde4ef;border-radius:8px;background:#fafbfd;font-size:13px;color:#1a6b3a;cursor:pointer;text-align:center;" onclick="triggerUploadRef('galeria')">🖼️ Escolher da galeria</button>
+</div>
+<input type="file" id="file-corte-camera" accept="image/*" capture="environment" style="display:none" onchange="carregarImagem('corte',this)">
+<input type="file" id="file-corte-galeria" accept="image/*" style="display:none" onchange="carregarImagem('corte',this)">
+<div class="upload-zone" id="zone-corte" style="pointer-events:none;cursor:default;">
+<input type="file" id="file-corte" accept="image/*" style="display:none" onchange="carregarImagem('corte',this)">
         <img class="upload-preview" id="prev-corte" alt="">
         <button class="remove-img" onclick="remover('corte',event)">✕</button>
         <div class="upload-icon">✂️</div>
@@ -363,6 +372,7 @@ function selecionarSalon(id){
 }
 
 window.triggerUpload=id=>document.getElementById(id).click();
+window.triggerUploadRef=tipo=>{ if(tipo==='camera') document.getElementById('file-corte-camera').click(); else document.getElementById('file-corte-galeria').click(); };
 window.carregarImagem=(tipo,input)=>{
   const f=input.files[0]; if(!f)return;
   const r=new FileReader(); r.onload=e=>{
@@ -376,7 +386,7 @@ window.carregarImagem=(tipo,input)=>{
 window.remover=(tipo,ev)=>{
   ev.stopPropagation(); imgs[tipo]=null;
   document.getElementById('prev-'+tipo).src=''; document.getElementById('zone-'+tipo).classList.remove('has-img');
-  document.getElementById('file-'+tipo).value=''; atualizarBotao();
+  ['file-corte-camera','file-corte-galeria','file-'+tipo].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';}); atualizarBotao();
 };
 function atualizarBotao(){
   const u=licencaDoc?getUsosMes(licencaDoc):0;
