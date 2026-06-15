@@ -51,7 +51,6 @@ body { font-family:'DM Sans',sans-serif; background:#0f0a0d; color:#f0e8f0; min-
 .galeria-ou { text-align:center; font-size:12px; color:#bbb; margin:14px 0; letter-spacing:1px; position:relative; }
 .galeria-ou::before,.galeria-ou::after { content:''; position:absolute; top:50%; width:40%; height:1px; background:#ecdde6; }
 .galeria-ou::before { left:0; } .galeria-ou::after { right:0; }
-/* Meus Looks */
 .meus-looks-titulo { font-size:11px; font-weight:600; color:#C4729A; letter-spacing:2px; text-transform:uppercase; margin:18px 0 10px; display:flex; align-items:center; justify-content:space-between; cursor:pointer; }
 .btn-add-look { background:#fdf0f6; border:1px solid #e8c0d4; color:#8B3A6A; font-size:10px; letter-spacing:1px; padding:5px 12px; border-radius:20px; cursor:pointer; font-weight:600; }
 .meus-looks-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:8px; }
@@ -96,11 +95,16 @@ body { font-family:'DM Sans',sans-serif; background:#0f0a0d; color:#f0e8f0; min-
 .erro-area { display:none; background:rgba(200,80,80,0.08); border:1px solid rgba(200,80,80,0.25); border-radius:8px; padding:16px; margin-bottom:16px; color:#c62828; font-size:13px; }
 .toast { position:fixed; bottom:30px; right:30px; background:rgba(196,114,154,0.15); border:1px solid rgba(196,114,154,0.4); color:#8B3A6A; font-size:12px; letter-spacing:2px; padding:12px 22px; border-radius:8px; opacity:0; transform:translateY(10px); transition:all 0.3s; pointer-events:none; z-index:999; }
 .toast.visivel { opacity:1; transform:translateY(0); }
+
+/* Botões de fonte de referência */
+.ref-source-btns { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px; }
+.ref-source-btn { padding:10px; border:1px solid #ecdde6; border-radius:8px; background:#fdf8fb; font-size:13px; color:#7a3a5a; cursor:pointer; text-align:center; transition:all 0.15s; }
+.ref-source-btn:hover { border-color:#C4729A; background:#fdf0f6; }
+
 @media(max-width:600px){ .galeria-grid-make{grid-template-columns:repeat(2,1fr)} .meus-looks-grid{grid-template-columns:repeat(2,1fr)} .app-header{flex-direction:column;gap:10px} .app-body{padding:12px} }
 </style>
 </head>
 <body>
-
 <div id="tela-bloqueio">
   <div>
     <div style="font-size:48px;margin-bottom:16px">🔒</div>
@@ -118,7 +122,6 @@ body { font-family:'DM Sans',sans-serif; background:#0f0a0d; color:#f0e8f0; min-
       <div class="uso-badge" id="uso-badge">💄 carregando…</div>
     </div>
   </div>
-
   <div class="banner amarelo" id="banner-dias"></div>
   <div class="banner vermelho" id="banner-vencido"></div>
   <div class="banner laranja" id="banner-creditos"></div>
@@ -184,13 +187,21 @@ body { font-family:'DM Sans',sans-serif; background:#0f0a0d; color:#f0e8f0; min-
       <div class="meus-looks-titulo" id="btn-ver-looks" onclick="toggleMeusLooks()">✦ Ver / Adicionar Looks da Maquiadora</div>
 
       <div class="galeria-ou">ou envie uma referência</div>
-      <div class="upload-zone" id="zone-makeup" onclick="triggerUpload('file-makeup')" style="min-height:80px">
-        <input type="file" id="file-makeup" accept="image/*" onchange="carregarImagem('makeup',this)">
+
+      <!-- CORRIGIDO: adicionado capture="user" + botões câmera/galeria -->
+      <div class="ref-source-btns">
+        <button class="ref-source-btn" onclick="triggerUploadRef('camera')">📷 Tirar foto da referência</button>
+        <button class="ref-source-btn" onclick="triggerUploadRef('galeria')">🖼️ Escolher da galeria</button>
+      </div>
+      <input type="file" id="file-makeup-camera" accept="image/*" capture="environment" style="display:none" onchange="carregarImagem('makeup',this)">
+      <input type="file" id="file-makeup-galeria" accept="image/*" style="display:none" onchange="carregarImagem('makeup',this)">
+
+      <div class="upload-zone" id="zone-makeup" style="min-height:80px; pointer-events:none; cursor:default;">
         <img class="upload-preview" id="prev-makeup" alt="">
-        <button class="remove-img" onclick="remover('makeup',event)">✕</button>
+        <button class="remove-img" style="pointer-events:all" onclick="remover('makeup',event)">✕</button>
         <div class="upload-icon" style="font-size:22px">📁</div>
-        <div class="upload-label" style="font-size:12px">Enviar referência própria</div>
-        <div class="upload-hint">Look desejado ou paleta</div>
+        <div class="upload-label" style="font-size:12px">Referência selecionada aparece aqui</div>
+        <div class="upload-hint">Use os botões acima para escolher</div>
       </div>
     </div>
 
@@ -250,7 +261,6 @@ const CARENCIA_MS = 24*60*60*1000;
 const CREDITOS_AVISO = 10;
 const DIAS_AVISO = 5;
 const LOOKS_KEY = 'studio_compt_makeup_looks';
-
 const imgs = {rosto:null, makeup:null};
 let licencaDoc = null;
 let GEMINI_KEY = null;
@@ -279,15 +289,12 @@ async function inicializar() {
     const dentroCarencia = agora <= (dados.venceEm + CARENCIA_MS);
     const usos = getUsosMes(dados);
     const limiteTotal = (dados.limite||50) + (dados.creditosAvulsos||0);
-
     if (vencido && !dentroCarencia) { mostrarBloqueio('Plano vencido','Seu plano venceu em '+dados.venceData+'. Entre em contato para renovar.'); return; }
     if (usos >= limiteTotal) { mostrarBloqueio('Créditos esgotados','Você usou todos os '+limiteTotal+' créditos deste mês. Entre em contato para adicionar mais.'); return; }
-
     const cfgSnap = await getDoc(doc(db,'config','gemini'));
     if (!cfgSnap.exists()) { mostrarBloqueio('Erro de configuração','Contate o suporte.'); return; }
     GEMINI_KEY = cfgSnap.data().apiKey;
     licencaDoc = { id:chave, ...dados };
-
     const planoLabel = dados.plano==='starter'?'Starter':'Pro';
     document.getElementById('licenca-nome').textContent = dados.nome+' · '+planoLabel;
     document.getElementById('app').style.display = 'block';
@@ -333,17 +340,20 @@ function atualizarContador(dados) {
   if (rest<=0) mostrarBloqueio('Créditos esgotados','Você usou todos os créditos deste mês. Entre em contato para adicionar mais.');
 }
 
+window.triggerUploadRef = (tipo) => {
+  if (tipo === 'camera') document.getElementById('file-makeup-camera').click();
+  else document.getElementById('file-makeup-galeria').click();
+};
+
 window.selecionarMake = (el, estilo) => {
   document.querySelectorAll('.galeria-item-make').forEach(i=>i.classList.remove('selecionado'));
   el.classList.add('selecionado'); window._makeEstilo=estilo; lookSelecionado=null;
   imgs.makeup=null; document.getElementById('prev-makeup').src='';
   document.getElementById('zone-makeup').classList.remove('has-img');
-  document.getElementById('file-makeup').value='';
   document.querySelectorAll('.meu-look-item').forEach(i=>i.classList.remove('selecionado'));
   mostrarToast('✓ Estilo selecionado!'); atualizarBotao();
 };
 
-// Meus Looks
 function renderMeusLooks() {
   const grid = document.getElementById('grid-meus-looks'); grid.innerHTML='';
   const secao = document.getElementById('secao-meus-looks');
@@ -357,30 +367,36 @@ function renderMeusLooks() {
     grid.appendChild(el);
   });
 }
+
 function selecionarLook(id) {
   lookSelecionado=id; const look=meusLooks.find(l=>l.id===id);
   imgs.makeup=look.data; window._makeEstilo=null;
   document.querySelectorAll('.galeria-item-make').forEach(i=>i.classList.remove('selecionado'));
   document.getElementById('prev-makeup').src=''; document.getElementById('zone-makeup').classList.remove('has-img');
-  document.getElementById('file-makeup').value=''; renderMeusLooks();
+  renderMeusLooks();
   mostrarToast('✓ Look selecionado!'); atualizarBotao();
 }
+
 window.deletarLook = id => {
   meusLooks=meusLooks.filter(l=>l.id!==id);
   try{localStorage.setItem(LOOKS_KEY,JSON.stringify(meusLooks));}catch(_){}
   if(lookSelecionado===id){lookSelecionado=null;imgs.makeup=null;atualizarBotao();}
   renderMeusLooks();
 };
+
 window.toggleMeusLooks = () => {
   meusLooksVisivel=!meusLooksVisivel;
   renderMeusLooks();
 };
+
 window.abrirModalLook = () => {
   _lookFotoData=null; document.getElementById('preview-look').src=''; document.getElementById('preview-look').style.display='none';
   document.getElementById('look-zona-texto').style.display='block'; document.getElementById('zona-look').classList.remove('tem-foto');
   document.getElementById('input-look-nome').value=''; document.getElementById('modal-look').classList.add('visivel');
 };
+
 window.fecharModalLook = () => document.getElementById('modal-look').classList.remove('visivel');
+
 window.previewLook = input => {
   const f=input.files[0]; if(!f)return;
   const r=new FileReader(); r.onload=e=>{ _lookFotoData=e.target.result;
@@ -388,6 +404,7 @@ window.previewLook = input => {
     document.getElementById('look-zona-texto').style.display='none'; document.getElementById('zona-look').classList.add('tem-foto');
   }; r.readAsDataURL(f);
 };
+
 window.salvarLook = () => {
   const nome=document.getElementById('input-look-nome').value.trim();
   if(!_lookFotoData){mostrarToast('⚠ Adicione uma foto');return;}
@@ -399,6 +416,7 @@ window.salvarLook = () => {
 };
 
 window.triggerUpload = id => document.getElementById(id).click();
+
 window.carregarImagem = (tipo,input) => {
   const f=input.files[0]; if(!f)return;
   const r=new FileReader(); r.onload=e=>{
@@ -409,11 +427,14 @@ window.carregarImagem = (tipo,input) => {
     atualizarBotao();
   }; r.readAsDataURL(f);
 };
+
 window.remover = (tipo,ev) => {
   ev.stopPropagation(); imgs[tipo]=null;
   document.getElementById('prev-'+tipo).src=''; document.getElementById('zone-'+tipo).classList.remove('has-img');
-  document.getElementById('file-'+tipo).value=''; atualizarBotao();
+  ['file-makeup-camera','file-makeup-galeria','file-'+tipo].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  atualizarBotao();
 };
+
 function atualizarBotao() {
   const u=licencaDoc?getUsosMes(licencaDoc):0;
   const l=(licencaDoc?.limite||50)+(licencaDoc?.creditosAvulsos||0);
@@ -468,10 +489,12 @@ window.gerarProvador = async () => {
 };
 
 window.baixar=()=>{const a=document.createElement('a');a.href=document.getElementById('result-img').src;a.download=`maquiagem_${Date.now()}.png`;a.click();};
+
 window.nova=()=>{
   imgs.rosto=null;imgs.makeup=null;window._makeEstilo=null;lookSelecionado=null;
   document.getElementById('result-area').classList.remove('visible');
-  ['rosto','makeup'].forEach(t=>{document.getElementById('prev-'+t).src='';document.getElementById('zone-'+t).classList.remove('has-img');document.getElementById('file-'+t).value='';});
+  ['rosto','makeup'].forEach(t=>{document.getElementById('prev-'+t).src='';document.getElementById('zone-'+t).classList.remove('has-img');});
+  ['file-rosto','file-makeup-camera','file-makeup-galeria'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   document.querySelectorAll('.galeria-item-make').forEach(i=>i.classList.remove('selecionado'));
   document.querySelectorAll('.meu-look-item').forEach(i=>i.classList.remove('selecionado'));
   renderMeusLooks();atualizarBotao();window.scrollTo({top:0,behavior:'smooth'});
