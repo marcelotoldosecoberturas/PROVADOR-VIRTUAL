@@ -455,7 +455,7 @@ window.gerarProvador = async () => {
     let prompt,parts;
     if(imgs.makeup){
       const makeupB64=imgs.makeup.split(',')[1], mkMime=imgs.makeup.split(';')[0].split(':')[1];
-      prompt=`Você é especialista em maquiagem digital. Aplique a maquiagem da imagem de referência no rosto da primeira imagem. Mantenha as feições, cor de pele, iluminação e perspectiva originais. Resultado fotorrealista e profissional.`;
+      prompt=`Você é especialista em maquiagem digital. Analise a maquiagem da imagem de referência e aplique APENAS os produtos de maquiagem (sombra, batom, blush, delineador, base) no rosto da primeira imagem. REGRAS CRÍTICAS: 1) Mantenha o cabelo EXATAMENTE igual ao original — NÃO mude cor, corte ou estilo do cabelo. 2) Mantenha as feições, cor de pele, iluminação e perspectiva originais. 3) Aplique somente a maquiagem visível na referência. Resultado fotorrealista e profissional.`;
       parts=[{text:prompt},{inline_data:{mime_type:rostoMime,data:rostoB64}},{inline_data:{mime_type:mkMime,data:makeupB64}}];
     }else{
       const estilo=window._makeEstilo||'maquiagem natural';
