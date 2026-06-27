@@ -3,21 +3,21 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Provador de Make — Studio Provador</title>
+<title>Provador de Maquiagem — Studio Provador</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700&family=Cormorant+Garamond:wght@300;400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:'DM Sans',sans-serif; background:#0a0c0f; color:#e8eaf0; min-height:100vh; }
+body { font-family:'DM Sans',sans-serif; background:#0f0a0d; color:#f0e8f0; min-height:100vh; }
 #tela-bloqueio { display:none; align-items:center; justify-content:center; min-height:100vh; padding:20px; text-align:center; }
 #tela-bloqueio h2 { font-family:'Playfair Display',serif; font-size:22px; color:#E88080; margin-bottom:10px; }
 #tela-bloqueio p { font-size:13px; color:#9A7A7A; line-height:1.7; margin-bottom:20px; }
-.btn-voltar { background:none; border:1px solid rgba(126,200,164,0.3); color:#7EC8A4; font-family:'DM Sans',sans-serif; font-size:12px; letter-spacing:2px; text-transform:uppercase; padding:10px 24px; cursor:pointer; border-radius:2px; }
-#app { display:none; min-height:100vh; background:#f4f6f9; color:#10141a; }
-.app-header { background:#fff; border-bottom:1px solid #dde4ef; padding:14px 20px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:10; }
-.app-logo { font-family:'Playfair Display',serif; font-size:18px; color:#10141a; display:flex; align-items:center; gap:8px; }
-.logo-dot { width:7px; height:7px; border-radius:50%; background:#C88AC0; display:inline-block; }
-.licenca-info { text-align:right; font-size:11px; color:#7A5B9A; }
-.uso-badge { display:inline-flex; align-items:center; gap:6px; background:#f5eef9; border:1px solid #d8b8d8; border-radius:20px; padding:4px 12px; font-size:12px; color:#6b3a8a; font-weight:500; margin-top:4px; }
+.btn-voltar { background:none; border:1px solid rgba(196,114,154,0.3); color:#C4729A; font-family:'DM Sans',sans-serif; font-size:12px; letter-spacing:2px; text-transform:uppercase; padding:10px 24px; cursor:pointer; border-radius:2px; }
+#app { display:none; min-height:100vh; background:#f7f2f5; color:#1a1015; }
+.app-header { background:#fff; border-bottom:1px solid #ecdde6; padding:14px 20px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:10; }
+.app-logo { font-family:'Playfair Display',serif; font-size:18px; color:#1a1015; display:flex; align-items:center; gap:8px; }
+.logo-dot { width:7px; height:7px; border-radius:50%; background:#C4729A; display:inline-block; }
+.licenca-info { text-align:right; font-size:11px; color:#C4729A; }
+.uso-badge { display:inline-flex; align-items:center; gap:6px; background:#fdf0f6; border:1px solid #e8c0d4; border-radius:20px; padding:4px 12px; font-size:12px; color:#8B3A6A; font-weight:500; margin-top:4px; }
 .uso-badge.aviso { background:#fff8e1; border-color:#ffe082; color:#b06000; }
 .uso-badge.esgotado { background:#fde8e8; border-color:#f5c6c6; color:#c62828; }
 .banner { padding:10px 16px; font-size:12px; line-height:1.6; border-bottom:1px solid; display:none; }
@@ -25,59 +25,87 @@ body { font-family:'DM Sans',sans-serif; background:#0a0c0f; color:#e8eaf0; min-
 .banner.vermelho { background:#fff0f0; border-color:#f5c6c6; color:#c62828; }
 .banner.laranja { background:#fff5ec; border-color:#ffc896; color:#8a3d00; }
 .app-body { max-width:680px; margin:0 auto; padding:20px; }
-.section-card { background:#fff; border:1px solid #dde4ef; border-radius:12px; padding:20px; margin-bottom:16px; }
+.section-card { background:#fff; border:1px solid #ecdde6; border-radius:12px; padding:20px; margin-bottom:16px; }
 .section-title { font-size:11px; font-weight:500; color:#aaa; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:14px; }
 .upload-zone { border:2px dashed #ddd; border-radius:12px; padding:20px 14px; text-align:center; cursor:pointer; transition:border-color 0.15s,background 0.15s; position:relative; min-height:140px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; }
-.upload-zone:hover { border-color:#C88AC0; background:#fdf5ff; }
-.upload-zone.has-img { border-style:solid; border-color:#C88AC0; padding:8px; }
+.upload-zone:hover { border-color:#C4729A; background:#fdf5f9; }
+.upload-zone.has-img { border-style:solid; border-color:#C4729A; padding:8px; }
 .upload-zone input[type=file] { display:none; }
 .upload-icon { font-size:28px; }
 .upload-label { font-size:13px; font-weight:500; color:#333; }
 .upload-hint { font-size:11px; color:#999; }
-.upload-preview { width:100%; height:140px; object-fit:contain; border-radius:8px; display:none; background:#f4f6f9; }
+.upload-preview { width:100%; height:140px; object-fit:contain; border-radius:8px; display:none; background:#f7f2f5; }
 .upload-zone.has-img .upload-preview { display:block; }
 .upload-zone.has-img .upload-icon,.upload-zone.has-img .upload-label,.upload-zone.has-img .upload-hint { display:none; }
 .remove-img { position:absolute; top:6px; right:6px; width:22px; height:22px; background:rgba(0,0,0,0.5); border:none; border-radius:50%; color:white; font-size:12px; cursor:pointer; display:none; align-items:center; justify-content:center; }
 .upload-zone.has-img .remove-img { display:flex; }
-.galeria-titulo { font-size:11px; font-weight:500; color:#aaa; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:12px; }
+.galeria-grid-make { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:12px; }
+.galeria-item-make { border:2px solid #ecdde6; border-radius:10px; overflow:hidden; cursor:pointer; transition:all 0.15s; background:#fdf8fb; position:relative; }
+.galeria-item-make:hover { border-color:#C4729A; transform:translateY(-2px); box-shadow:0 4px 14px rgba(196,114,154,0.2); }
+.galeria-item-make.selecionado { border-color:#C4729A; box-shadow:0 0 0 3px rgba(196,114,154,0.25); }
+.galeria-item-make img { width:100%; height:90px; object-fit:cover; object-position:center top; display:block; }
+.galeria-item-make .make-label { padding:6px 6px 8px; text-align:center; background:#fff; }
+.galeria-item-make .make-nome { font-size:11px; font-weight:600; color:#7a3a5a; display:block; }
+.galeria-item-make .make-desc { font-size:9px; color:#aaa; display:block; margin-top:1px; }
+.galeria-item-make.selecionado::after { content:'✓'; position:absolute; top:6px; right:8px; background:#C4729A; color:#fff; font-size:11px; font-weight:700; width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center; line-height:20px; text-align:center; }
 .galeria-ou { text-align:center; font-size:12px; color:#bbb; margin:14px 0; letter-spacing:1px; position:relative; }
-.galeria-ou::before,.galeria-ou::after { content:''; position:absolute; top:50%; width:40%; height:1px; background:#dde4ef; }
+.galeria-ou::before,.galeria-ou::after { content:''; position:absolute; top:50%; width:40%; height:1px; background:#ecdde6; }
 .galeria-ou::before { left:0; } .galeria-ou::after { right:0; }
-.galeria-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:4px; }
-.galeria-item { border:2px solid #dde4ef; border-radius:10px; padding:6px 6px 8px; text-align:center; cursor:pointer; transition:all 0.15s; background:#fafbfd; display:flex; flex-direction:column; align-items:center; gap:4px; }
-.galeria-item:hover { border-color:#C88AC0; background:#fdf5ff; transform:translateY(-2px); box-shadow:0 4px 12px rgba(200,138,192,0.15); }
-.galeria-item.selecionado { border-color:#C88AC0; background:#fdf5ff; box-shadow:0 0 0 3px rgba(200,138,192,0.2); }
-.galeria-item .gi-emoji { font-size:28px; margin-bottom:2px; }
-.galeria-item .gi-nome { font-size:11px; color:#333; font-weight:600; line-height:1.3; }
-.galeria-item .gi-desc { font-size:10px; color:#888; line-height:1.3; }
-.galeria-secao { font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#C88AC0; font-weight:600; margin:16px 0 10px; padding-bottom:6px; border-bottom:1px solid #fdf0ff; }
-.btn-gerar { width:100%; height:50px; background:linear-gradient(135deg,#7a3a8a,#C88AC0); color:white; border:none; border-radius:8px; font-family:'DM Sans',sans-serif; font-size:16px; font-weight:500; cursor:pointer; transition:opacity 0.15s,transform 0.1s; display:flex; align-items:center; justify-content:center; gap:8px; }
+.meus-looks-titulo { font-size:11px; font-weight:600; color:#C4729A; letter-spacing:2px; text-transform:uppercase; margin:18px 0 10px; display:flex; align-items:center; justify-content:space-between; cursor:pointer; }
+.btn-add-look { background:#fdf0f6; border:1px solid #e8c0d4; color:#8B3A6A; font-size:10px; letter-spacing:1px; padding:5px 12px; border-radius:20px; cursor:pointer; font-weight:600; }
+.meus-looks-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:10px; margin-bottom:8px; }
+.meu-look-item { border:2px solid #ecdde6; border-radius:10px; overflow:hidden; cursor:pointer; transition:all 0.15s; background:#fdf8fb; position:relative; }
+.meu-look-item:hover { border-color:#C4729A; transform:translateY(-2px); }
+.meu-look-item.selecionado { border-color:#C4729A; box-shadow:0 0 0 3px rgba(196,114,154,0.25); }
+.meu-look-item img { width:100%; height:90px; object-fit:cover; object-position:center top; display:block; }
+.meu-look-item .look-label { padding:5px 6px 7px; background:#fff; }
+.meu-look-item .look-nome { font-size:10px; font-weight:600; color:#7a3a5a; display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.meu-look-item .look-del { position:absolute; top:4px; right:4px; background:rgba(0,0,0,0.55); color:#fff; border:none; border-radius:50%; width:18px; height:18px; font-size:10px; cursor:pointer; display:none; align-items:center; justify-content:center; }
+.meu-look-item:hover .look-del { display:flex; }
+.meu-look-item.selecionado::after { content:'✓'; position:absolute; top:4px; left:6px; background:#C4729A; color:#fff; font-size:10px; font-weight:700; width:18px; height:18px; border-radius:50%; display:flex; align-items:center; justify-content:center; }
+.modal-look-overlay { position:fixed; inset:0; background:rgba(0,0,0,0.6); z-index:200; display:none; align-items:center; justify-content:center; padding:20px; }
+.modal-look-overlay.visivel { display:flex; }
+.modal-look-box { background:#fff; border-radius:12px; padding:24px; width:100%; max-width:360px; }
+.modal-look-titulo { font-family:'Playfair Display',serif; font-size:16px; color:#7a3a5a; margin-bottom:16px; }
+.modal-look-zona { border:2px dashed #e0d0d8; border-radius:10px; min-height:120px; display:flex; align-items:center; justify-content:center; cursor:pointer; margin-bottom:12px; overflow:hidden; }
+.modal-look-preview { width:100%; max-height:160px; object-fit:contain; display:none; }
+.modal-look-zona.tem-foto .modal-look-preview { display:block; }
+.modal-look-zona.tem-foto #look-zona-texto { display:none; }
+#look-zona-texto { font-size:13px; color:#aaa; padding:20px; text-align:center; }
+.modal-look-nome { width:100%; border:1px solid #e0d0d8; border-radius:8px; padding:10px 12px; font-size:14px; color:#1a1015; outline:none; margin-bottom:14px; font-family:'DM Sans',sans-serif; }
+.modal-look-acoes { display:flex; gap:10px; }
+.btn-look-cancelar { flex:1; padding:10px; border:1px solid #e0d0d8; border-radius:8px; background:#fff; cursor:pointer; font-size:14px; }
+.btn-look-salvar { flex:1; padding:10px; border:none; border-radius:8px; background:linear-gradient(135deg,#8B3A6A,#C4729A); color:#fff; cursor:pointer; font-size:14px; font-weight:500; }
+.info-row { display:flex; gap:8px; align-items:center; background:#fdf5f9; border-radius:8px; padding:10px 14px; font-size:13px; color:#999; margin-bottom:12px; }
+.btn-gerar { width:100%; height:50px; background:linear-gradient(135deg,#8B3A6A,#C4729A); color:white; border:none; border-radius:8px; font-family:'DM Sans',sans-serif; font-size:16px; font-weight:500; cursor:pointer; transition:opacity 0.15s,transform 0.1s; display:flex; align-items:center; justify-content:center; gap:8px; }
 .btn-gerar:hover:not(:disabled) { opacity:0.88; }
 .btn-gerar:active { transform:scale(0.98); }
-.btn-gerar:disabled { background:#e0e4ea; color:#aaa; cursor:default; }
+.btn-gerar:disabled { background:#e0dce0; color:#aaa; cursor:default; }
 .result-area { display:none; }
 .result-area.visible { display:block; }
-.result-img-wrap { border-radius:12px; overflow:hidden; background:#eef2f7; }
-.result-img { width:100%; height:auto; max-height:70vh; object-fit:cover; border-radius:12px; display:block; }
+.result-img-wrap { border-radius:12px; overflow:hidden; }
+.result-img { width:100%; border-radius:12px; display:block; }
 .result-actions { display:flex; gap:10px; margin-top:12px; }
-.btn-dl { flex:1; height:40px; background:#f0f4f8; border:1px solid #ddd; border-radius:8px; font-family:'DM Sans',sans-serif; font-size:14px; font-weight:500; cursor:pointer; color:#10141a; transition:background 0.12s; }
-.btn-dl:hover { background:#dde4ef; }
+.btn-dl { flex:1; height:40px; background:#f5f0f3; border:1px solid #ddd; border-radius:8px; font-family:'DM Sans',sans-serif; font-size:14px; cursor:pointer; color:#1a1015; }
+.btn-dl:hover { background:#ecdde6; }
 .loading-area { display:none; text-align:center; padding:50px 20px; }
-.loading-spinner { width:36px; height:36px; border:2px solid rgba(200,138,192,0.2); border-top-color:#C88AC0; border-radius:50%; animation:spin 1s linear infinite; margin:0 auto 16px; }
+.loading-spinner { width:36px; height:36px; border:2px solid rgba(196,114,154,0.2); border-top-color:#C4729A; border-radius:50%; animation:spin 1s linear infinite; margin:0 auto 16px; }
 @keyframes spin { to{transform:rotate(360deg)} }
-.loading-texto { font-family:'Playfair Display',serif; font-size:14px; letter-spacing:2px; color:#C88AC0; text-transform:uppercase; }
+.loading-texto { font-family:'Playfair Display',serif; font-size:14px; letter-spacing:2px; color:#C4729A; text-transform:uppercase; }
 .erro-area { display:none; background:rgba(200,80,80,0.08); border:1px solid rgba(200,80,80,0.25); border-radius:8px; padding:16px; margin-bottom:16px; color:#c62828; font-size:13px; }
-.toast { position:fixed; bottom:30px; right:30px; background:rgba(200,138,192,0.15); border:1px solid rgba(200,138,192,0.4); color:#6b3a8a; font-size:12px; letter-spacing:2px; padding:12px 22px; border-radius:8px; opacity:0; transform:translateY(10px); transition:all 0.3s; pointer-events:none; z-index:999; }
+.toast { position:fixed; bottom:30px; right:30px; background:rgba(196,114,154,0.15); border:1px solid rgba(196,114,154,0.4); color:#8B3A6A; font-size:12px; letter-spacing:2px; padding:12px 22px; border-radius:8px; opacity:0; transform:translateY(10px); transition:all 0.3s; pointer-events:none; z-index:999; }
 .toast.visivel { opacity:1; transform:translateY(0); }
+
+/* Botões de fonte de referência */
 .ref-source-btns { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px; }
-.ref-source-btn { padding:10px; border:1px solid #dde4ef; border-radius:8px; background:#fafbfd; font-size:13px; color:#7a3a8a; cursor:pointer; text-align:center; transition:all 0.15s; }
-.ref-source-btn:hover { border-color:#C88AC0; background:#fdf5ff; }
-@media(max-width:600px){ .galeria-grid{grid-template-columns:repeat(2,1fr)} .app-header{flex-direction:column;gap:10px} .result-img{max-height:60vh} .app-body{padding:12px} }
+.ref-source-btn { padding:10px; border:1px solid #ecdde6; border-radius:8px; background:#fdf8fb; font-size:13px; color:#7a3a5a; cursor:pointer; text-align:center; transition:all 0.15s; }
+.ref-source-btn:hover { border-color:#C4729A; background:#fdf0f6; }
+
+@media(max-width:600px){ .galeria-grid-make{grid-template-columns:repeat(2,1fr)} .meus-looks-grid{grid-template-columns:repeat(2,1fr)} .app-header{flex-direction:column;gap:10px} .app-body{padding:12px} }
 </style>
 </head>
 <body>
-
-<div id="tela-bloqueio" style="display:none">
+<div id="tela-bloqueio">
   <div>
     <div style="font-size:48px;margin-bottom:16px">🔒</div>
     <h2 id="bloqueio-titulo">Acesso bloqueado</h2>
@@ -88,118 +116,118 @@ body { font-family:'DM Sans',sans-serif; background:#0a0c0f; color:#e8eaf0; min-
 
 <div id="app">
   <div class="app-header">
-    <div class="app-logo"><span class="logo-dot"></span> Provador de Make</div>
+    <div class="app-logo"><span class="logo-dot"></span> Provador de Maquiagem</div>
     <div class="licenca-info">
       <div id="licenca-nome"></div>
       <div class="uso-badge" id="uso-badge">💄 carregando…</div>
     </div>
   </div>
-
   <div class="banner amarelo" id="banner-dias"></div>
   <div class="banner vermelho" id="banner-vencido"></div>
   <div class="banner laranja" id="banner-creditos"></div>
 
   <div class="app-body">
-
-    <!-- Foto da cliente -->
     <div class="section-card">
-      <div class="section-title">Foto do cliente</div>
+      <div class="section-title">Foto do rosto</div>
       <div class="upload-zone" id="zone-rosto" onclick="triggerUpload('file-rosto')">
         <input type="file" id="file-rosto" accept="image/*" capture="environment" onchange="carregarImagem('rosto',this)">
         <img class="upload-preview" id="prev-rosto" alt="">
         <button class="remove-img" onclick="remover('rosto',event)">✕</button>
-        <div class="upload-icon">🧑</div>
-        <div class="upload-label">Foto do Cliente</div>
-        <div class="upload-hint">Foto frontal, sem maquiagem, boa iluminação</div>
+        <div class="upload-icon">🧖‍♀️</div>
+        <div class="upload-label">Foto do Rosto</div>
+        <div class="upload-hint">Foto frontal, boa iluminação</div>
       </div>
     </div>
 
-    <!-- Escolha do estilo -->
     <div class="section-card">
-      <div class="galeria-titulo">Escolha o estilo de make</div>
-
-      <div class="galeria-secao">Olhos</div>
-      <div class="galeria-grid">
-        <div class="galeria-item" onclick="selecionarMake(this,'Smoky Eye clássico — olhos esfumados escuros com delineado marcado')">
-          <div class="gi-emoji">🌑</div>
-          <div class="gi-nome">Smoky Eye</div>
-          <div class="gi-desc">Esfumado escuro</div>
+      <div class="section-title">Escolha o estilo de maquiagem</div>
+      <div class="galeria-grid-make">
+        <div class="galeria-item-make" onclick="selecionarMake(this,'Apply subtle natural makeup: lightweight foundation matching skin tone, softly defined brows, light mascara, and nude/pink lip balm. Result must look like the person is wearing almost no makeup — fresh, clean, skin-first finish.')">
+          <img src="https://images.pexels.com/photos/3373716/pexels-photo-3373716.jpeg?auto=compress&cs=tinysrgb&w=200&h=120&fit=crop" alt="Make Natural" onerror="this.style.height='40px'">
+          <div class="make-label"><span class="make-nome">Make Natural</span><span class="make-desc">Pele uniforme, lábios nude</span></div>
         </div>
-        <div class="galeria-item" onclick="selecionarMake(this,'Cat Eye — delineado gatinho preciso com canto externo levantado')">
-          <div class="gi-emoji">😼</div>
-          <div class="gi-nome">Cat Eye</div>
-          <div class="gi-desc">Delineado gatinho</div>
+        <div class="galeria-item-make" onclick="selecionarMake(this,'Apply a professional smokey eye: blend dark brown and black eyeshadow ONLY on the upper eyelids and slightly above the crease. Add thin precise eyeliner on upper lid only, volumizing mascara. Keep skin and lips neutral. Blending must be smooth with a clean gradient fading upward.')">
+          <img src="https://images.pexels.com/photos/2065195/pexels-photo-2065195.jpeg?auto=compress&cs=tinysrgb&w=200&h=120&fit=crop" alt="Olho Esfumado" onerror="this.style.height='40px'">
+          <div class="make-label"><span class="make-nome">Olho Esfumado</span><span class="make-desc">Sombra escura degradê</span></div>
         </div>
-        <div class="galeria-item" onclick="selecionarMake(this,'Make colorida vibrante — sombra colorida nos olhos, iluminador e batom neutro')">
-          <div class="gi-emoji">🌈</div>
-          <div class="gi-nome">Colorida</div>
-          <div class="gi-desc">Sombra vibrante</div>
+        <div class="galeria-item-make" onclick="selecionarMake(this,'Apply classic red lip makeup: precise classic red lipstick with clean edges, minimal eye makeup with subtle mascara, light foundation with soft blush. The red lip must look precisely applied and elegant, not cartoonish.')">
+          <img src="https://images.pexels.com/photos/1037999/pexels-photo-1037999.jpeg?auto=compress&cs=tinysrgb&w=200&h=120&fit=crop" alt="Batom Vermelho" onerror="this.style.height='40px'">
+          <div class="make-label"><span class="make-nome">Batom Vermelho</span><span class="make-desc">Classic red lip, make clean</span></div>
         </div>
-      </div>
-
-      <div class="galeria-secao">Lábios</div>
-      <div class="galeria-grid">
-        <div class="galeria-item" onclick="selecionarMake(this,'Batom vermelho clássico com pele iluminada e olhos sutis')">
-          <div class="gi-emoji">💋</div>
-          <div class="gi-nome">Batom Vermelho</div>
-          <div class="gi-desc">Lábio clássico</div>
+        <div class="galeria-item-make" onclick="selecionarMake(this,'Apply elegant bridal makeup: flawless full-coverage foundation, subtle highlight on cheekbones and brow bone, natural false lashes, soft rose-pink lips, delicate peachy blush. Result must look romantic, polished and camera-ready.')">
+          <img src="https://images.pexels.com/photos/1729931/pexels-photo-1729931.jpeg?auto=compress&cs=tinysrgb&w=200&h=120&fit=crop" alt="Look Noiva" onerror="this.style.height='40px'">
+          <div class="make-label"><span class="make-nome">Look Noiva</span><span class="make-desc">Iluminador, cílios, rosé</span></div>
         </div>
-        <div class="galeria-item" onclick="selecionarMake(this,'Lábio nude glossy — batom rosado natural com gloss brilhante')">
-          <div class="gi-emoji">🫦</div>
-          <div class="gi-nome">Nude Glossy</div>
-          <div class="gi-desc">Natural brilhante</div>
+        <div class="galeria-item-make" onclick="selecionarMake(this,'Apply glamorous party makeup: finely applied glitter or shimmer on upper eyelids, precise dark eyeliner, voluminous mascara, bold lip color (wine or fuchsia). All products must look professionally blended — glamorous but not overdone.')">
+          <img src="https://images.pexels.com/photos/3762875/pexels-photo-3762875.jpeg?auto=compress&cs=tinysrgb&w=200&h=120&fit=crop" alt="Make Festa" onerror="this.style.height='40px'">
+          <div class="make-label"><span class="make-nome">Make Festa</span><span class="make-desc">Glitter, delineado dramático</span></div>
         </div>
-        <div class="galeria-item" onclick="selecionarMake(this,'Batom vinho escuro — tom bordô ou vinho com pele matte')">
-          <div class="gi-emoji">🍷</div>
-          <div class="gi-nome">Vinho</div>
-          <div class="gi-desc">Tom bordô</div>
+        <div class="galeria-item-make" onclick="selecionarMake(this,'Apply cat eye makeup: precise thin-to-thick winged eyeliner with a clean sharp flick at the outer corner of each eye. Keep the wing symmetrical and elegant. Neutral skin and lips. The wing must look hand-drawn by a professional — sharp, not smudged.')">
+          <img src="https://images.pexels.com/photos/2681751/pexels-photo-2681751.jpeg?auto=compress&cs=tinysrgb&w=200&h=120&fit=crop" alt="Cat Eye" onerror="this.style.height='40px'">
+          <div class="make-label"><span class="make-nome">Cat Eye</span><span class="make-desc">Delineado gatinho alongado</span></div>
+        </div>
+        <div class="galeria-item-make" onclick="selecionarMake(this,'Apply elegant nighttime makeup: precise black eyeliner on upper lash line with a subtle wing, well-defined brows, medium plum or mauve-rose lipstick. Soft natural foundation, light blush. Result must look sophisticated and wearable for a night out.')">
+          <img src="https://images.pexels.com/photos/2823254/pexels-photo-2823254.jpeg?auto=compress&cs=tinysrgb&w=200&h=120&fit=crop" alt="Make Noturna" onerror="this.style.height='40px'">
+          <div class="make-label"><span class="make-nome">Make Noturna</span><span class="make-desc">Delineado + lábio vinho</span></div>
+        </div>
+        <div class="galeria-item-make" onclick="selecionarMake(this,'Apply artistic colorful editorial makeup: vibrant blue and purple eyeshadow on upper lids, graphic color accents, bold fuchsia or coral lips. Style should look like a high-fashion editorial shoot — creative and striking but still wearable.')">
+          <img src="https://images.pexels.com/photos/3997991/pexels-photo-3997991.jpeg?auto=compress&cs=tinysrgb&w=200&h=120&fit=crop" alt="Artístico" onerror="this.style.height='40px'">
+          <div class="make-label"><span class="make-nome">Artístico</span><span class="make-desc">Cores vibrantes, criativo</span></div>
         </div>
       </div>
 
-      <div class="galeria-secao">Completo</div>
-      <div class="galeria-grid">
-        <div class="galeria-item" onclick="selecionarMake(this,'Make noiva — look suave e romântico com iluminador, sombra champagne e batom rosado')">
-          <div class="gi-emoji">👰</div>
-          <div class="gi-nome">Noiva</div>
-          <div class="gi-desc">Suave e romântico</div>
+      <!-- Meus Looks -->
+      <div id="secao-meus-looks" style="display:none">
+        <div class="meus-looks-titulo" onclick="toggleMeusLooks()">
+          <span>✦ Meus Looks</span>
+          <button class="btn-add-look" onclick="event.stopPropagation();abrirModalLook()">+ Adicionar Look</button>
         </div>
-        <div class="galeria-item" onclick="selecionarMake(this,'Make festa — look glamouroso com sombra dourada, iluminador intenso e batom nude')">
-          <div class="gi-emoji">✨</div>
-          <div class="gi-nome">Festa</div>
-          <div class="gi-desc">Glamouroso</div>
-        </div>
-        <div class="galeria-item" onclick="selecionarMake(this,'Make natural dia — base leve, blush rosado, máscara de cílios e batom cor de boca')">
-          <div class="gi-emoji">🌸</div>
-          <div class="gi-nome">Natural Dia</div>
-          <div class="gi-desc">Leve e fresco</div>
-        </div>
+        <div class="meus-looks-grid" id="grid-meus-looks"></div>
       </div>
+      <div class="meus-looks-titulo" id="btn-ver-looks" onclick="toggleMeusLooks()">✦ Ver / Adicionar Looks da Maquiadora</div>
 
       <div class="galeria-ou">ou envie uma referência</div>
 
+      <!-- CORRIGIDO: adicionado capture="user" + botões câmera/galeria -->
       <div class="ref-source-btns">
         <button class="ref-source-btn" onclick="triggerUploadRef('camera')">📷 Tirar foto da referência</button>
         <button class="ref-source-btn" onclick="triggerUploadRef('galeria')">🖼️ Escolher da galeria</button>
       </div>
-      <input type="file" id="file-ref-camera" accept="image/*" capture="environment" style="display:none" onchange="carregarImagem('ref',this)">
-      <input type="file" id="file-ref-galeria" accept="image/*" style="display:none" onchange="carregarImagem('ref',this)">
+      <input type="file" id="file-makeup-camera" accept="image/*" capture="environment" style="display:none" onchange="carregarImagem('makeup',this)">
+      <input type="file" id="file-makeup-galeria" accept="image/*" style="display:none" onchange="carregarImagem('makeup',this)">
 
-      <div class="upload-zone" id="zone-ref" style="min-height:100px;pointer-events:none;cursor:default;">
-        <img class="upload-preview" id="prev-ref" alt="" style="max-height:200px;width:auto;object-fit:contain;">
-        <button class="remove-img" onclick="remover('ref',event)" style="pointer-events:all">✕</button>
-        <div class="upload-icon">💄</div>
-        <div class="upload-label">Foto de Referência</div>
-        <div class="upload-hint">Make que deseja aplicar</div>
+      <div class="upload-zone" id="zone-makeup" style="min-height:80px; pointer-events:none; cursor:default;">
+        <img class="upload-preview" id="prev-makeup" alt="">
+        <button class="remove-img" style="pointer-events:all" onclick="remover('makeup',event)">✕</button>
+        <div class="upload-icon" style="font-size:22px">📁</div>
+        <div class="upload-label" style="font-size:12px">Referência selecionada aparece aqui</div>
+        <div class="upload-hint">Use os botões acima para escolher</div>
       </div>
-
     </div>
 
-    <!-- Geração -->
+    <!-- Modal adicionar look -->
+    <div class="modal-look-overlay" id="modal-look">
+      <div class="modal-look-box">
+        <div class="modal-look-titulo">✦ Adicionar Look</div>
+        <div class="modal-look-zona" id="zona-look" onclick="document.getElementById('input-look-foto').click()">
+          <input type="file" id="input-look-foto" accept="image/*" style="display:none" onchange="previewLook(this)">
+          <img id="preview-look" class="modal-look-preview" alt="">
+          <div id="look-zona-texto">📷 Toque para escolher a foto do look</div>
+        </div>
+        <input type="text" class="modal-look-nome" id="input-look-nome" placeholder="Nome do look (ex: Noiva Clássica)">
+        <div class="modal-look-acoes">
+          <button class="btn-look-cancelar" onclick="fecharModalLook()">Cancelar</button>
+          <button class="btn-look-salvar" onclick="salvarLook()">✓ Salvar Look</button>
+        </div>
+      </div>
+    </div>
+
     <div class="section-card">
+      <div class="info-row">💡 A IA aplicará a maquiagem preservando as feições naturais</div>
       <div class="erro-area" id="erro-area"></div>
       <div class="loading-area" id="loading-area">
         <div class="loading-spinner"></div>
-        <div class="loading-texto">Aplicando make…</div>
+        <div class="loading-texto">Aplicando maquiagem…</div>
       </div>
       <div class="result-area" id="result-area">
         <div class="result-img-wrap"><img class="result-img" id="result-img" alt="Resultado"></div>
@@ -208,9 +236,8 @@ body { font-family:'DM Sans',sans-serif; background:#0a0c0f; color:#e8eaf0; min-
           <button class="btn-dl" onclick="nova()">↺ Nova simulação</button>
         </div>
       </div>
-      <button class="btn-gerar" id="btn-gerar" onclick="gerarProvador()" disabled>💄 Simular make</button>
+      <button class="btn-gerar" id="btn-gerar" onclick="gerarProvador()" disabled>✨ Gerar Simulação</button>
     </div>
-
   </div>
 </div>
 
@@ -233,15 +260,17 @@ const db = getFirestore(fb);
 const CARENCIA_MS = 24*60*60*1000;
 const CREDITOS_AVISO = 10;
 const DIAS_AVISO = 5;
-
-const imgs = { rosto:null, ref:null };
+const LOOKS_KEY = 'studio_compt_makeup_looks';
+const imgs = {rosto:null, makeup:null};
 let licencaDoc = null;
 let GEMINI_KEY = null;
-let makeNome = null;
+let meusLooks = JSON.parse(localStorage.getItem(LOOKS_KEY)||'[]');
+let lookSelecionado = null;
+let meusLooksVisivel = false;
+let _lookFotoData = null;
 
 function getMesAtual() { const d=new Date(); return `${d.getFullYear()}_${d.getMonth()+1}`; }
 function getUsosMes(dados) { return (dados.usos||{})[getMesAtual()]||0; }
-
 function mostrarToast(msg) {
   const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('visivel');
   setTimeout(()=>t.classList.remove('visivel'),2800);
@@ -260,29 +289,19 @@ async function inicializar() {
     const dentroCarencia = agora <= (dados.venceEm + CARENCIA_MS);
     const usos = getUsosMes(dados);
     const limiteTotal = (dados.limite||50) + (dados.creditosAvulsos||0);
-
-    if (vencido && !dentroCarencia) {
-      mostrarBloqueio('Plano vencido','Seu plano venceu em '+dados.venceData+'. Entre em contato para renovar.');
-      return;
-    }
-    if (usos >= limiteTotal) {
-      mostrarBloqueio('Créditos esgotados','Você usou todos os créditos deste mês. Entre em contato para adicionar mais.');
-      return;
-    }
-
+    if (vencido && !dentroCarencia) { mostrarBloqueio('Plano vencido','Seu plano venceu em '+dados.venceData+'. Entre em contato para renovar.'); return; }
+    if (usos >= limiteTotal) { mostrarBloqueio('Créditos esgotados','Você usou todos os '+limiteTotal+' créditos deste mês. Entre em contato para adicionar mais.'); return; }
     const cfgSnap = await getDoc(doc(db,'config','gemini'));
     if (!cfgSnap.exists()) { mostrarBloqueio('Erro de configuração','Contate o suporte.'); return; }
     GEMINI_KEY = cfgSnap.data().apiKey;
     licencaDoc = { id:chave, ...dados };
-
     const planoLabel = dados.plano==='starter'?'Starter':'Pro';
     document.getElementById('licenca-nome').textContent = dados.nome+' · '+planoLabel;
     document.getElementById('app').style.display = 'block';
     atualizarContador(dados);
     renderBanners(dados, usos, limiteTotal);
-  } catch(e) {
-    window.location.href = 'index.html';
-  }
+    renderMeusLooks();
+  } catch(e) { window.location.href='index.html'; }
 }
 
 function mostrarBloqueio(titulo, msg) {
@@ -321,156 +340,164 @@ function atualizarContador(dados) {
   if (rest<=0) mostrarBloqueio('Créditos esgotados','Você usou todos os créditos deste mês. Entre em contato para adicionar mais.');
 }
 
-function verificarBotao() {
-  const snap = document.getElementById('btn-gerar');
-  const usos = getUsosMes(licencaDoc||{});
-  const limite = ((licencaDoc?.limite)||50) + ((licencaDoc?.creditosAvulsos)||0);
-  snap.disabled = !(imgs.rosto && (imgs.ref || makeNome)) || usos >= limite;
+window.triggerUploadRef = (tipo) => {
+  if (tipo === 'camera') document.getElementById('file-makeup-camera').click();
+  else document.getElementById('file-makeup-galeria').click();
+};
+
+window.selecionarMake = (el, estilo) => {
+  document.querySelectorAll('.galeria-item-make').forEach(i=>i.classList.remove('selecionado'));
+  el.classList.add('selecionado'); window._makeEstilo=estilo; lookSelecionado=null;
+  imgs.makeup=null; document.getElementById('prev-makeup').src='';
+  document.getElementById('zone-makeup').classList.remove('has-img');
+  document.querySelectorAll('.meu-look-item').forEach(i=>i.classList.remove('selecionado'));
+  mostrarToast('✓ Estilo selecionado!'); atualizarBotao();
+};
+
+function renderMeusLooks() {
+  const grid = document.getElementById('grid-meus-looks'); grid.innerHTML='';
+  const secao = document.getElementById('secao-meus-looks');
+  if (meusLooks.length === 0 && !meusLooksVisivel) { secao.style.display='none'; return; }
+  secao.style.display='block';
+  meusLooks.forEach(look => {
+    const el = document.createElement('div');
+    el.className = 'meu-look-item'+(lookSelecionado===look.id?' selecionado':'');
+    el.innerHTML = `<img src="${look.data}" alt="${look.nome}"><div class="look-label"><span class="look-nome">${look.nome}</span></div><button class="look-del" onclick="event.stopPropagation();deletarLook('${look.id}')">✕</button>`;
+    el.querySelector('img').onclick = () => selecionarLook(look.id);
+    grid.appendChild(el);
+  });
 }
+
+function selecionarLook(id) {
+  lookSelecionado=id; const look=meusLooks.find(l=>l.id===id);
+  imgs.makeup=look.data; window._makeEstilo=null;
+  document.querySelectorAll('.galeria-item-make').forEach(i=>i.classList.remove('selecionado'));
+  document.getElementById('prev-makeup').src=''; document.getElementById('zone-makeup').classList.remove('has-img');
+  renderMeusLooks();
+  mostrarToast('✓ Look selecionado!'); atualizarBotao();
+}
+
+window.deletarLook = id => {
+  meusLooks=meusLooks.filter(l=>l.id!==id);
+  try{localStorage.setItem(LOOKS_KEY,JSON.stringify(meusLooks));}catch(_){}
+  if(lookSelecionado===id){lookSelecionado=null;imgs.makeup=null;atualizarBotao();}
+  renderMeusLooks();
+};
+
+window.toggleMeusLooks = () => {
+  meusLooksVisivel=!meusLooksVisivel;
+  renderMeusLooks();
+};
+
+window.abrirModalLook = () => {
+  _lookFotoData=null; document.getElementById('preview-look').src=''; document.getElementById('preview-look').style.display='none';
+  document.getElementById('look-zona-texto').style.display='block'; document.getElementById('zona-look').classList.remove('tem-foto');
+  document.getElementById('input-look-nome').value=''; document.getElementById('modal-look').classList.add('visivel');
+};
+
+window.fecharModalLook = () => document.getElementById('modal-look').classList.remove('visivel');
+
+window.previewLook = input => {
+  const f=input.files[0]; if(!f)return;
+  const r=new FileReader(); r.onload=e=>{ _lookFotoData=e.target.result;
+    const img=document.getElementById('preview-look'); img.src=e.target.result; img.style.display='block';
+    document.getElementById('look-zona-texto').style.display='none'; document.getElementById('zona-look').classList.add('tem-foto');
+  }; r.readAsDataURL(f);
+};
+
+window.salvarLook = () => {
+  const nome=document.getElementById('input-look-nome').value.trim();
+  if(!_lookFotoData){mostrarToast('⚠ Adicione uma foto');return;}
+  if(!nome){mostrarToast('⚠ Digite um nome para o look');return;}
+  const id='look_'+Date.now();
+  meusLooks.push({id,data:_lookFotoData,nome});
+  try{localStorage.setItem(LOOKS_KEY,JSON.stringify(meusLooks));}catch(_){}
+  fecharModalLook(); renderMeusLooks(); mostrarToast('✓ Look salvo!');
+};
 
 window.triggerUpload = id => document.getElementById(id).click();
 
-window.triggerUploadRef = tipo => {
-  document.getElementById(tipo==='camera'?'file-ref-camera':'file-ref-galeria').click();
+window.carregarImagem = (tipo,input) => {
+  const f=input.files[0]; if(!f)return;
+  const r=new FileReader(); r.onload=e=>{
+    imgs[tipo]=e.target.result;
+    document.getElementById('prev-'+tipo).src=e.target.result;
+    document.getElementById('zone-'+tipo).classList.add('has-img');
+    if(tipo==='makeup'){document.querySelectorAll('.galeria-item-make').forEach(i=>i.classList.remove('selecionado'));lookSelecionado=null;window._makeEstilo=null;}
+    atualizarBotao();
+  }; r.readAsDataURL(f);
 };
 
-window.carregarImagem = (tipo, input) => {
-  const file = input.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    if (tipo === 'ref') {
-      imgs.ref = e.target.result;
-      makeNome = null;
-      document.querySelectorAll('.galeria-item').forEach(i=>i.classList.remove('selecionado'));
-      const prevRef = document.getElementById('prev-ref');
-      prevRef.src = e.target.result;
-      prevRef.style.display = 'block';
-      prevRef.style.maxHeight = '200px';
-      prevRef.style.width = 'auto';
-      const zoneRef = document.getElementById('zone-ref');
-      zoneRef.classList.add('has-img');
-    } else {
-      imgs[tipo] = e.target.result;
-      document.getElementById('prev-'+tipo).src = e.target.result;
-      document.getElementById('zone-'+tipo).classList.add('has-img');
-    }
-    verificarBotao();
-  };
-  reader.readAsDataURL(file);
+window.remover = (tipo,ev) => {
+  ev.stopPropagation(); imgs[tipo]=null;
+  document.getElementById('prev-'+tipo).src=''; document.getElementById('zone-'+tipo).classList.remove('has-img');
+  ['file-makeup-camera','file-makeup-galeria','file-'+tipo].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  atualizarBotao();
 };
 
-window.remover = (tipo, e) => {
-  e.stopPropagation();
-  if (tipo === 'ref') {
-    imgs.ref = null;
-    document.getElementById('prev-ref').src = '';
-    document.getElementById('zone-ref').classList.remove('has-img');
-    document.getElementById('file-ref-camera').value = '';
-    document.getElementById('file-ref-galeria').value = '';
-  } else {
-    imgs[tipo] = null;
-    document.getElementById('prev-'+tipo).src = '';
-    document.getElementById('zone-'+tipo).classList.remove('has-img');
-    document.getElementById('file-'+tipo).value = '';
-  }
-  verificarBotao();
-};
-
-window.selecionarMake = (el, descricao) => {
-  document.querySelectorAll('.galeria-item').forEach(i=>i.classList.remove('selecionado'));
-  el.classList.add('selecionado');
-  makeNome = descricao;
-  imgs.ref = null;
-  document.getElementById('prev-ref').src = '';
-  document.getElementById('zone-ref').classList.remove('has-img');
-  verificarBotao();
-};
+function atualizarBotao() {
+  const u=licencaDoc?getUsosMes(licencaDoc):0;
+  const l=(licencaDoc?.limite||50)+(licencaDoc?.creditosAvulsos||0);
+  document.getElementById('btn-gerar').disabled=!(imgs.rosto&&(imgs.makeup||window._makeEstilo))||u>=l;
+}
 
 window.gerarProvador = async () => {
-  const snap = await getDoc(doc(db,'licencas',licencaDoc.id));
-  const dados = snap.data(); licencaDoc = { id:licencaDoc.id, ...dados };
-  const usos = getUsosMes(dados);
-  const limiteTotal = (dados.limite||50) + (dados.creditosAvulsos||0);
-  if (usos >= limiteTotal) { atualizarContador(dados); return; }
-
-  document.getElementById('btn-gerar').disabled = true;
-  document.getElementById('erro-area').style.display = 'none';
+  const snap=await getDoc(doc(db,'licencas',licencaDoc.id));
+  const dados=snap.data(); licencaDoc={id:licencaDoc.id,...dados};
+  const usos=getUsosMes(dados); const limiteTotal=(dados.limite||50)+(dados.creditosAvulsos||0);
+  if(usos>=limiteTotal){atualizarContador(dados);return;}
+  document.getElementById('btn-gerar').disabled=true;
+  document.getElementById('erro-area').style.display='none';
   document.getElementById('result-area').classList.remove('visible');
-  document.getElementById('loading-area').style.display = 'block';
-
-  try {
-    const rB64 = imgs.rosto.split(',')[1], rMime = imgs.rosto.split(';')[0].split(':')[1];
-    let prompt, parts;
-
-    if (imgs.ref) {
-      const cB64 = imgs.ref.split(',')[1], cMime = imgs.ref.split(';')[0].split(':')[1];
-      prompt = `You are an expert photo editor specializing in makeup application. Your task: take the person from IMAGE 1 and apply ONLY the makeup colors and style visible in IMAGE 2 to her face. CRITICAL RULES — you must follow all of these without exception: (1) The face, skin, bone structure, eyes, nose, lips shape, and hair of the person in IMAGE 1 must remain 100% identical. (2) Do NOT blend, merge, or composite the two faces together. (3) Do NOT change the hairstyle or hair color. (4) Do NOT change the background or lighting. (5) ONLY paint/apply makeup products: eyeshadow colors, eyeliner, mascara, blush, contour, highlighter, lipstick color — copying the style from IMAGE 2. Output a single natural photorealistic result showing the IMAGE 1 person wearing the makeup from IMAGE 2.`;
-      parts = [{text:prompt},{inline_data:{mime_type:rMime,data:rB64}},{inline_data:{mime_type:cMime,data:cB64}}];
-    } else {
-      prompt = `You are an expert photo editor specializing in makeup application. Apply the following makeup style to the person in this photo: ${makeNome}. CRITICAL RULES — you must follow all of these without exception: (1) The face, skin, bone structure, eyes, nose, lips shape, hair, and background must remain 100% identical to the original photo. (2) Do NOT change the hairstyle or hair color. (3) Do NOT change the background or lighting. (4) ONLY add makeup products to the face: apply the described eyeshadow, eyeliner, blush, contour, and lipstick. Output a single natural photorealistic result.`;
-      parts = [{text:prompt},{inline_data:{mime_type:rMime,data:rB64}}];
+  document.getElementById('loading-area').style.display='block';
+  try{
+    const rostoB64=imgs.rosto.split(',')[1], rostoMime=imgs.rosto.split(';')[0].split(':')[1];
+    let prompt,parts;
+    if(imgs.makeup){
+      const makeupB64=imgs.makeup.split(',')[1], mkMime=imgs.makeup.split(';')[0].split(':')[1];
+      prompt=`Você é especialista em maquiagem digital de precisão. Analise a maquiagem da imagem de referência e replique FIELMENTE no rosto da primeira imagem. REGRAS CRÍTICAS: 1) Mantenha o cabelo EXATAMENTE igual ao original — NÃO mude cor, corte ou estilo. 2) Mantenha as feições, cor de pele, iluminação e perspectiva originais. 3) Aplique a maquiagem com intensidade IDÊNTICA à referência — nem mais forte, nem mais suave. Se na referência o esfumado é leve, aplique leve. Se o batom é discreto, aplique discreto. 4) NÃO intensifique nem interprete — apenas reproduza o que está visível. Resultado fotorrealista e natural.`;
+      parts=[{text:prompt},{inline_data:{mime_type:rostoMime,data:rostoB64}},{inline_data:{mime_type:mkMime,data:makeupB64}}];
+    }else{
+      const estilo=window._makeEstilo||'maquiagem natural';
+      prompt=`You are a professional makeup artist and photo retoucher. Edit this photo to apply makeup as described. CRITICAL RULES: 1) Keep the exact same person, face shape, skin tone, lighting, background and camera angle. 2) Apply makeup with subtle, realistic precision — no harsh edges, no cartoonish or overdone effects. 3) The result must look like a real photo of a person wearing tasteful professional makeup — natural and wearable, not theatrical. 4) Do NOT change hair, skin color, facial features, background or anything outside the makeup area. 5) Less is more — apply with a light hand, keeping the result believable and elegant. Makeup to apply: ${estilo}`;
+      parts=[{text:prompt},{inline_data:{mime_type:rostoMime,data:rostoB64}}];
     }
-
-    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${GEMINI_KEY}`,
-      {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
-        contents:[{parts}],
-        generationConfig:{ responseModalities:["IMAGE","TEXT"] }
-      })});
-
-    if (!res.ok) { const e=await res.json(); throw new Error(e.error?.message||'Erro '+res.status); }
-    const data = await res.json();
-    let img = null;
-    for (const p of data.candidates?.[0]?.content?.parts||[]) {
-      const id = p.inlineData || p.inline_data;
-      if (id?.mimeType?.startsWith('image/') || id?.mime_type?.startsWith('image/')) {
-        img = `data:${id.mimeType||id.mime_type};base64,${id.data}`; break;
-      }
+    const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${GEMINI_KEY}`,
+      {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts}]})});
+    if(!res.ok){const e=await res.json();throw new Error(e.error?.message||'Erro '+res.status);}
+    const data=await res.json();
+    let img=null;
+    for(const p of data.candidates?.[0]?.content?.parts||[]){
+      const id=p.inlineData||p.inline_data;
+      if(id?.mimeType?.startsWith('image/')||id?.mime_type?.startsWith('image/')){img=`data:${id.mimeType||id.mime_type};base64,${id.data}`;break;}
     }
-    if (!img) {
-      const f = data.candidates?.[0]?.finishReason||'';
-      if (f==='SAFETY') throw new Error('Imagem bloqueada por segurança. Tente outra foto.');
-      throw new Error('IA não retornou imagem. Tente novamente.');
-    }
-
-    const mesKey = 'usos.'+getMesAtual();
+    if(!img){const f=data.candidates?.[0]?.finishReason||'';if(f==='SAFETY')throw new Error('Imagem bloqueada por segurança. Tente outra foto.');throw new Error('IA não retornou imagem. Tente novamente.');}
+    const mesKey='usos.'+getMesAtual();
     await updateDoc(doc(db,'licencas',licencaDoc.id),{[mesKey]:increment(1)});
-    licencaDoc = {id:licencaDoc.id,...(await getDoc(doc(db,'licencas',licencaDoc.id))).data()};
-
-    document.getElementById('loading-area').style.display = 'none';
-    document.getElementById('result-img').src = img;
+    licencaDoc={id:licencaDoc.id,...(await getDoc(doc(db,'licencas',licencaDoc.id))).data()};
+    document.getElementById('loading-area').style.display='none';
+    document.getElementById('result-img').src=img;
     document.getElementById('result-area').classList.add('visible');
     document.getElementById('result-area').scrollIntoView({behavior:'smooth',block:'nearest'});
     atualizarContador(licencaDoc);
-  } catch(e) {
-    document.getElementById('loading-area').style.display = 'none';
-    document.getElementById('erro-area').textContent = '⚠ '+e.message;
-    document.getElementById('erro-area').style.display = 'block';
-    document.getElementById('btn-gerar').disabled = false;
+  }catch(e){
+    document.getElementById('loading-area').style.display='none';
+    document.getElementById('erro-area').textContent='⚠ '+e.message;
+    document.getElementById('erro-area').style.display='block';
+    document.getElementById('btn-gerar').disabled=false;
   }
 };
 
-window.baixar = () => {
-  const a = document.createElement('a');
-  a.href = document.getElementById('result-img').src;
-  a.download = `make_${Date.now()}.png`;
-  a.click();
-};
+window.baixar=()=>{const a=document.createElement('a');a.href=document.getElementById('result-img').src;a.download=`maquiagem_${Date.now()}.png`;a.click();};
 
-window.nova = () => {
-  imgs.rosto = null; imgs.ref = null; makeNome = null;
+window.nova=()=>{
+  imgs.rosto=null;imgs.makeup=null;window._makeEstilo=null;lookSelecionado=null;
   document.getElementById('result-area').classList.remove('visible');
-  ['rosto'].forEach(t=>{
-    document.getElementById('prev-'+t).src='';
-    document.getElementById('zone-'+t).classList.remove('has-img');
-    document.getElementById('file-'+t).value='';
-  });
-  document.getElementById('prev-ref').src='';
-  document.getElementById('zone-ref').classList.remove('has-img');
-  document.getElementById('file-ref-camera').value='';
-  document.getElementById('file-ref-galeria').value='';
-  document.querySelectorAll('.galeria-item').forEach(i=>i.classList.remove('selecionado'));
-  verificarBotao();
+  ['rosto','makeup'].forEach(t=>{document.getElementById('prev-'+t).src='';document.getElementById('zone-'+t).classList.remove('has-img');});
+  ['file-rosto','file-makeup-camera','file-makeup-galeria'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  document.querySelectorAll('.galeria-item-make').forEach(i=>i.classList.remove('selecionado'));
+  document.querySelectorAll('.meu-look-item').forEach(i=>i.classList.remove('selecionado'));
+  renderMeusLooks();atualizarBotao();window.scrollTo({top:0,behavior:'smooth'});
 };
 
 inicializar();
