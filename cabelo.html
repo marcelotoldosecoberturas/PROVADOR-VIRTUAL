@@ -409,11 +409,11 @@ window.gerarProvador=async()=>{
     let prompt,parts;
     if(imgs.corte){
       const cB64=imgs.corte.split(',')[1],cMime=imgs.corte.split(';')[0].split(':')[1];
-      prompt=`You are a professional photo editor. Your ONLY task is to change the HAIR of the person in IMAGE 1. STRICT RULES — follow all without exception: (1) Do NOT change ANYTHING about the face: same eyes, same nose, same mouth, same skin tone, same facial features, same expression. (2) Do NOT apply any makeup or change skin texture. (3) Do NOT change the background or lighting. (4) Take ONLY the hair shape, cut, and color from IMAGE 2 and apply it to the person in IMAGE 1. (5) The face must be 100% identical to IMAGE 1. Output a single photorealistic image.`;
+      prompt=`This is a hair simulation task. IMAGE 1 is the CLIENT — her face, skin, eyes, nose, mouth, expression and background must be preserved EXACTLY as they are. IMAGE 2 is ONLY a hair reference — extract ONLY the hair cut, shape and volume from it, nothing else. Apply that hairstyle onto the CLIENT from IMAGE 1, keeping her face 100% identical. Do NOT generate a new person. Do NOT change skin, makeup, facial features, background or lighting. The output must look like the exact same person from IMAGE 1, with only the hair changed.`;
       parts=[{text:prompt},{inline_data:{mime_type:rMime,data:rB64}},{inline_data:{mime_type:cMime,data:cB64}}];
     }else{
       const corte=window._corteNome||'haircut';
-      prompt=`You are a professional photo editor. Your ONLY task is to change the HAIR of the person in this photo to a "${corte}" hairstyle. STRICT RULES — follow all without exception: (1) Do NOT change ANYTHING about the face: same eyes, same nose, same mouth, same skin tone, same facial features, same expression. (2) Do NOT apply any makeup or change skin texture. (3) Do NOT change the background or lighting. (4) Only change the hair style and length. (5) The face must be 100% identical to the original. Output a single photorealistic image.`;
+      prompt=`This is a hair simulation task. The person in this photo is the CLIENT — her face, skin, eyes, nose, mouth, expression and background must be preserved EXACTLY as they are. Apply ONLY a "${corte}" hairstyle to her hair. Do NOT generate a new person. Do NOT change skin tone, makeup, facial features, background or lighting. Keep the volume natural and proportional to her head size. The output must look like the exact same person, with only the hair changed.`;
       parts=[{text:prompt},{inline_data:{mime_type:rMime,data:rB64}}];
     }
     const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${GEMINI_KEY}`,
