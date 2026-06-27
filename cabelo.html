@@ -416,7 +416,7 @@ window.gerarProvador=async()=>{
       prompt=`You are a professional hair stylist and photo editor. Apply a "${corte}" hairstyle to the person in this photo (${generoAtual}). IMPORTANT: keep the exact same face, skin tone, facial features, lighting and background. Only change the hairstyle. The result must look like a real professional photo — natural, photorealistic.`;
       parts=[{text:prompt},{inline_data:{mime_type:rMime,data:rB64}}];
     }
-   const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${GEMINI_KEY}`,
+   const res=await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-image:generateContent?key=${GEMINI_KEY}`,
       {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({contents:[{parts}]})});
     if(!res.ok){const e=await res.json();throw new Error(e.error?.message||'Erro '+res.status);}
     const data=await res.json();
