@@ -3,95 +3,222 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Provador Virtual — Acesso</title>
+<title>Provador de Make — Studio Provador</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700&family=Cormorant+Garamond:wght@300;400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 * { margin:0; padding:0; box-sizing:border-box; }
-body { font-family:'DM Sans',sans-serif; background:#f8faf9; color:#1a2a22; min-height:100vh; display:flex; align-items:center; justify-content:center; padding:20px; }
-.box { width:100%; max-width:380px; text-align:center; }
-.logo { font-family:'Playfair Display',serif; font-size:10px; letter-spacing:8px; color:#2d7a5a; text-transform:uppercase; margin-bottom:14px; }
-.titulo { font-family:'Playfair Display',serif; font-size:30px; color:#1a2a22; margin-bottom:6px; }
-.titulo em { color:#7EC8A4; font-style:italic; }
-.sub { font-size:11px; letter-spacing:2px; color:#2d7a5a; text-transform:uppercase; margin-bottom:40px; }
-.campo label { font-size:10px; letter-spacing:3px; text-transform:uppercase; color:#2d7a5a; display:block; margin-bottom:8px; text-align:left; }
-.campo input { width:100%; background:#ffffff; border:1px solid rgba(126,200,164,0.5); border-radius:8px; color:#1a2a22; font-family:'Cormorant Garamond',serif; font-size:28px; padding:14px 16px; outline:none; transition:border-color 0.3s; text-align:center; letter-spacing:8px; }
-.campo input:focus { border-color:#7EC8A4; }
-.btn { width:100%; background:linear-gradient(135deg,#1a5c3a,#7EC8A4,#1a5c3a); border:none; color:#0a0c0f; font-family:'Playfair Display',serif; font-size:12px; letter-spacing:4px; text-transform:uppercase; padding:14px; cursor:pointer; border-radius:2px; font-weight:700; margin-top:14px; transition:opacity 0.3s; }
-.btn:hover { opacity:0.85; }
-.btn:disabled { opacity:0.4; cursor:default; }
-.erro { background:rgba(200,80,80,0.1); border:1px solid rgba(200,80,80,0.3); color:#E88080; font-size:12px; padding:10px 16px; border-radius:2px; margin-top:14px; display:none; line-height:1.5; }
-.aviso { background:rgba(255,200,50,0.08); border:1px solid rgba(255,200,50,0.25); color:#E8C97A; font-size:12px; padding:10px 16px; border-radius:2px; margin-top:14px; display:none; line-height:1.6; text-align:left; }
-.aviso strong { color:#FFD966; }
-.geo-status { font-size:11px; color:#5B9A7A; margin-top:10px; min-height:16px; letter-spacing:1px; }
-.tela-escolha { display:none; text-align:center; }
-.bem-vindo { font-family:'Playfair Display',serif; font-size:22px; color:#1a2a22; margin-bottom:6px; }
-.bem-sub { font-size:11px; color:#2d7a5a; letter-spacing:2px; text-transform:uppercase; margin-bottom:10px; }
-.creditos-badge { display:inline-flex; align-items:center; gap:6px; background:rgba(126,200,164,0.1); border:1px solid rgba(126,200,164,0.25); border-radius:20px; padding:5px 14px; font-size:12px; color:#7EC8A4; margin-bottom:30px; }
-.creditos-badge.aviso-cred { background:rgba(255,200,50,0.1); border-color:rgba(255,200,50,0.3); color:#E8C97A; }
-.creditos-badge.esgotado { background:rgba(200,80,80,0.1); border-color:rgba(200,80,80,0.3); color:#E88080; }
-.opcoes { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin-bottom:20px; }
-.opcao { background:#ffffff; border:1px solid rgba(126,200,164,0.3); border-radius:8px; padding:28px 16px; cursor:pointer; transition:all 0.2s; text-decoration:none; color:inherit; box-shadow:0 2px 8px rgba(0,0,0,0.06); }
-.opcao:hover { border-color:#7EC8A4; background:rgba(126,200,164,0.12); transform:translateY(-2px); }
-.opcao .icone { font-size:36px; margin-bottom:10px; }
-.opcao .nome { font-family:'Playfair Display',serif; font-size:16px; color:#1a6b3a; margin-bottom:4px; }
-.opcao .desc { font-size:11px; color:#555; letter-spacing:1px; }
-.btn-sair { background:none; border:1px solid rgba(126,200,164,0.4); color:#2d7a5a; font-family:'DM Sans',sans-serif; font-size:11px; letter-spacing:2px; text-transform:uppercase; padding:8px 20px; cursor:pointer; border-radius:2px; transition:all 0.2s; margin-top:10px; }
-.btn-sair:hover { border-color:rgba(200,80,80,0.3); color:#E88080; }
-.banner { border-radius:6px; padding:10px 14px; font-size:12px; margin-bottom:14px; line-height:1.6; text-align:left; display:none; }
-.banner.amarelo { background:rgba(255,200,50,0.08); border:1px solid rgba(255,200,50,0.25); color:#E8C97A; }
-.banner.vermelho { background:rgba(200,80,80,0.1); border:1px solid rgba(200,80,80,0.3); color:#E88080; }
-.banner.laranja { background:rgba(230,120,30,0.1); border:1px solid rgba(230,120,30,0.3); color:#E89050; }
+body { font-family:'DM Sans',sans-serif; background:#0a0c0f; color:#e8eaf0; min-height:100vh; }
+#tela-bloqueio { display:none; align-items:center; justify-content:center; min-height:100vh; padding:20px; text-align:center; }
+#tela-bloqueio h2 { font-family:'Playfair Display',serif; font-size:22px; color:#E88080; margin-bottom:10px; }
+#tela-bloqueio p { font-size:13px; color:#9A7A7A; line-height:1.7; margin-bottom:20px; }
+.btn-voltar { background:none; border:1px solid rgba(126,200,164,0.3); color:#7EC8A4; font-family:'DM Sans',sans-serif; font-size:12px; letter-spacing:2px; text-transform:uppercase; padding:10px 24px; cursor:pointer; border-radius:2px; }
+#app { display:none; min-height:100vh; background:#f4f6f9; color:#10141a; }
+.app-header { background:#fff; border-bottom:1px solid #dde4ef; padding:14px 20px; display:flex; align-items:center; justify-content:space-between; position:sticky; top:0; z-index:10; }
+.app-logo { font-family:'Playfair Display',serif; font-size:18px; color:#10141a; display:flex; align-items:center; gap:8px; }
+.logo-dot { width:7px; height:7px; border-radius:50%; background:#C88AC0; display:inline-block; }
+.licenca-info { text-align:right; font-size:11px; color:#7A5B9A; }
+.uso-badge { display:inline-flex; align-items:center; gap:6px; background:#f5eef9; border:1px solid #d8b8d8; border-radius:20px; padding:4px 12px; font-size:12px; color:#6b3a8a; font-weight:500; margin-top:4px; }
+.uso-badge.aviso { background:#fff8e1; border-color:#ffe082; color:#b06000; }
+.uso-badge.esgotado { background:#fde8e8; border-color:#f5c6c6; color:#c62828; }
+.banner { padding:10px 16px; font-size:12px; line-height:1.6; border-bottom:1px solid; display:none; }
+.banner.amarelo { background:#fffbea; border-color:#ffe082; color:#7a5500; }
+.banner.vermelho { background:#fff0f0; border-color:#f5c6c6; color:#c62828; }
+.banner.laranja { background:#fff5ec; border-color:#ffc896; color:#8a3d00; }
+.app-body { max-width:680px; margin:0 auto; padding:20px; }
+.section-card { background:#fff; border:1px solid #dde4ef; border-radius:12px; padding:20px; margin-bottom:16px; }
+.section-title { font-size:11px; font-weight:500; color:#aaa; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:14px; }
+.upload-zone { border:2px dashed #ddd; border-radius:12px; padding:20px 14px; text-align:center; cursor:pointer; transition:border-color 0.15s,background 0.15s; position:relative; min-height:140px; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:8px; }
+.upload-zone:hover { border-color:#C88AC0; background:#fdf5ff; }
+.upload-zone.has-img { border-style:solid; border-color:#C88AC0; padding:8px; }
+.upload-zone input[type=file] { display:none; }
+.upload-icon { font-size:28px; }
+.upload-label { font-size:13px; font-weight:500; color:#333; }
+.upload-hint { font-size:11px; color:#999; }
+.upload-preview { width:100%; height:140px; object-fit:contain; border-radius:8px; display:none; background:#f4f6f9; }
+.upload-zone.has-img .upload-preview { display:block; }
+.upload-zone.has-img .upload-icon,.upload-zone.has-img .upload-label,.upload-zone.has-img .upload-hint { display:none; }
+.remove-img { position:absolute; top:6px; right:6px; width:22px; height:22px; background:rgba(0,0,0,0.5); border:none; border-radius:50%; color:white; font-size:12px; cursor:pointer; display:none; align-items:center; justify-content:center; }
+.upload-zone.has-img .remove-img { display:flex; }
+.galeria-titulo { font-size:11px; font-weight:500; color:#aaa; text-transform:uppercase; letter-spacing:0.8px; margin-bottom:12px; }
+.galeria-ou { text-align:center; font-size:12px; color:#bbb; margin:14px 0; letter-spacing:1px; position:relative; }
+.galeria-ou::before,.galeria-ou::after { content:''; position:absolute; top:50%; width:40%; height:1px; background:#dde4ef; }
+.galeria-ou::before { left:0; } .galeria-ou::after { right:0; }
+.galeria-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-bottom:4px; }
+.galeria-item { border:2px solid #dde4ef; border-radius:10px; padding:6px 6px 8px; text-align:center; cursor:pointer; transition:all 0.15s; background:#fafbfd; display:flex; flex-direction:column; align-items:center; gap:4px; }
+.galeria-item:hover { border-color:#C88AC0; background:#fdf5ff; transform:translateY(-2px); box-shadow:0 4px 12px rgba(200,138,192,0.15); }
+.galeria-item.selecionado { border-color:#C88AC0; background:#fdf5ff; box-shadow:0 0 0 3px rgba(200,138,192,0.2); }
+.galeria-item .gi-emoji { font-size:28px; margin-bottom:2px; }
+.galeria-item .gi-nome { font-size:11px; color:#333; font-weight:600; line-height:1.3; }
+.galeria-item .gi-desc { font-size:10px; color:#888; line-height:1.3; }
+.galeria-secao { font-size:10px; letter-spacing:2px; text-transform:uppercase; color:#C88AC0; font-weight:600; margin:16px 0 10px; padding-bottom:6px; border-bottom:1px solid #fdf0ff; }
+.btn-gerar { width:100%; height:50px; background:linear-gradient(135deg,#7a3a8a,#C88AC0); color:white; border:none; border-radius:8px; font-family:'DM Sans',sans-serif; font-size:16px; font-weight:500; cursor:pointer; transition:opacity 0.15s,transform 0.1s; display:flex; align-items:center; justify-content:center; gap:8px; }
+.btn-gerar:hover:not(:disabled) { opacity:0.88; }
+.btn-gerar:active { transform:scale(0.98); }
+.btn-gerar:disabled { background:#e0e4ea; color:#aaa; cursor:default; }
+.result-area { display:none; }
+.result-area.visible { display:block; }
+.result-img-wrap { border-radius:12px; overflow:hidden; background:#eef2f7; }
+.result-img { width:100%; height:auto; max-height:70vh; object-fit:cover; border-radius:12px; display:block; }
+.result-actions { display:flex; gap:10px; margin-top:12px; }
+.btn-dl { flex:1; height:40px; background:#f0f4f8; border:1px solid #ddd; border-radius:8px; font-family:'DM Sans',sans-serif; font-size:14px; font-weight:500; cursor:pointer; color:#10141a; transition:background 0.12s; }
+.btn-dl:hover { background:#dde4ef; }
+.loading-area { display:none; text-align:center; padding:50px 20px; }
+.loading-spinner { width:36px; height:36px; border:2px solid rgba(200,138,192,0.2); border-top-color:#C88AC0; border-radius:50%; animation:spin 1s linear infinite; margin:0 auto 16px; }
+@keyframes spin { to{transform:rotate(360deg)} }
+.loading-texto { font-family:'Playfair Display',serif; font-size:14px; letter-spacing:2px; color:#C88AC0; text-transform:uppercase; }
+.erro-area { display:none; background:rgba(200,80,80,0.08); border:1px solid rgba(200,80,80,0.25); border-radius:8px; padding:16px; margin-bottom:16px; color:#c62828; font-size:13px; }
+.toast { position:fixed; bottom:30px; right:30px; background:rgba(200,138,192,0.15); border:1px solid rgba(200,138,192,0.4); color:#6b3a8a; font-size:12px; letter-spacing:2px; padding:12px 22px; border-radius:8px; opacity:0; transform:translateY(10px); transition:all 0.3s; pointer-events:none; z-index:999; }
+.toast.visivel { opacity:1; transform:translateY(0); }
+.ref-source-btns { display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px; }
+.ref-source-btn { padding:10px; border:1px solid #dde4ef; border-radius:8px; background:#fafbfd; font-size:13px; color:#7a3a8a; cursor:pointer; text-align:center; transition:all 0.15s; }
+.ref-source-btn:hover { border-color:#C88AC0; background:#fdf5ff; }
+@media(max-width:600px){ .galeria-grid{grid-template-columns:repeat(2,1fr)} .app-header{flex-direction:column;gap:10px} .result-img{max-height:60vh} .app-body{padding:12px} }
 </style>
 </head>
 <body>
 
-<!-- TELA LOGIN -->
-<div class="box" id="tela-login">
-  <div class="logo">Studio Provador</div>
-  <div class="titulo">Provador <em>Virtual</em></div>
-  <div class="sub">Cabelo · Maquiagem</div>
-  <div class="campo">
-    <label>Senha de acesso</label>
-    <input type="text" id="input-pin" maxlength="4" placeholder="••••"
-      oninput="this.value=this.value.replace(/\D/g,'')"
-      onkeydown="if(event.key==='Enter')entrar()">
+<div id="tela-bloqueio" style="display:none">
+  <div>
+    <div style="font-size:48px;margin-bottom:16px">🔒</div>
+    <h2 id="bloqueio-titulo">Acesso bloqueado</h2>
+    <p id="bloqueio-msg">Retorne à tela inicial.</p>
+    <button class="btn-voltar" onclick="window.location.href='index.html'">← Voltar</button>
   </div>
-  <button class="btn" id="btn-entrar" onclick="entrar()">Entrar</button>
-  <div class="geo-status" id="geo-status"></div>
-  <div class="erro" id="login-erro"></div>
-  <div class="aviso" id="login-aviso"></div>
 </div>
 
-<!-- TELA ESCOLHA -->
-<div class="box tela-escolha" id="tela-escolha">
-  <div class="bem-vindo" id="bem-vindo">Olá!</div>
-  <div class="bem-sub" id="bem-sub">Plano Starter</div>
-
-  <!-- Banners de aviso -->
-  <div class="banner amarelo" id="banner-dias" role="alert"></div>
-  <div class="banner vermelho" id="banner-vencido" role="alert"></div>
-  <div class="banner laranja" id="banner-creditos" role="alert"></div>
-
-  <div class="creditos-badge" id="creditos-badge">✨ carregando…</div>
-
-  <div class="opcoes">
-    <a class="opcao" id="link-cabelo" href="cabelo.html">
-      <div class="icone">✂️</div>
-      <div class="nome">Cabelo</div>
-      <div class="desc">Simular corte</div>
-    </a>
-    <a class="opcao" id="link-makeup" href="maquiagem.html">
-      <div class="icone">💄</div>
-      <div class="nome">Maquiagem</div>
-      <div class="desc">Simular make</div>
-    </a>
+<div id="app">
+  <div class="app-header">
+    <div class="app-logo"><span class="logo-dot"></span> Provador de Make</div>
+    <div class="licenca-info">
+      <div id="licenca-nome"></div>
+      <div class="uso-badge" id="uso-badge">💄 carregando…</div>
+    </div>
   </div>
-  <button class="btn-sair" onclick="sair()">Sair</button>
+
+  <div class="banner amarelo" id="banner-dias"></div>
+  <div class="banner vermelho" id="banner-vencido"></div>
+  <div class="banner laranja" id="banner-creditos"></div>
+
+  <div class="app-body">
+
+    <!-- Foto da cliente -->
+    <div class="section-card">
+      <div class="section-title">Foto do cliente</div>
+      <div class="upload-zone" id="zone-rosto" onclick="triggerUpload('file-rosto')">
+        <input type="file" id="file-rosto" accept="image/*" capture="environment" onchange="carregarImagem('rosto',this)">
+        <img class="upload-preview" id="prev-rosto" alt="">
+        <button class="remove-img" onclick="remover('rosto',event)">✕</button>
+        <div class="upload-icon">🧑</div>
+        <div class="upload-label">Foto do Cliente</div>
+        <div class="upload-hint">Foto frontal, sem maquiagem, boa iluminação</div>
+      </div>
+    </div>
+
+    <!-- Escolha do estilo -->
+    <div class="section-card">
+      <div class="galeria-titulo">Escolha o estilo de make</div>
+
+      <div class="galeria-secao">Olhos</div>
+      <div class="galeria-grid">
+        <div class="galeria-item" onclick="selecionarMake(this,'Smoky Eye clássico — olhos esfumados escuros com delineado marcado')">
+          <div class="gi-emoji">🌑</div>
+          <div class="gi-nome">Smoky Eye</div>
+          <div class="gi-desc">Esfumado escuro</div>
+        </div>
+        <div class="galeria-item" onclick="selecionarMake(this,'Cat Eye — delineado gatinho preciso com canto externo levantado')">
+          <div class="gi-emoji">😼</div>
+          <div class="gi-nome">Cat Eye</div>
+          <div class="gi-desc">Delineado gatinho</div>
+        </div>
+        <div class="galeria-item" onclick="selecionarMake(this,'Make colorida vibrante — sombra colorida nos olhos, iluminador e batom neutro')">
+          <div class="gi-emoji">🌈</div>
+          <div class="gi-nome">Colorida</div>
+          <div class="gi-desc">Sombra vibrante</div>
+        </div>
+      </div>
+
+      <div class="galeria-secao">Lábios</div>
+      <div class="galeria-grid">
+        <div class="galeria-item" onclick="selecionarMake(this,'Batom vermelho clássico com pele iluminada e olhos sutis')">
+          <div class="gi-emoji">💋</div>
+          <div class="gi-nome">Batom Vermelho</div>
+          <div class="gi-desc">Lábio clássico</div>
+        </div>
+        <div class="galeria-item" onclick="selecionarMake(this,'Lábio nude glossy — batom rosado natural com gloss brilhante')">
+          <div class="gi-emoji">🫦</div>
+          <div class="gi-nome">Nude Glossy</div>
+          <div class="gi-desc">Natural brilhante</div>
+        </div>
+        <div class="galeria-item" onclick="selecionarMake(this,'Batom vinho escuro — tom bordô ou vinho com pele matte')">
+          <div class="gi-emoji">🍷</div>
+          <div class="gi-nome">Vinho</div>
+          <div class="gi-desc">Tom bordô</div>
+        </div>
+      </div>
+
+      <div class="galeria-secao">Completo</div>
+      <div class="galeria-grid">
+        <div class="galeria-item" onclick="selecionarMake(this,'Make noiva — look suave e romântico com iluminador, sombra champagne e batom rosado')">
+          <div class="gi-emoji">👰</div>
+          <div class="gi-nome">Noiva</div>
+          <div class="gi-desc">Suave e romântico</div>
+        </div>
+        <div class="galeria-item" onclick="selecionarMake(this,'Make festa — look glamouroso com sombra dourada, iluminador intenso e batom nude')">
+          <div class="gi-emoji">✨</div>
+          <div class="gi-nome">Festa</div>
+          <div class="gi-desc">Glamouroso</div>
+        </div>
+        <div class="galeria-item" onclick="selecionarMake(this,'Make natural dia — base leve, blush rosado, máscara de cílios e batom cor de boca')">
+          <div class="gi-emoji">🌸</div>
+          <div class="gi-nome">Natural Dia</div>
+          <div class="gi-desc">Leve e fresco</div>
+        </div>
+      </div>
+
+      <div class="galeria-ou">ou envie uma referência</div>
+
+      <div class="ref-source-btns">
+        <button class="ref-source-btn" onclick="triggerUploadRef('camera')">📷 Tirar foto da referência</button>
+        <button class="ref-source-btn" onclick="triggerUploadRef('galeria')">🖼️ Escolher da galeria</button>
+      </div>
+      <input type="file" id="file-ref-camera" accept="image/*" capture="environment" style="display:none" onchange="carregarImagem('ref',this)">
+      <input type="file" id="file-ref-galeria" accept="image/*" style="display:none" onchange="carregarImagem('ref',this)">
+
+      <div class="upload-zone" id="zone-ref" style="min-height:100px;pointer-events:none;cursor:default;">
+        <img class="upload-preview" id="prev-ref" alt="" style="max-height:200px;width:auto;object-fit:contain;">
+        <button class="remove-img" onclick="remover('ref',event)" style="pointer-events:all">✕</button>
+        <div class="upload-icon">💄</div>
+        <div class="upload-label">Foto de Referência</div>
+        <div class="upload-hint">Make que deseja aplicar</div>
+      </div>
+
+    </div>
+
+    <!-- Geração -->
+    <div class="section-card">
+      <div class="erro-area" id="erro-area"></div>
+      <div class="loading-area" id="loading-area">
+        <div class="loading-spinner"></div>
+        <div class="loading-texto">Aplicando make…</div>
+      </div>
+      <div class="result-area" id="result-area">
+        <div class="result-img-wrap"><img class="result-img" id="result-img" alt="Resultado"></div>
+        <div class="result-actions">
+          <button class="btn-dl" onclick="baixar()">⬇ Salvar</button>
+          <button class="btn-dl" onclick="nova()">↺ Nova simulação</button>
+        </div>
+      </div>
+      <button class="btn-gerar" id="btn-gerar" onclick="gerarProvador()" disabled>💄 Simular make</button>
+    </div>
+
+  </div>
 </div>
+
+<div class="toast" id="toast"></div>
 
 <script type="module">
 import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js';
-import { getFirestore, collection, query, where, getDocs, doc, updateDoc } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
+import { getFirestore, doc, getDoc, updateDoc, increment } from 'https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js';
 
 const fb = initializeApp({
   apiKey:"AIzaSyCB-4FQpw157I6qKJAuXyXc3QEzqlcI1c0",
@@ -103,175 +230,250 @@ const fb = initializeApp({
 });
 const db = getFirestore(fb);
 
-const GEO_RAIO_METROS = 150;
-const DIAS_AVISO = 5;
+const CARENCIA_MS = 24*60*60*1000;
 const CREDITOS_AVISO = 10;
-const CARENCIA_MS = 24 * 60 * 60 * 1000; // 1 dia
+const DIAS_AVISO = 5;
+
+const imgs = { rosto:null, ref:null };
+let licencaDoc = null;
+let GEMINI_KEY = null;
+let makeNome = null;
 
 function getMesAtual() { const d=new Date(); return `${d.getFullYear()}_${d.getMonth()+1}`; }
 function getUsosMes(dados) { return (dados.usos||{})[getMesAtual()]||0; }
 
-function distanciaMetros(lat1,lng1,lat2,lng2) {
-  const R=6371000, r=Math.PI/180;
-  const a=Math.sin((lat2-lat1)*r/2)**2 + Math.cos(lat1*r)*Math.cos(lat2*r)*Math.sin((lng2-lng1)*r/2)**2;
-  return R*2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+function mostrarToast(msg) {
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('visivel');
+  setTimeout(()=>t.classList.remove('visivel'),2800);
 }
 
-function getPosicaoAtual() {
-  return new Promise((res,rej) => {
-    if (!navigator.geolocation) { rej(new Error('Geolocalização não suportada neste dispositivo.')); return; }
-    navigator.geolocation.getCurrentPosition(
-      p => res({ lat: p.coords.latitude, lng: p.coords.longitude }),
-      e => rej(new Error('Permita a localização para acessar o provador.')),
-      { enableHighAccuracy:true, timeout:10000 }
-    );
-  });
-}
-
-window.entrar = async () => {
-  const pin = document.getElementById('input-pin').value.trim();
-  const btn = document.getElementById('btn-entrar');
-  const erro = document.getElementById('login-erro');
-  const avisoEl = document.getElementById('login-aviso');
-  const geoStatus = document.getElementById('geo-status');
-  erro.style.display = 'none';
-  avisoEl.style.display = 'none';
-
-  if (pin.length !== 4) { erro.textContent='Digite os 4 dígitos da sua senha.'; erro.style.display='block'; return; }
-
-  btn.disabled=true; btn.textContent='Verificando…';
-
+async function inicializar() {
+  const params = new URLSearchParams(window.location.search);
+  const chave = params.get('chave') || sessionStorage.getItem('compt_chave');
+  if (!chave || !chave.startsWith('COMPT-')) { window.location.href='index.html'; return; }
   try {
-    // 1. Busca licença pelo PIN
-    const q = query(collection(db,'licencas'), where('pin','==',pin), where('compartilhado','==',true));
-    const snap = await getDocs(q);
-    if (snap.empty) throw new Error('Senha incorreta ou não encontrada.');
-    const docSnap = snap.docs[0];
-    const dados = docSnap.data();
-    const chave = docSnap.id;
-
-    // 2. Verifica vencimento com carência de 1 dia
+    const snap = await getDoc(doc(db,'licencas',chave));
+    if (!snap.exists()) { window.location.href='index.html'; return; }
+    const dados = snap.data();
     const agora = Date.now();
     const vencido = agora > dados.venceEm;
     const dentroCarencia = agora <= (dados.venceEm + CARENCIA_MS);
-    if (vencido && !dentroCarencia) throw new Error('Acesso encerrado. Plano vencido em '+dados.venceData+'. Entre em contato para renovar.');
-
-    // 3. Verifica créditos
-    const usos = getUsosMes(dados);
-    const limiteBase = dados.limite || 50;
-    const avulsos = dados.creditosAvulsos || 0;
-    const limiteTotal = limiteBase + avulsos;
-    if (usos >= limiteTotal) throw new Error('Créditos esgotados este mês. Entre em contato para adicionar créditos avulsos.');
-
-    // 4. Geolocalização
-    geoStatus.textContent = '📍 Verificando localização…';
-    const posAtual = await getPosicaoAtual();
-
-    if (dados.geoLat && dados.geoLng) {
-      // Já tem local cadastrado — verifica distância
-      const dist = distanciaMetros(posAtual.lat, posAtual.lng, dados.geoLat, dados.geoLng);
-      if (dist > GEO_RAIO_METROS) throw new Error(`Acesso permitido apenas no local cadastrado do salão. Você está a ${Math.round(dist)}m do endereço registrado.`);
-    } else {
-      // Primeiro acesso — registra localização
-      await updateDoc(doc(db,'licencas',chave), {
-        geoLat: posAtual.lat,
-        geoLng: posAtual.lng,
-        primeiroAcesso: agora
-      });
-    }
-    geoStatus.textContent = '';
-
-    // 5. Salva sessão no sessionStorage
-    sessionStorage.setItem('compt_chave', chave);
-    sessionStorage.setItem('compt_dados', JSON.stringify({...dados, id:chave}));
-    // Salva PIN no dispositivo para não pedir de novo
-    localStorage.setItem('compt_pin_salvo', pin);
-
-    // 6. Monta tela de escolha
-    mostrarTelaEscolha(dados, chave, usos, limiteTotal, vencido, dentroCarencia);
-
-  } catch(e) {
-    geoStatus.textContent = '';
-    erro.textContent = e.message || 'Erro ao verificar acesso.';
-    erro.style.display = 'block';
-    btn.disabled=false; btn.textContent='Entrar';
-  }
-};
-
-function mostrarTelaEscolha(dados, chave, usos, limiteTotal, vencido, dentroCarencia) {
-  document.getElementById('tela-login').style.display = 'none';
-  document.getElementById('tela-escolha').style.display = 'block';
-
-  const planoLabel = dados.plano === 'starter' ? 'Starter · 50 créditos/mês' : 'Pro · 80 créditos/mês';
-  document.getElementById('bem-vindo').textContent = dados.nome;
-  document.getElementById('bem-sub').textContent = planoLabel;
-
-  // Badge de créditos
-  const rest = limiteTotal - usos;
-  const badge = document.getElementById('creditos-badge');
-  const avulsos = dados.creditosAvulsos || 0;
-  badge.textContent = avulsos > 0
-    ? `✨ ${usos} / ${dados.limite||50} +${avulsos} avulso · ${rest} restantes`
-    : `✨ ${usos} / ${limiteTotal} créditos usados · ${rest} restantes`;
-  badge.className = 'creditos-badge' + (rest <= 0 ? ' esgotado' : rest <= CREDITOS_AVISO ? ' aviso-cred' : '');
-
-  // Banners de aviso
-  const diasRestantes = Math.ceil((dados.venceEm - Date.now()) / (1000*60*60*24));
-
-  if (vencido && dentroCarencia) {
-    const b = document.getElementById('banner-vencido');
-    b.innerHTML = '⛔ <strong>Plano vencido!</strong> Acesso será bloqueado em breve. Entre em contato para renovar.';
-    b.style.display = 'block';
-  } else if (!vencido && diasRestantes <= DIAS_AVISO) {
-    const b = document.getElementById('banner-dias');
-    b.innerHTML = `⚠️ <strong>Atenção:</strong> Seu plano vence em <strong>${diasRestantes} dia${diasRestantes>1?'s':''}</strong> (${dados.venceData}). Renove para não perder o acesso.`;
-    b.style.display = 'block';
-  }
-
-  if (rest <= CREDITOS_AVISO && rest > 0) {
-    const b = document.getElementById('banner-creditos');
-    b.innerHTML = `🔶 <strong>Créditos acabando:</strong> Restam apenas <strong>${rest} créditos</strong> este mês. Entre em contato para adicionar mais.`;
-    b.style.display = 'block';
-  }
-
-  // Passa chave via URL para os provadores
-  document.getElementById('link-cabelo').href = `cabelo.html?chave=${chave}`;
-  document.getElementById('link-makeup').href = `maquiagem.html?chave=${chave}`;
-}
-
-window.sair = () => {
-  sessionStorage.clear();
-  document.getElementById('tela-login').style.display = 'flex';
-  document.getElementById('tela-escolha').style.display = 'none';
-  // Mantém o PIN preenchido para facilitar re-entrada
-  const pinSalvo = localStorage.getItem('compt_pin_salvo');
-  document.getElementById('input-pin').value = pinSalvo || '';
-  document.getElementById('btn-entrar').disabled = false;
-  document.getElementById('btn-entrar').textContent = 'Entrar';
-};
-
-// Auto-login: tenta com sessão ativa ou PIN salvo
-const chaveSalva = sessionStorage.getItem('compt_chave');
-const dadosSalvos = sessionStorage.getItem('compt_dados');
-if (chaveSalva && dadosSalvos) {
-  try {
-    const dados = JSON.parse(dadosSalvos);
     const usos = getUsosMes(dados);
     const limiteTotal = (dados.limite||50) + (dados.creditosAvulsos||0);
-    const vencido = Date.now() > dados.venceEm;
-    const dentroCarencia = Date.now() <= (dados.venceEm + CARENCIA_MS);
-    if (!vencido || dentroCarencia) {
-      mostrarTelaEscolha(dados, chaveSalva, usos, limiteTotal, vencido, dentroCarencia);
+
+    if (vencido && !dentroCarencia) {
+      mostrarBloqueio('Plano vencido','Seu plano venceu em '+dados.venceData+'. Entre em contato para renovar.');
+      return;
     }
-  } catch(_) {}
-} else {
-  // Preenche PIN salvo e faz login automático
-  const pinSalvo = localStorage.getItem('compt_pin_salvo');
-  if (pinSalvo) {
-    document.getElementById('input-pin').value = pinSalvo;
-    setTimeout(() => entrar(), 400);
+    if (usos >= limiteTotal) {
+      mostrarBloqueio('Créditos esgotados','Você usou todos os créditos deste mês. Entre em contato para adicionar mais.');
+      return;
+    }
+
+    const cfgSnap = await getDoc(doc(db,'config','gemini'));
+    if (!cfgSnap.exists()) { mostrarBloqueio('Erro de configuração','Contate o suporte.'); return; }
+    GEMINI_KEY = cfgSnap.data().apiKey;
+    licencaDoc = { id:chave, ...dados };
+
+    const planoLabel = dados.plano==='starter'?'Starter':'Pro';
+    document.getElementById('licenca-nome').textContent = dados.nome+' · '+planoLabel;
+    document.getElementById('app').style.display = 'block';
+    atualizarContador(dados);
+    renderBanners(dados, usos, limiteTotal);
+  } catch(e) {
+    window.location.href = 'index.html';
   }
 }
+
+function mostrarBloqueio(titulo, msg) {
+  document.getElementById('bloqueio-titulo').textContent = titulo;
+  document.getElementById('bloqueio-msg').textContent = msg;
+  document.getElementById('tela-bloqueio').style.display = 'flex';
+}
+
+function renderBanners(dados, usos, limiteTotal) {
+  const agora = Date.now();
+  const vencido = agora > dados.venceEm;
+  const dentroCarencia = agora <= (dados.venceEm + CARENCIA_MS);
+  const diasRestantes = Math.ceil((dados.venceEm - agora) / (1000*60*60*24));
+  const rest = limiteTotal - usos;
+  if (vencido && dentroCarencia) {
+    const b=document.getElementById('banner-vencido');
+    b.innerHTML='⛔ <strong>Plano vencido!</strong> Acesso será bloqueado em breve. Entre em contato para renovar.';
+    b.style.display='block';
+  } else if (!vencido && diasRestantes <= DIAS_AVISO) {
+    const b=document.getElementById('banner-dias');
+    b.innerHTML=`⚠️ <strong>Atenção:</strong> Plano vence em <strong>${diasRestantes} dia${diasRestantes>1?'s':''}</strong> (${dados.venceData}). Renove para não perder o acesso.`;
+    b.style.display='block';
+  }
+  if (rest <= CREDITOS_AVISO && rest > 0) {
+    const b=document.getElementById('banner-creditos');
+    b.innerHTML=`🔶 <strong>Créditos acabando:</strong> Restam <strong>${rest} créditos</strong> este mês. Entre em contato para adicionar mais.`;
+    b.style.display='block';
+  }
+}
+
+function atualizarContador(dados) {
+  const usos=getUsosMes(dados), limiteBase=dados.limite||50, avulso=dados.creditosAvulsos||0, limite=limiteBase+avulso, rest=limite-usos;
+  const badge=document.getElementById('uso-badge');
+  badge.textContent = avulso>0 ? `💄 ${usos}/${limiteBase}+${avulso} avulso · ${rest} restantes` : `💄 ${usos}/${limite} créditos · ${rest} restantes`;
+  badge.className = 'uso-badge'+(rest<=0?' esgotado':rest<=CREDITOS_AVISO?' aviso':'');
+  if (rest<=0) mostrarBloqueio('Créditos esgotados','Você usou todos os créditos deste mês. Entre em contato para adicionar mais.');
+}
+
+function verificarBotao() {
+  const snap = document.getElementById('btn-gerar');
+  const usos = getUsosMes(licencaDoc||{});
+  const limite = ((licencaDoc?.limite)||50) + ((licencaDoc?.creditosAvulsos)||0);
+  snap.disabled = !(imgs.rosto && (imgs.ref || makeNome)) || usos >= limite;
+}
+
+window.triggerUpload = id => document.getElementById(id).click();
+
+window.triggerUploadRef = tipo => {
+  document.getElementById(tipo==='camera'?'file-ref-camera':'file-ref-galeria').click();
+};
+
+window.carregarImagem = (tipo, input) => {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    if (tipo === 'ref') {
+      imgs.ref = e.target.result;
+      makeNome = null;
+      document.querySelectorAll('.galeria-item').forEach(i=>i.classList.remove('selecionado'));
+      const prevRef = document.getElementById('prev-ref');
+      prevRef.src = e.target.result;
+      prevRef.style.display = 'block';
+      prevRef.style.maxHeight = '200px';
+      prevRef.style.width = 'auto';
+      const zoneRef = document.getElementById('zone-ref');
+      zoneRef.classList.add('has-img');
+    } else {
+      imgs[tipo] = e.target.result;
+      document.getElementById('prev-'+tipo).src = e.target.result;
+      document.getElementById('zone-'+tipo).classList.add('has-img');
+    }
+    verificarBotao();
+  };
+  reader.readAsDataURL(file);
+};
+
+window.remover = (tipo, e) => {
+  e.stopPropagation();
+  if (tipo === 'ref') {
+    imgs.ref = null;
+    document.getElementById('prev-ref').src = '';
+    document.getElementById('zone-ref').classList.remove('has-img');
+    document.getElementById('file-ref-camera').value = '';
+    document.getElementById('file-ref-galeria').value = '';
+  } else {
+    imgs[tipo] = null;
+    document.getElementById('prev-'+tipo).src = '';
+    document.getElementById('zone-'+tipo).classList.remove('has-img');
+    document.getElementById('file-'+tipo).value = '';
+  }
+  verificarBotao();
+};
+
+window.selecionarMake = (el, descricao) => {
+  document.querySelectorAll('.galeria-item').forEach(i=>i.classList.remove('selecionado'));
+  el.classList.add('selecionado');
+  makeNome = descricao;
+  imgs.ref = null;
+  document.getElementById('prev-ref').src = '';
+  document.getElementById('zone-ref').classList.remove('has-img');
+  verificarBotao();
+};
+
+window.gerarProvador = async () => {
+  const snap = await getDoc(doc(db,'licencas',licencaDoc.id));
+  const dados = snap.data(); licencaDoc = { id:licencaDoc.id, ...dados };
+  const usos = getUsosMes(dados);
+  const limiteTotal = (dados.limite||50) + (dados.creditosAvulsos||0);
+  if (usos >= limiteTotal) { atualizarContador(dados); return; }
+
+  document.getElementById('btn-gerar').disabled = true;
+  document.getElementById('erro-area').style.display = 'none';
+  document.getElementById('result-area').classList.remove('visible');
+  document.getElementById('loading-area').style.display = 'block';
+
+  try {
+    const rB64 = imgs.rosto.split(',')[1], rMime = imgs.rosto.split(';')[0].split(':')[1];
+    let prompt, parts;
+
+    if (imgs.ref) {
+      const cB64 = imgs.ref.split(',')[1], cMime = imgs.ref.split(';')[0].split(':')[1];
+      prompt = `You are an expert photo editor specializing in makeup application. Your task: take the person from IMAGE 1 and apply ONLY the makeup colors and style visible in IMAGE 2 to her face. CRITICAL RULES — you must follow all of these without exception: (1) The face, skin, bone structure, eyes, nose, lips shape, and hair of the person in IMAGE 1 must remain 100% identical. (2) Do NOT blend, merge, or composite the two faces together. (3) Do NOT change the hairstyle or hair color. (4) Do NOT change the background or lighting. (5) ONLY paint/apply makeup products: eyeshadow colors, eyeliner, mascara, blush, contour, highlighter, lipstick color — copying the style from IMAGE 2. Output a single natural photorealistic result showing the IMAGE 1 person wearing the makeup from IMAGE 2.`;
+      parts = [{text:prompt},{inline_data:{mime_type:rMime,data:rB64}},{inline_data:{mime_type:cMime,data:cB64}}];
+    } else {
+      prompt = `You are an expert photo editor specializing in makeup application. Apply the following makeup style to the person in this photo: ${makeNome}. CRITICAL RULES — you must follow all of these without exception: (1) The face, skin, bone structure, eyes, nose, lips shape, hair, and background must remain 100% identical to the original photo. (2) Do NOT change the hairstyle or hair color. (3) Do NOT change the background or lighting. (4) ONLY add makeup products to the face: apply the described eyeshadow, eyeliner, blush, contour, and lipstick. Output a single natural photorealistic result.`;
+      parts = [{text:prompt},{inline_data:{mime_type:rMime,data:rB64}}];
+    }
+
+    const res = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=${GEMINI_KEY}`,
+      {method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
+        contents:[{parts}],
+        generationConfig:{ responseModalities:["IMAGE","TEXT"] }
+      })});
+
+    if (!res.ok) { const e=await res.json(); throw new Error(e.error?.message||'Erro '+res.status); }
+    const data = await res.json();
+    let img = null;
+    for (const p of data.candidates?.[0]?.content?.parts||[]) {
+      const id = p.inlineData || p.inline_data;
+      if (id?.mimeType?.startsWith('image/') || id?.mime_type?.startsWith('image/')) {
+        img = `data:${id.mimeType||id.mime_type};base64,${id.data}`; break;
+      }
+    }
+    if (!img) {
+      const f = data.candidates?.[0]?.finishReason||'';
+      if (f==='SAFETY') throw new Error('Imagem bloqueada por segurança. Tente outra foto.');
+      throw new Error('IA não retornou imagem. Tente novamente.');
+    }
+
+    const mesKey = 'usos.'+getMesAtual();
+    await updateDoc(doc(db,'licencas',licencaDoc.id),{[mesKey]:increment(1)});
+    licencaDoc = {id:licencaDoc.id,...(await getDoc(doc(db,'licencas',licencaDoc.id))).data()};
+
+    document.getElementById('loading-area').style.display = 'none';
+    document.getElementById('result-img').src = img;
+    document.getElementById('result-area').classList.add('visible');
+    document.getElementById('result-area').scrollIntoView({behavior:'smooth',block:'nearest'});
+    atualizarContador(licencaDoc);
+  } catch(e) {
+    document.getElementById('loading-area').style.display = 'none';
+    document.getElementById('erro-area').textContent = '⚠ '+e.message;
+    document.getElementById('erro-area').style.display = 'block';
+    document.getElementById('btn-gerar').disabled = false;
+  }
+};
+
+window.baixar = () => {
+  const a = document.createElement('a');
+  a.href = document.getElementById('result-img').src;
+  a.download = `make_${Date.now()}.png`;
+  a.click();
+};
+
+window.nova = () => {
+  imgs.rosto = null; imgs.ref = null; makeNome = null;
+  document.getElementById('result-area').classList.remove('visible');
+  ['rosto'].forEach(t=>{
+    document.getElementById('prev-'+t).src='';
+    document.getElementById('zone-'+t).classList.remove('has-img');
+    document.getElementById('file-'+t).value='';
+  });
+  document.getElementById('prev-ref').src='';
+  document.getElementById('zone-ref').classList.remove('has-img');
+  document.getElementById('file-ref-camera').value='';
+  document.getElementById('file-ref-galeria').value='';
+  document.querySelectorAll('.galeria-item').forEach(i=>i.classList.remove('selecionado'));
+  verificarBotao();
+};
+
+inicializar();
 </script>
 </body>
 </html>
