@@ -119,55 +119,53 @@ body { font-family:'DM Sans',sans-serif; background:#0a0c0f; color:#e8eaf0; min-
 
   <div class="app-body">
     <div class="section-card">
-      <div class="section-title">Gênero</div>
-      <div class="genero-selector">
-        <button class="genero-btn ativo" id="btn-fem" onclick="setGenero('feminino')">👩 Feminino</button>
-        <button class="genero-btn" id="btn-masc" onclick="setGenero('masculino')">👨 Masculino</button>
+      <div class="section-title">Foto da cliente</div>
+      <div class="ref-source-btns" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+        <button class="ref-source-btn" style="padding:10px;border:1px solid #dde4ef;border-radius:8px;background:#fafbfd;font-size:13px;color:#1a6b3a;cursor:pointer;text-align:center;" onclick="document.getElementById('file-rosto-camera').click()">📷 Tirar foto agora</button>
+        <button class="ref-source-btn" style="padding:10px;border:1px solid #dde4ef;border-radius:8px;background:#fafbfd;font-size:13px;color:#1a6b3a;cursor:pointer;text-align:center;" onclick="document.getElementById('file-rosto-galeria').click()">🖼️ Escolher da galeria</button>
       </div>
-    </div>
-    <div class="section-card">
-      <div class="section-title">Foto do cliente</div>
-      <div class="upload-zone" id="zone-rosto" onclick="triggerUpload('file-rosto')">
-        <input type="file" id="file-rosto" accept="image/*" capture="environment" onchange="carregarImagem('rosto',this)">
+      <input type="file" id="file-rosto-camera" accept="image/*" capture="environment" style="display:none" onchange="carregarImagem('rosto',this)">
+      <input type="file" id="file-rosto-galeria" accept="image/*" style="display:none" onchange="carregarImagem('rosto',this)">
+      <div class="upload-zone" id="zone-rosto" style="pointer-events:none;cursor:default;">
         <img class="upload-preview" id="prev-rosto" alt="">
-        <button class="remove-img" onclick="remover('rosto',event)">✕</button>
+        <button class="remove-img" style="pointer-events:all;" onclick="remover('rosto',event)">✕</button>
         <div class="upload-icon">🧑</div>
-        <div class="upload-label">Foto do Cliente</div>
+        <div class="upload-label">Foto da Cliente</div>
         <div class="upload-hint">Foto frontal, boa iluminação</div>
       </div>
     </div>
     <div class="section-card">
-      <div class="galeria-titulo">Escolha o corte desejado</div>
-      <div class="galeria-secao">Feminino</div>
+      <div class="galeria-titulo">Escolha o estilo desejado</div>
+      <div class="galeria-secao">Cortes Curtos</div>
       <div class="galeria-grid" id="galeria-fem">
-        <div class="galeria-item" onclick="selecionarCorte(this,'feminino','Longo Liso')"><img class="gi-foto" src="https://images.unsplash.com/photo-1522337360788-8b13dee7a37e?w=200&h=120&fit=crop&crop=top" alt="Longo Liso" onerror="this.style.background='#ddd'"><div class="gi-nome">Longo Liso</div></div>
-        <div class="galeria-item" onclick="selecionarCorte(this,'feminino','Bob Curto')"><img class="gi-foto" src="https://images.unsplash.com/photo-1595476108010-b4d1f102b1b1?w=200&h=120&fit=crop&crop=top" alt="Bob Curto" onerror="this.style.background='#ddd'"><div class="gi-nome">Bob Curto</div></div>
-        <div class="galeria-item" onclick="selecionarCorte(this,'feminino','Chanel')"><img class="gi-foto" src="https://images.unsplash.com/photo-1620122830785-a67c4c66b20e?w=200&h=120&fit=crop&crop=top" alt="Chanel" onerror="this.style.background='#ddd'"><div class="gi-nome">Chanel</div></div>
-        <div class="galeria-item" onclick="selecionarCorte(this,'feminino','Pixie Cut')"><img class="gi-foto" src="https://images.unsplash.com/photo-1634449571010-02389ed0f9b0?w=200&h=120&fit=crop&crop=top" alt="Pixie Cut" onerror="this.style.background='#ddd'"><div class="gi-nome">Pixie Cut</div></div>
-        <div class="galeria-item" onclick="selecionarCorte(this,'feminino','Cacheado Longo')"><img class="gi-foto" src="https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=200&h=120&fit=crop&crop=top" alt="Cacheado Longo" onerror="this.style.background='#ddd'"><div class="gi-nome">Cacheado Longo</div></div>
-        <div class="galeria-item" onclick="selecionarCorte(this,'feminino','Ondulado Médio')"><img class="gi-foto" src="https://images.unsplash.com/photo-1492106087820-71f1a00d2b11?w=200&h=120&fit=crop&crop=top" alt="Ondulado Médio" onerror="this.style.background='#ddd'"><div class="gi-nome">Ondulado Médio</div></div>
+        <div class="galeria-item" onclick="selecionarCorte(this,'feminino','Pixie Ladeado')"><img class="gi-foto" src="imgs/pixie-ladeado.png" alt="Pixie Ladeado" onerror="this.style.background='#ddd'"><div class="gi-nome">Pixie Ladeado</div></div>
+        <div class="galeria-item" onclick="selecionarCorte(this,'feminino','Pixie Clássico')"><img class="gi-foto" src="imgs/pixie-classico.png" alt="Pixie Clássico" onerror="this.style.background='#ddd'"><div class="gi-nome">Pixie Clássico</div></div>
+        <div class="galeria-item" onclick="selecionarCorte(this,'feminino','Pixie com Franja')"><img class="gi-foto" src="imgs/pixie-ruivo.png" alt="Pixie com Franja" onerror="this.style.background='#ddd'"><div class="gi-nome">Pixie com Franja</div></div>
       </div>
-      <div class="galeria-secao">Masculino</div>
-      <div class="galeria-grid" id="galeria-masc">
-        <div class="galeria-item" onclick="selecionarCorte(this,'masculino','Degradê')"><img class="gi-foto" src="https://images.unsplash.com/photo-1503951914875-452162b0f3f1?w=200&h=120&fit=crop&crop=top" alt="Degradê" onerror="this.style.background='#ddd'"><div class="gi-nome">Degradê</div></div>
-        <div class="galeria-item" onclick="selecionarCorte(this,'masculino','Undercut')"><img class="gi-foto" src="https://images.unsplash.com/photo-1580618672591-eb180b1a973f?w=200&h=120&fit=crop&crop=top" alt="Undercut" onerror="this.style.background='#ddd'"><div class="gi-nome">Undercut</div></div>
-        <div class="galeria-item" onclick="selecionarCorte(this,'masculino','Buzz Cut')"><img class="gi-foto" src="https://images.unsplash.com/photo-1621605815971-fbc98d665033?w=200&h=120&fit=crop&crop=top" alt="Buzz Cut" onerror="this.style.background='#ddd'"><div class="gi-nome">Buzz Cut</div></div>
-        <div class="galeria-item" onclick="selecionarCorte(this,'masculino','Pompadour')"><img class="gi-foto" src="https://images.unsplash.com/photo-1599351431202-1e0f0137899a?w=200&h=120&fit=crop&crop=top" alt="Pompadour" onerror="this.style.background='#ddd'"><div class="gi-nome">Pompadour</div></div>
+      <div class="galeria-secao">Cortes Médios</div>
+      <div class="galeria-grid">
+        <div class="galeria-item" onclick="selecionarCorte(this,'feminino','Bob Chanel')"><img class="gi-foto" src="imgs/bob-chanel.png" alt="Bob Chanel" onerror="this.style.background='#ddd'"><div class="gi-nome">Bob Chanel</div></div>
+        <div class="galeria-item" onclick="selecionarCorte(this,'feminino','Bob Ondulado')"><img class="gi-foto" src="imgs/bob-ondulado.png" alt="Bob Ondulado" onerror="this.style.background='#ddd'"><div class="gi-nome">Bob Ondulado</div></div>
+        <div class="galeria-item" onclick="selecionarCorte(this,'feminino','Cacheado Médio')"><img class="gi-foto" src="imgs/cacheado-medio.png" alt="Cacheado Médio" onerror="this.style.background='#ddd'"><div class="gi-nome">Cacheado Médio</div></div>
+      </div>
+      <div class="galeria-secao">Compridos e Penteados</div>
+      <div class="galeria-grid">
+        <div class="galeria-item" onclick="selecionarCorte(this,'feminino','Liso Longo')"><img class="gi-foto" src="imgs/liso-longo.png" alt="Liso Longo" onerror="this.style.background='#ddd'"><div class="gi-nome">Liso Longo</div></div>
+        <div class="galeria-item" onclick="selecionarCorte(this,'feminino','Ondulado Volumoso')"><img class="gi-foto" src="imgs/ondulado-volumoso.png" alt="Ondulado Volumoso" onerror="this.style.background='#ddd'"><div class="gi-nome">Ondulado Volumoso</div></div>
+        <div class="galeria-item" onclick="selecionarCorte(this,'feminino','Preso com Franja')"><img class="gi-foto" src="imgs/preso-franja.png" alt="Preso com Franja" onerror="this.style.background='#ddd'"><div class="gi-nome">Preso com Franja</div></div>
+        <div class="galeria-item" onclick="selecionarCorte(this,'feminino','Rabo Ondulado')"><img class="gi-foto" src="imgs/rabo-ondulado.png" alt="Rabo Ondulado" onerror="this.style.background='#ddd'"><div class="gi-nome">Rabo Ondulado</div></div>
       </div>
       <div class="galeria-ou">ou envie uma referência</div>
-      <div class="upload-zone" id="zone-corte" onclick="triggerUpload('file-corte')">
-        <!-- CORRIGIDO: botões câmera/galeria separados -->
-</div>
-<div class="ref-source-btns" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
-  <button class="ref-source-btn" style="padding:10px;border:1px solid #dde4ef;border-radius:8px;background:#fafbfd;font-size:13px;color:#1a6b3a;cursor:pointer;text-align:center;" onclick="triggerUploadRef('camera')">📷 Tirar foto da referência</button>
-  <button class="ref-source-btn" style="padding:10px;border:1px solid #dde4ef;border-radius:8px;background:#fafbfd;font-size:13px;color:#1a6b3a;cursor:pointer;text-align:center;" onclick="triggerUploadRef('galeria')">🖼️ Escolher da galeria</button>
-</div>
-<input type="file" id="file-corte-camera" accept="image/*" capture="environment" style="display:none" onchange="carregarImagem('corte',this)">
-<input type="file" id="file-corte-galeria" accept="image/*" style="display:none" onchange="carregarImagem('corte',this)">
-<div class="upload-zone" id="zone-corte" style="pointer-events:none;cursor:default;">
-<input type="file" id="file-corte" accept="image/*" style="display:none" onchange="carregarImagem('corte',this)">
+      <div class="ref-source-btns" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+        <button class="ref-source-btn" style="padding:10px;border:1px solid #dde4ef;border-radius:8px;background:#fafbfd;font-size:13px;color:#1a6b3a;cursor:pointer;text-align:center;" onclick="triggerUploadRef('camera')">📷 Tirar foto da referência</button>
+        <button class="ref-source-btn" style="padding:10px;border:1px solid #dde4ef;border-radius:8px;background:#fafbfd;font-size:13px;color:#1a6b3a;cursor:pointer;text-align:center;" onclick="triggerUploadRef('galeria')">🖼️ Escolher da galeria</button>
+      </div>
+      <input type="file" id="file-corte-camera" accept="image/*" capture="environment" style="display:none" onchange="carregarImagem('corte',this)">
+      <input type="file" id="file-corte-galeria" accept="image/*" style="display:none" onchange="carregarImagem('corte',this)">
+      <div class="upload-zone" id="zone-corte" style="pointer-events:none;cursor:default;">
+        <input type="file" id="file-corte" accept="image/*" style="display:none" onchange="carregarImagem('corte',this)">
         <img class="upload-preview" id="prev-corte" alt="">
-        <button class="remove-img" onclick="remover('corte',event)">✕</button>
+        <button class="remove-img" style="pointer-events:all;" onclick="remover('corte',event)">✕</button>
         <div class="upload-icon">✂️</div>
         <div class="upload-label">Foto de Referência</div>
         <div class="upload-hint">Corte que deseja aplicar</div>
@@ -311,13 +309,6 @@ function atualizarContador(dados) {
   if (rest<=0) mostrarBloqueio('Créditos esgotados','Você usou todos os créditos deste mês. Entre em contato para adicionar mais.');
 }
 
-// Gênero
-window.setGenero = g => {
-  generoAtual=g;
-  document.getElementById('btn-fem').className='genero-btn'+(g==='feminino'?' ativo':'');
-  document.getElementById('btn-masc').className='genero-btn'+(g==='masculino'?' ativo':'');
-};
-
 // Galeria
 window.selecionarCorte = (el,genero,nome) => {
   document.querySelectorAll('.galeria-item').forEach(i=>i.classList.remove('selecionado'));
@@ -325,7 +316,7 @@ window.selecionarCorte = (el,genero,nome) => {
   imgs.corte=null; salonSelecionado=null;
   document.getElementById('prev-corte').src='';
   document.getElementById('zone-corte').classList.remove('has-img');
-  document.getElementById('file-corte').value='';
+  ['file-corte-camera','file-corte-galeria','file-corte'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   document.getElementById('salon-selecionado-info').style.display='none';
   renderSalon(); mostrarToast('✓ '+nome+' selecionado'); atualizarBotao();
 };
@@ -367,11 +358,10 @@ function selecionarSalon(id){
   salonSelecionado=id; const foto=salonFotos.find(f=>f.id===id); imgs.corte=foto.data; window._corteNome=null;
   document.querySelectorAll('.galeria-item').forEach(i=>i.classList.remove('selecionado'));
   document.getElementById('prev-corte').src=''; document.getElementById('zone-corte').classList.remove('has-img');
-  document.getElementById('file-corte').value=''; document.getElementById('salon-selecionado-info').style.display='block';
+  ['file-corte-camera','file-corte-galeria','file-corte'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';}); document.getElementById('salon-selecionado-info').style.display='block';
   renderSalon(); mostrarToast('✓ Trabalho selecionado!'); atualizarBotao();
 }
 
-window.triggerUpload=id=>document.getElementById(id).click();
 window.triggerUploadRef=tipo=>{ if(tipo==='camera') document.getElementById('file-corte-camera').click(); else document.getElementById('file-corte-galeria').click(); };
 window.carregarImagem=(tipo,input)=>{
   const f=input.files[0]; if(!f)return;
@@ -386,7 +376,7 @@ window.carregarImagem=(tipo,input)=>{
 window.remover=(tipo,ev)=>{
   ev.stopPropagation(); imgs[tipo]=null;
   document.getElementById('prev-'+tipo).src=''; document.getElementById('zone-'+tipo).classList.remove('has-img');
-  ['file-corte-camera','file-corte-galeria','file-'+tipo].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';}); atualizarBotao();
+  ['file-corte-camera','file-corte-galeria','file-rosto-camera','file-rosto-galeria','file-'+tipo].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';}); atualizarBotao();
 };
 function atualizarBotao(){
   const u=licencaDoc?getUsosMes(licencaDoc):0;
@@ -446,7 +436,9 @@ window.baixar=()=>{const a=document.createElement('a');a.href=document.getElemen
 window.nova=()=>{
   imgs.rosto=null;imgs.corte=null;window._corteNome=null;salonSelecionado=null;
   document.getElementById('result-area').classList.remove('visible');
-  ['rosto','corte'].forEach(t=>{document.getElementById('prev-'+t).src='';document.getElementById('zone-'+t).classList.remove('has-img');document.getElementById('file-'+t).value='';});
+  document.getElementById('prev-rosto').src='';document.getElementById('zone-rosto').classList.remove('has-img');
+  document.getElementById('prev-corte').src='';document.getElementById('zone-corte').classList.remove('has-img');
+  ['file-rosto-camera','file-rosto-galeria','file-corte-camera','file-corte-galeria','file-corte'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   document.querySelectorAll('.galeria-item').forEach(i=>i.classList.remove('selecionado'));
   document.getElementById('salon-selecionado-info').style.display='none';
   renderSalon();atualizarBotao();window.scrollTo({top:0,behavior:'smooth'});
