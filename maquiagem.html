@@ -129,10 +129,15 @@ body { font-family:'DM Sans',sans-serif; background:#0f0a0d; color:#f0e8f0; min-
   <div class="app-body">
     <div class="section-card">
       <div class="section-title">Foto do rosto</div>
-      <div class="upload-zone" id="zone-rosto" onclick="triggerUpload('file-rosto')">
-        <input type="file" id="file-rosto" accept="image/*" capture="environment" onchange="carregarImagem('rosto',this)">
+      <div class="ref-source-btns" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+        <button class="ref-source-btn" style="padding:10px;border:1px solid #dde4ef;border-radius:8px;background:#fafbfd;font-size:13px;color:#1a6b3a;cursor:pointer;text-align:center;" onclick="document.getElementById('file-rosto-camera').click()">📷 Tirar foto agora</button>
+        <button class="ref-source-btn" style="padding:10px;border:1px solid #dde4ef;border-radius:8px;background:#fafbfd;font-size:13px;color:#1a6b3a;cursor:pointer;text-align:center;" onclick="document.getElementById('file-rosto-galeria').click()">🖼️ Escolher da galeria</button>
+      </div>
+      <input type="file" id="file-rosto-camera" accept="image/*" capture="environment" style="display:none" onchange="carregarImagem('rosto',this)">
+      <input type="file" id="file-rosto-galeria" accept="image/*" style="display:none" onchange="carregarImagem('rosto',this)">
+      <div class="upload-zone" id="zone-rosto" style="pointer-events:none;cursor:default;">
         <img class="upload-preview" id="prev-rosto" alt="">
-        <button class="remove-img" onclick="remover('rosto',event)">✕</button>
+        <button class="remove-img" style="pointer-events:all;" onclick="remover('rosto',event)">✕</button>
         <div class="upload-icon">🧖‍♀️</div>
         <div class="upload-label">Foto do Rosto</div>
         <div class="upload-hint">Foto frontal, boa iluminação</div>
@@ -143,36 +148,40 @@ body { font-family:'DM Sans',sans-serif; background:#0f0a0d; color:#f0e8f0; min-
       <div class="section-title">Escolha o estilo de maquiagem</div>
       <div class="galeria-grid-make">
         <div class="galeria-item-make" onclick="selecionarMake(this,'Apply subtle natural makeup: lightweight foundation matching skin tone, softly defined brows, light mascara, and nude/pink lip balm. Result must look like the person is wearing almost no makeup — fresh, clean, skin-first finish.')">
-          <img src="https://images.pexels.com/photos/3373716/pexels-photo-3373716.jpeg?auto=compress&cs=tinysrgb&w=200&h=120&fit=crop" alt="Make Natural" onerror="this.style.height='40px'">
+          <img src="imgs/make-smokey-marrom.png" alt="Make Natural" onerror="this.style.height='40px'">
           <div class="make-label"><span class="make-nome">Make Natural</span><span class="make-desc">Pele uniforme, lábios nude</span></div>
         </div>
         <div class="galeria-item-make" onclick="selecionarMake(this,'Apply a professional smokey eye: blend dark brown and black eyeshadow ONLY on the upper eyelids and slightly above the crease. Add thin precise eyeliner on upper lid only, volumizing mascara. Keep skin and lips neutral. Blending must be smooth with a clean gradient fading upward.')">
-          <img src="https://images.pexels.com/photos/2065195/pexels-photo-2065195.jpeg?auto=compress&cs=tinysrgb&w=200&h=120&fit=crop" alt="Olho Esfumado" onerror="this.style.height='40px'">
+          <img src="imgs/make-smokey-preto.png" alt="Olho Esfumado" onerror="this.style.height='40px'">
           <div class="make-label"><span class="make-nome">Olho Esfumado</span><span class="make-desc">Sombra escura degradê</span></div>
         </div>
         <div class="galeria-item-make" onclick="selecionarMake(this,'Apply classic red lip makeup: precise classic red lipstick with clean edges, minimal eye makeup with subtle mascara, light foundation with soft blush. The red lip must look precisely applied and elegant, not cartoonish.')">
-          <img src="https://images.pexels.com/photos/1037999/pexels-photo-1037999.jpeg?auto=compress&cs=tinysrgb&w=200&h=120&fit=crop" alt="Batom Vermelho" onerror="this.style.height='40px'">
-          <div class="make-label"><span class="make-nome">Batom Vermelho</span><span class="make-desc">Classic red lip, make clean</span></div>
+          <img src="imgs/make-batom-vermelho.png" alt="Batom Vermelho" onerror="this.style.height='40px'">
+          <div class="make-label"><span class="make-nome">Batom Vermelho</span><span class="make-desc">Lábio vermelho, make clean</span></div>
         </div>
-        <div class="galeria-item-make" onclick="selecionarMake(this,'Apply elegant bridal makeup: flawless full-coverage foundation, subtle highlight on cheekbones and brow bone, natural false lashes, soft rose-pink lips, delicate peachy blush. Result must look romantic, polished and camera-ready.')">
-          <img src="https://images.pexels.com/photos/1729931/pexels-photo-1729931.jpeg?auto=compress&cs=tinysrgb&w=200&h=120&fit=crop" alt="Look Noiva" onerror="this.style.height='40px'">
-          <div class="make-label"><span class="make-nome">Look Noiva</span><span class="make-desc">Iluminador, cílios, rosé</span></div>
+        <div class="galeria-item-make" onclick="selecionarMake(this,'Apply elegant cat eye with wine lip: precise winged eyeliner with a clean sharp flick at the outer corners, well-defined brows, deep wine/burgundy lipstick with clean edges. Light natural foundation. Result must look sophisticated and editorial.')">
+          <img src="imgs/make-delineado-vinho.png" alt="Delineado + Vinho" onerror="this.style.height='40px'">
+          <div class="make-label"><span class="make-nome">Delineado + Vinho</span><span class="make-desc">Cat eye + batom vinho</span></div>
         </div>
-        <div class="galeria-item-make" onclick="selecionarMake(this,'Apply glamorous party makeup: finely applied glitter or shimmer on upper eyelids, precise dark eyeliner, voluminous mascara, bold lip color (wine or fuchsia). All products must look professionally blended — glamorous but not overdone.')">
-          <img src="https://images.pexels.com/photos/3762875/pexels-photo-3762875.jpeg?auto=compress&cs=tinysrgb&w=200&h=120&fit=crop" alt="Make Festa" onerror="this.style.height='40px'">
-          <div class="make-label"><span class="make-nome">Make Festa</span><span class="make-desc">Glitter, delineado dramático</span></div>
+        <div class="galeria-item-make" onclick="selecionarMake(this,'Apply glamorous party makeup: finely applied silver glitter or shimmer on upper eyelids, precise dark dramatic eyeliner, voluminous mascara, deep wine or burgundy matte lipstick. All products must look professionally blended — glamorous but not overdone.')">
+          <img src="imgs/make-glitter-vinho.png" alt="Make Festa" onerror="this.style.height='40px'">
+          <div class="make-label"><span class="make-nome">Make Festa</span><span class="make-desc">Glitter + batom vinho</span></div>
         </div>
-        <div class="galeria-item-make" onclick="selecionarMake(this,'Apply cat eye makeup: precise thin-to-thick winged eyeliner with a clean sharp flick at the outer corner of each eye. Keep the wing symmetrical and elegant. Neutral skin and lips. The wing must look hand-drawn by a professional — sharp, not smudged.')">
-          <img src="https://images.pexels.com/photos/2681751/pexels-photo-2681751.jpeg?auto=compress&cs=tinysrgb&w=200&h=120&fit=crop" alt="Cat Eye" onerror="this.style.height='40px'">
-          <div class="make-label"><span class="make-nome">Cat Eye</span><span class="make-desc">Delineado gatinho alongado</span></div>
+        <div class="galeria-item-make" onclick="selecionarMake(this,'Apply cat eye with wine lip and clean skin: thin-to-thick precise winged eyeliner with a sharp flick, deep wine/burgundy lipstick, minimal eye shadow, light blush, clean foundation. Result must look sleek, modern and polished.')">
+          <img src="imgs/make-gatinho-vinho.png" alt="Cat Eye + Vinho" onerror="this.style.height='40px'">
+          <div class="make-label"><span class="make-nome">Cat Eye + Vinho</span><span class="make-desc">Delineado gatinho, lábio vinho</span></div>
         </div>
-        <div class="galeria-item-make" onclick="selecionarMake(this,'Apply elegant nighttime makeup: precise black eyeliner on upper lash line with a subtle wing, well-defined brows, medium plum or mauve-rose lipstick. Soft natural foundation, light blush. Result must look sophisticated and wearable for a night out.')">
-          <img src="https://images.pexels.com/photos/2823254/pexels-photo-2823254.jpeg?auto=compress&cs=tinysrgb&w=200&h=120&fit=crop" alt="Make Noturna" onerror="this.style.height='40px'">
-          <div class="make-label"><span class="make-nome">Make Noturna</span><span class="make-desc">Delineado + lábio vinho</span></div>
+        <div class="galeria-item-make" onclick="selecionarMake(this,'Apply warm copper smokey eye: blend warm copper, bronze and brown eyeshadow on upper lids and crease, subtle lower lash line shadow, mascara, neutral nude-rose lips, luminous skin finish. Result must look warm, romantic and editorial.')">
+          <img src="imgs/make-smokey-cobre.png" alt="Smokey Cobre" onerror="this.style.height='40px'">
+          <div class="make-label"><span class="make-nome">Smokey Cobre</span><span class="make-desc">Sombra cobre, lábio nude</span></div>
         </div>
-        <div class="galeria-item-make" onclick="selecionarMake(this,'Apply artistic colorful editorial makeup: vibrant blue and purple eyeshadow on upper lids, graphic color accents, bold fuchsia or coral lips. Style should look like a high-fashion editorial shoot — creative and striking but still wearable.')">
-          <img src="https://images.pexels.com/photos/3997991/pexels-photo-3997991.jpeg?auto=compress&cs=tinysrgb&w=200&h=120&fit=crop" alt="Artístico" onerror="this.style.height='40px'">
-          <div class="make-label"><span class="make-nome">Artístico</span><span class="make-desc">Cores vibrantes, criativo</span></div>
+        <div class="galeria-item-make" onclick="selecionarMake(this,'Apply artistic colorful editorial makeup: vibrant blue and purple eyeshadow on upper lids extending slightly outward, graphic fuchsia color accents on lower lash line or cheekbones, bold fuchsia lips. Style must look like a high-fashion editorial shoot — creative and striking.')">
+          <img src="imgs/make-artistica.png" alt="Artístico" onerror="this.style.height='40px'">
+          <div class="make-label"><span class="make-nome">Artístico</span><span class="make-desc">Azul, roxo, fucsia vibrante</span></div>
+        </div>
+        <div class="galeria-item-make" onclick="selecionarMake(this,'Apply intense dark smokey eye: deep black and dark charcoal eyeshadow blended heavily on upper lids, lower lash line and outer corners, precise eyeliner, voluminous mascara. Skin must stay clean and neutral. Result must look dramatic and high-contrast.')">
+          <img src="imgs/make-smokey-escuro.png" alt="Smokey Intenso" onerror="this.style.height='40px'">
+          <div class="make-label"><span class="make-nome">Smokey Intenso</span><span class="make-desc">Esfumado preto dramático</span></div>
         </div>
       </div>
 
@@ -494,7 +503,7 @@ window.nova=()=>{
   imgs.rosto=null;imgs.makeup=null;window._makeEstilo=null;lookSelecionado=null;
   document.getElementById('result-area').classList.remove('visible');
   ['rosto','makeup'].forEach(t=>{document.getElementById('prev-'+t).src='';document.getElementById('zone-'+t).classList.remove('has-img');});
-  ['file-rosto','file-makeup-camera','file-makeup-galeria'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
+  ['file-rosto-camera','file-rosto-galeria','file-makeup-camera','file-makeup-galeria'].forEach(id=>{const el=document.getElementById(id);if(el)el.value='';});
   document.querySelectorAll('.galeria-item-make').forEach(i=>i.classList.remove('selecionado'));
   document.querySelectorAll('.meu-look-item').forEach(i=>i.classList.remove('selecionado'));
   renderMeusLooks();atualizarBotao();window.scrollTo({top:0,behavior:'smooth'});
